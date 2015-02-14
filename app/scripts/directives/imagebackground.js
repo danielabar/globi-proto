@@ -10,24 +10,27 @@ angular.module('globiProtoApp')
   .directive('backgroundImage', function ($rootScope) {
     return {
       restrict: 'A',
-      link: function($scope, $element, $attrs) {
-        console.log('=== IMAGE BACKGROUND DIRECTIVE IS RUNNING');
-        $element.css('background-image', 'url(' + $attrs.backgroundImage + ')');
+      link: function($scope, $element) {
+
+        var placeholderUlr = 'http://dummyimage.com/150x150&text=No%20image%20available';
 
         $scope.$on('taxonEvent', function(evt, data) {
           console.log('=== IMAGE BACKGROUND RESPONDING TO $scope.$on TAXON EVENT: ' + JSON.stringify(data));
-          $element.css('background-image', 'url(' + data.thumbnailURL + ')');
+          if (data.thumbnailURL) {
+            $element.css('background-image', 'url(' + data.thumbnailURL + ')');
+          } else {
+            $element.css('background-image', 'url(' + placeholderUlr + ')');
+          }
         });
 
         $rootScope.$on('taxonEvent', function(evt, data) {
           console.log('=== IMAGE BACKGROUND RESPONDING TO $rootScope.$on TAXON EVENT: ' + JSON.stringify(data));
-          $element.css('background-image', 'url(' + data.thumbnailURL + ')');
+          if (data.thumbnailURL) {
+            $element.css('background-image', 'url(' + data.thumbnailURL + ')');
+          } else {
+            $element.css('background-image', 'url(' + placeholderUlr + ')');
+          }
         });
-
-        // $scope.$watch('background-image', function(oldval, newval) {
-        //   console.log('=== IMAGE BACKGROUND RESPONDING TO $scope.$watch: oldval = ' + oldval + ', newval = ' + newval);
-        //   $element.css('background-image', 'url(' + $attrs.backgroundImage + ')');
-        // });
       }
     };
   });
