@@ -8,9 +8,11 @@
  * Controller of the globiProtoApp
  */
  angular.module('globiProtoApp')
- .controller('MainCtrl', function ($scope, closeMatch, images) {
+ .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope) {
 
-  $scope.taxon = {};
+  $scope.taxon = {
+    // imageURL: 'http://placehold.it/250x250'
+  };
 
   $scope.getResults = function(val) {
     return closeMatch.get({taxon: val}).$promise.then(function(response) {
@@ -27,6 +29,9 @@
       $scope.taxon.thumbnailURL = response.thumbnailURL;
       $scope.taxon.imageURL = response.imageURL;
       $scope.taxon.infoURL = response.infoURL;
+
+      $rootScope.$emit('taxonEvent', $scope.taxon);
+      $rootScope.$broadcast('taxonEvent', $scope.taxon);
     });
   };
 
