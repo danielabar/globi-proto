@@ -10,27 +10,40 @@
  */
 angular
   .module('globiProtoApp', [
+    'ui.router',
+    'ngResource',
     'ngAnimate',
     'ngAria',
     'ngCookies',
-    'ngResource',
-    'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'ui.bootstrap',
-    'ui.select'
+    'ui.bootstrap'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+  .config(function ($stateProvider, $urlRouterProvider) {
+    $stateProvider
+      .state('main', {
+        url: '/main',
+        views: {
+          'nav' : {
+            templateUrl: 'views/nav.html'
+          },
+          'content' : {
+            templateUrl: 'views/main.html',
+            controller: 'MainCtrl'
+          }
+        }
       })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl'
-      })
-      .otherwise({
-        redirectTo: '/'
+      .state('about', {
+        url: '/about',
+        views: {
+          'nav' : {
+            templateUrl: 'views/nav.html'
+          },
+          'content' : {
+            templateUrl: 'views/about.html',
+            controller: 'AboutCtrl'
+          }
+        }
       });
+    $urlRouterProvider.otherwise('/main');
   });
