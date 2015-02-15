@@ -79,21 +79,23 @@ body {
   margin: 0;
   margin-bottom: -5px;
   padding-right: 5px;
-  width: 300px;
-  height: 120px;
+  width: 260px;
+  height: 140px;
   border: 1px solid #C5C3C3;
   border-radius: 3px;
 }
 
 .image-content {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 0.5em;
+  top: 0.5em;
   background-repeat: no-repeat;
-  background-size: contain;
-  width: 40%;
-  height: 80%;
+  background-size: cover;
+  width: 100px;
+  height: 100px;
   z-index: 1;
+  border-radius: 50%;
+  background-position: 50% 50%;
 }
 
 .image-description-1 {
@@ -111,6 +113,20 @@ body {
   text-align: center;
   color: gray;
   font-size: .8em;
+}
+
+.actions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 260px;
+  border-top: 1px solid #CBCDE8;
+}
+
+.actions a {
+  position: relative;
+  top: 0;
+  left: 1em;
 }
 
 /* Responsive: Portrait tablets and up */

@@ -1,6 +1,10 @@
 <div class="image-tile">
-  <div class="image-content" style="background-image: url({{imageData.imageURL}});"></div>
+  <div class="image-content" style="background-image: url({{imageData.thumbnailURL}});"></div>
   <div class="image-description-1">{{imageData.scientificName}}
     <div class="image-description-2">{{imageData.commonName}}</div>
+  </div>
+  <hr>
+  <div class="actions">
+    <a ng-href="{{imageData.infoURL}}">More info</a>
   </div>
 </div>
