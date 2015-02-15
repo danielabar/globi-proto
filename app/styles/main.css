@@ -65,6 +65,11 @@ body {
 
 .search-results li {
   list-style-type: none;
+  margin-left: 1em;
+}
+
+.search-results .taxon-source {
+  margin-left: -1em;
 }
 
 .image-tile {
@@ -102,13 +107,10 @@ body {
 }
 
 .image-description-2 {
-  position: absolute;
-  right: 0;
-  top: 3em;
+  position: relative;
   text-align: center;
   color: gray;
-  width: 60%;
-  font-size: 1.1em;
+  font-size: .8em;
 }
 
 /* Responsive: Portrait tablets and up */

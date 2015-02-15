@@ -3,7 +3,7 @@
     <form class="form-inline">
 
       <div class="form-group">
-        <label for="speciesName">Name</label>
+        <label for="speciesName">Species</label>
         <input id="speciesName" name="speciesName" type="text"
           ng-model="query.name" class="form-control"
           placeholder="Animal (eg: tuna)"
@@ -30,7 +30,7 @@
 <div class="search-results">
   <div class="row">
     <div class="col-xs-4">
-      <div data-image-tile="taxon"></div>
+      <div data-image-tile="taxon" class="taxon-source"></div>
     </div>
     <div class="col-xs-8">
       <ul ng-repeat="sr in searchResults">

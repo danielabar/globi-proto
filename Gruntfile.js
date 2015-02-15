@@ -386,6 +386,17 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    // Deploy
+    'gh-pages': {
+      dist: {
+        options: {
+          base: 'dist',
+          message: 'Deployed by grunt gh-pages'
+        },
+        src: '**/*'
+      }
     }
   });
 
@@ -441,4 +452,6 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  grunt.registerTask('deploy', ['build', 'gh-pages:dist']);
 };
