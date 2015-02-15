@@ -22,7 +22,7 @@ angular
   .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('main', {
-        url: '/main',
+        url: '/main?name&interaction',
         views: {
           'nav' : {
             templateUrl: 'views/nav.html'

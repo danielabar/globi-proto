@@ -8,9 +8,63 @@
  * Controller of the globiProtoApp
  */
  angular.module('globiProtoApp')
- .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope, interactionTypes, taxonInteraction) {
+ .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope, interactionTypes, taxonInteraction, $state) {
 
-  $scope.query = {};
+  var doSearch = function() {
+    $scope.searchResults = [];
+    taxonInteraction.get({taxon: $scope.query.name, interaction: $scope.query.interaction}).$promise.then(function(response) {
+      var speciesList = response.data[0][2];
+      speciesList.forEach(function(item) {
+        images.get({taxon: item}).$promise.then(function(imageResponse) {
+          $scope.searchResults.push({
+            scientificName: imageResponse.scientificName,
+            commonName: imageResponse.commonName,
+            thumbnailURL: imageResponse.thumbnailURL,
+            imageURL: imageResponse.imageURL,
+            infoURL: imageResponse.infoURL
+          });
+          $rootScope.$emit('taxonEvent', $scope.searchResults[$scope.searchResults.length-1]);
+          $rootScope.$broadcast('taxonEvent', $scope.searchResults[$scope.searchResults.length-1]);
+        }, function(err) {
+          console.dir(err);
+        });
+      });
+    }, function(err) {
+      console.dir(err);
+    });
+  };
+
+  var handleTaxonSelected = function(item) {
+    images.get({taxon: item}).$promise.then(function(response) {
+      $scope.taxon = {
+        scientificName: response.scientificName,
+        commonName: response.commonName,
+        thumbnailURL: response.thumbnailURL,
+        imageURL: response.imageURL,
+        infoURL: response.infoURL
+      };
+      $rootScope.$emit('taxonEvent', $scope.taxon);
+      $rootScope.$broadcast('taxonEvent', $scope.taxon);
+    }, function(err) {
+      console.dir(err);
+      $scope.taxon = {};
+      $rootScope.$emit('taxonEvent', $scope.taxon);
+      $rootScope.$broadcast('taxonEvent', $scope.taxon);
+    });
+  };
+
+  $scope.query = {
+    name: $state.params.name,
+    interaction: $state.params.interaction
+  };
+
+  if ($scope.query.name) {
+    handleTaxonSelected($scope.query.name);
+    if ($scope.query.interaction) {
+      doSearch();
+    }
+  }
+
   $scope.taxon = {};
   $scope.interactions = [];
   $scope.searchResults = [];
@@ -36,47 +90,30 @@
   };
 
   $scope.taxonSelected = function(item) {
-    images.get({taxon: item}).$promise.then(function(response) {
-      $scope.taxon = {
-        scientificName: response.scientificName,
-        commonName: response.commonName,
-        thumbnailURL: response.thumbnailURL,
-        imageURL: response.imageURL,
-        infoURL: response.infoURL
-      };
-      $rootScope.$emit('taxonEvent', $scope.taxon);
-      $rootScope.$broadcast('taxonEvent', $scope.taxon);
-    }, function(err) {
-      console.dir(err);
-      $scope.taxon = {};
-      $rootScope.$emit('taxonEvent', $scope.taxon);
-      $rootScope.$broadcast('taxonEvent', $scope.taxon);
-    });
+    $scope.query.name = item;
+    $scope.query.interaction = null;
+    $scope.searchResults = [];
+    $state.transitionTo('main', $scope.query, {location: true, reload: true});
+    // images.get({taxon: item}).$promise.then(function(response) {
+    //   $scope.taxon = {
+    //     scientificName: response.scientificName,
+    //     commonName: response.commonName,
+    //     thumbnailURL: response.thumbnailURL,
+    //     imageURL: response.imageURL,
+    //     infoURL: response.infoURL
+    //   };
+    //   $rootScope.$emit('taxonEvent', $scope.taxon);
+    //   $rootScope.$broadcast('taxonEvent', $scope.taxon);
+    // }, function(err) {
+    //   console.dir(err);
+    //   $scope.taxon = {};
+    //   $rootScope.$emit('taxonEvent', $scope.taxon);
+    //   $rootScope.$broadcast('taxonEvent', $scope.taxon);
+    // });
   };
 
   $scope.search = function() {
-    $scope.searchResults = [];
-    taxonInteraction.get({taxon: $scope.query.name, interaction: $scope.query.interaction}).$promise.then(function(response) {
-      var speciesList = response.data[0][2];
-      console.dir(speciesList);
-      speciesList.forEach(function(item) {
-        images.get({taxon: item}).$promise.then(function(imageResponse) {
-          $scope.searchResults.push({
-            scientificName: imageResponse.scientificName,
-            commonName: imageResponse.commonName,
-            thumbnailURL: imageResponse.thumbnailURL,
-            imageURL: imageResponse.imageURL,
-            infoURL: imageResponse.infoURL
-          });
-          $rootScope.$emit('taxonEvent', $scope.searchResults[$scope.searchResults.length-1]);
-          $rootScope.$broadcast('taxonEvent', $scope.searchResults[$scope.searchResults.length-1]);
-        }, function(err) {
-          console.dir(err);
-        });
-      });
-    }, function(err) {
-      console.dir(err);
-    });
+    $state.transitionTo('main', $scope.query, {location: true, reload: true});
   };
 
 });
