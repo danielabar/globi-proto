@@ -13,6 +13,7 @@
   $scope.query = {};
   $scope.taxon = {};
   $scope.interactions = [];
+  $scope.searchResults = [];
 
   interactionTypes.get().$promise.then(function(response) {
     Object.keys(response).forEach(function(interactionType) {
@@ -54,8 +55,25 @@
   };
 
   $scope.search = function() {
+    $scope.searchResults = [];
     taxonInteraction.get({taxon: $scope.query.name, interaction: $scope.query.interaction}).$promise.then(function(response) {
-      console.dir(response);
+      var speciesList = response.data[0][2];
+      console.dir(speciesList);
+      speciesList.forEach(function(item) {
+        images.get({taxon: item}).$promise.then(function(imageResponse) {
+          $scope.searchResults.push({
+            scientificName: imageResponse.scientificName,
+            commonName: imageResponse.commonName,
+            thumbnailURL: imageResponse.thumbnailURL,
+            imageURL: imageResponse.imageURL,
+            infoURL: imageResponse.infoURL
+          });
+          $rootScope.$emit('taxonEvent', $scope.searchResults[$scope.searchResults.length-1]);
+          $rootScope.$broadcast('taxonEvent', $scope.searchResults[$scope.searchResults.length-1]);
+        }, function(err) {
+          console.dir(err);
+        });
+      });
     }, function(err) {
       console.dir(err);
     });

@@ -63,6 +63,10 @@ body {
   margin-top: 1em;
 }
 
+.search-results li {
+  list-style-type: none;
+}
+
 .image-tile {
   background: #EFEDE3;
   display: inline-block;
