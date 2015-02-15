@@ -8,9 +8,21 @@
  * Controller of the globiProtoApp
  */
  angular.module('globiProtoApp')
- .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope) {
+ .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope, interactionTypes) {
 
+  $scope.search = {};
   $scope.taxon = {};
+  $scope.interactions = [];
+
+  interactionTypes.get().$promise.then(function(response) {
+    Object.keys(response).forEach(function(interactionType) {
+      $scope.interactions.push({
+        name: interactionType,
+        source: response[interactionType].source,
+        target: response[interactionType].target
+      });
+    });
+  });
 
   $scope.getResults = function(val) {
     return closeMatch.get({taxon: val}).$promise.then(function(response) {

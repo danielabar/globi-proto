@@ -1,10 +1,11 @@
 <div class="row">
   <div class="col-xs-12">
     <form class="form-inline">
+
       <div class="form-group">
         <label for="exampleInputName2">Name</label>
         <input type="text"
-          ng-model="asyncSelected" class="form-control"
+          ng-model="search.name" class="form-control"
           placeholder="Animal (eg: tuna)"
           typeahead="address for address in getResults($viewValue)"
           typeahead-wait-ms="100"
@@ -13,11 +14,15 @@
           typeahead-on-select="taxonSelected($item, $model, $label)">
         <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
       </div>
+
       <div class="form-group">
-        <label for="exampleInputEmail2">Email</label>
-        <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
+        <label for="exampleInputEmail2">Interaction</label>
+        <select class="form-control input-sm"
+          ng-model="search.interaction"
+          ng-options="i.name as (i.name + ' (' + i.source +  '->' + i.target + ')') for i in interactions">
+        </select>
       </div>
-      <button type="submit" class="btn btn-default">Send invitation</button>
+      <button type="submit" class="btn btn-default">Search</button>
     </form>
   </div>
 </div>
