@@ -5,7 +5,7 @@
       <div class="form-group">
         <label for="exampleInputName2">Name</label>
         <input type="text"
-          ng-model="search.name" class="form-control"
+          ng-model="query.name" class="form-control"
           placeholder="Animal (eg: tuna)"
           typeahead="address for address in getResults($viewValue)"
           typeahead-wait-ms="100"
@@ -18,11 +18,11 @@
       <div class="form-group">
         <label for="exampleInputEmail2">Interaction</label>
         <select class="form-control input-sm"
-          ng-model="search.interaction"
+          ng-model="query.interaction"
           ng-options="i.name as (i.name + ' (' + i.source +  '->' + i.target + ')') for i in interactions">
         </select>
       </div>
-      <button type="submit" class="btn btn-default">Search</button>
+      <button ng-click="search()" type="submit" class="btn btn-default">Search</button>
     </form>
   </div>
 </div>

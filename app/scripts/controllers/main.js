@@ -8,19 +8,21 @@
  * Controller of the globiProtoApp
  */
  angular.module('globiProtoApp')
- .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope, interactionTypes) {
+ .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope, interactionTypes, taxonInteraction) {
 
-  $scope.search = {};
+  $scope.query = {};
   $scope.taxon = {};
   $scope.interactions = [];
 
   interactionTypes.get().$promise.then(function(response) {
     Object.keys(response).forEach(function(interactionType) {
-      $scope.interactions.push({
-        name: interactionType,
-        source: response[interactionType].source,
-        target: response[interactionType].target
-      });
+      if (!interactionType.match(/^\$/)) {
+        $scope.interactions.push({
+          name: interactionType,
+          source: response[interactionType].source,
+          target: response[interactionType].target
+        });
+      }
     });
   });
 
@@ -48,6 +50,14 @@
       $scope.taxon = {};
       $rootScope.$emit('taxonEvent', $scope.taxon);
       $rootScope.$broadcast('taxonEvent', $scope.taxon);
+    });
+  };
+
+  $scope.search = function() {
+    taxonInteraction.get({taxon: $scope.query.name, interaction: $scope.query.interaction}).$promise.then(function(response) {
+      console.dir(response);
+    }, function(err) {
+      console.dir(err);
     });
   };
 
