@@ -103,8 +103,9 @@
     $state.transitionTo('main', $scope.query, {location: true, reload: true});
   };
 
-  $scope.$on('followEvent', function(evt, imageData) {
-    $scope.query.name = imageData.scientificName;
+  $scope.$on('followEvent', function(evt, eventData) {
+    $scope.query.name = eventData.imageData.scientificName;
+    $scope.query.interaction = eventData.interactionType;
     $scope.searchResults = [];
     $state.transitionTo('main', $scope.query, {location: true, reload: true});
   });
