@@ -3,7 +3,7 @@
 /**
  * @ngdoc function
  * @name globiProtoApp.controller:MainCtrl
- * @description
+ * @description (see friendly interaction names at http://www.globalbioticinteractions.org/)
  * # MainCtrl
  * Controller of the globiProtoApp
  */
