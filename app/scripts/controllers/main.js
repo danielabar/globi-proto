@@ -96,6 +96,13 @@
     $state.transitionTo('main', $scope.query, {location: true, reload: true});
   };
 
+  $scope.clear = function() {
+    $scope.query = {};
+    $scope.taxon = {};
+    $scope.searchResults = [];
+    $state.transitionTo('main', $scope.query, {location: true, reload: true});
+  };
+
   $scope.$on('followEvent', function(evt, imageData) {
     $scope.query.name = imageData.scientificName;
     $scope.searchResults = [];
