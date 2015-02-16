@@ -43,13 +43,9 @@
         imageURL: response.imageURL,
         infoURL: response.infoURL
       };
-      $rootScope.$emit('taxonEvent', $scope.taxon);
-      $rootScope.$broadcast('taxonEvent', $scope.taxon);
     }, function(err) {
       console.dir(err);
       $scope.taxon = {};
-      $rootScope.$emit('taxonEvent', $scope.taxon);
-      $rootScope.$broadcast('taxonEvent', $scope.taxon);
     });
   };
 
@@ -94,26 +90,16 @@
     $scope.query.interaction = null;
     $scope.searchResults = [];
     $state.transitionTo('main', $scope.query, {location: true, reload: true});
-    // images.get({taxon: item}).$promise.then(function(response) {
-    //   $scope.taxon = {
-    //     scientificName: response.scientificName,
-    //     commonName: response.commonName,
-    //     thumbnailURL: response.thumbnailURL,
-    //     imageURL: response.imageURL,
-    //     infoURL: response.infoURL
-    //   };
-    //   $rootScope.$emit('taxonEvent', $scope.taxon);
-    //   $rootScope.$broadcast('taxonEvent', $scope.taxon);
-    // }, function(err) {
-    //   console.dir(err);
-    //   $scope.taxon = {};
-    //   $rootScope.$emit('taxonEvent', $scope.taxon);
-    //   $rootScope.$broadcast('taxonEvent', $scope.taxon);
-    // });
   };
 
   $scope.search = function() {
     $state.transitionTo('main', $scope.query, {location: true, reload: true});
   };
+
+  $scope.$on('followEvent', function(evt, imageData) {
+    $scope.query.name = imageData.scientificName;
+    $scope.searchResults = [];
+    $state.transitionTo('main', $scope.query, {location: true, reload: true});
+  });
 
 });

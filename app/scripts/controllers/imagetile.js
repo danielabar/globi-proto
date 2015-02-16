@@ -8,6 +8,10 @@
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
-  .controller('ImagetileCtrl', function ($scope) {
-    $scope.foo = 'foo';
+  .controller('ImagetileCtrl', function ($scope, $rootScope) {
+
+    $scope.follow = function(imageData) {
+      $rootScope.$broadcast('followEvent', imageData);
+    };
+
   });
