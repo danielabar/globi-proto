@@ -1,9 +1,10 @@
-@tile-bg:         #FFF;
-@divider:         #CBCDE8;
-@icon-border:     @brand-primary;
+@tile-bg:           #FFF;
+@divider:           #CBCDE8;
+@icon-border:       @brand-primary;
 
-@tile-width:      180px;
-@tile-height:     310px;
+@tile-width:        180px;
+@tile-width-full:   320px;
+@tile-height:       310px;
 
 .image-tile {
   background: @tile-bg;
@@ -79,4 +80,19 @@
   -moz-box-shadow: 0px 0px 2px @icon-border;
   -webkit-box-shadow: 0px 0px 2px @icon-border;
   box-shadow: 0px 0px 2px @icon-border;
+}
+
+@media (max-width: 481px) {
+
+  .image-tile {
+    width: @tile-width-full;
+  }
+
+  .image-content {
+    background-repeat: no-repeat;
+  }
+
+  .actions {
+    width: @tile-width-full;
+  }
 }
