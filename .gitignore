@@ -3,3 +3,7 @@ dist
 .tmp
 .sass-cache
 bower_components
+
+# Generated files
+app/styles/*.map
+app/styles/*.css
