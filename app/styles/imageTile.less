@@ -1,9 +1,9 @@
-@tile-bg:         #EFEDE3;
-@tile-border:     #C5C3C3;
+@tile-bg:         #FFF;
 @divider:         #CBCDE8;
+@icon-border:     @brand-primary;
 
-@tile-width:      170px;
-@tile-height:     300px;
+@tile-width:      180px;
+@tile-height:     310px;
 
 .image-tile {
   background: @tile-bg;
@@ -11,20 +11,17 @@
   position: relative;
   width: @tile-width;
   height: @tile-height;
-  border: 1px solid @tile-border;
   border-radius: 3px;
 }
 
 .image-content {
   position: absolute;
   left: 0;
-  top: 0;
-  background-repeat: no-repeat;
+  top: -1px;
+  // background-repeat: no-repeat;
   background-size: contain;
   width: 100%;
   height: 110px;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
 }
 
 .image-description-1 {
@@ -54,6 +51,7 @@
 .actions a {
   cursor: pointer;
   margin-left: 0.6em;
+  text-decoration: none;
 }
 
 .actions ul {
@@ -65,7 +63,7 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
-  line-height: 2em;
+  line-height: 2.3em;
   vertical-align: middle;
 }
 
@@ -73,7 +71,12 @@
   border-top: 1px solid @divider;
 }
 
-// .actions .action {
-//   width: 50%;
-//   float: left;
-// }
+.actions span {
+  padding: 5px 5px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+  -moz-box-shadow: 0px 0px 2px @icon-border;
+  -webkit-box-shadow: 0px 0px 2px @icon-border;
+  box-shadow: 0px 0px 2px @icon-border;
+}
