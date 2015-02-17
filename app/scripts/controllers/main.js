@@ -80,13 +80,33 @@
   $scope.getResults = function(val) {
     return closeMatch.get({taxon: val}).$promise.then(function(response) {
       return response.data.map(function(item) {
-        return item[0];
+        return {
+          scientificName: item[0],
+          commonName: getEnglishCommonName(item[1])
+        };
       });
     });
   };
 
+  var getEnglishCommonName = function(commonNames) {
+    var result = '';
+    var allLanguages;
+    var parts;
+
+    if (commonNames) {
+      allLanguages = commonNames.split(' | ');
+      allLanguages.forEach(function(item) {
+        if (item.match(/@en/)) {
+          parts = item.split('@');
+          result = parts[0];
+        }
+      });
+    }
+    return result;
+  };
+
   $scope.taxonSelected = function(item) {
-    $scope.query.name = item;
+    $scope.query.name = item.scientificName;
     $scope.query.interaction = null;
     $scope.searchResults = [];
     $state.transitionTo('main', $scope.query, {location: true, reload: true});
