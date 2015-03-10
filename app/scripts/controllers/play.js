@@ -9,5 +9,7 @@
  */
 angular.module('globiProtoApp')
   .controller('PlayCtrl', function () {
-    TP.init();
+    // Experiment pass data from Angular to Canvas
+    var species = 'Thunnus albacares';
+    TP.init(species);
   });

@@ -1,11 +1,13 @@
+// TODO: Also need a stop function that can be called from Angular
+
 window.TP = {};
 
-TP.init = function() {
+TP.init = function(species) {
+  console.log('Canvas got species from Angular: ' + species);
   this.canvas = document.getElementById('canvas');
   this.ctx = canvas.getContext('2d');
   this.width = canvas.width;
   this.height = canvas.height;
-  // this.registerToolTips();
   this.registerHandlers();
 
   // global context properties
@@ -22,16 +24,6 @@ TP.init = function() {
   this.animate();
 };
 
-// TP.registerToolTips = function() {
-//   var self = this;
-//   $('.action').tooltip({
-//     container: 'body'
-//   });
-//   $('#download').on('click', function() {
-//     $(this).attr('href', self.canvas.toDataURL());
-//   });
-// };
-
 TP.registerHandlers = function() {
   var self = this;
   this.canvas.onclick = function(e) {
@@ -39,12 +31,6 @@ TP.registerHandlers = function() {
     square.render();
     self.shapeList.push(square);
   };
-  // $('#pause').on('click', function() {
-  //   self.pause();
-  // });
-  // $('#play').on('click', function() {
-  //   self.play();
-  // });
 };
 
 TP.pause = function() {
