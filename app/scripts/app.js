@@ -33,6 +33,18 @@ angular
           }
         }
       })
+      .state('play', {
+        url: '/play',
+        views: {
+          'nav' : {
+            templateUrl: 'views/nav.html'
+          },
+          'content' : {
+            templateUrl: 'views/play.html',
+            controller: 'PlayCtrl'
+          }
+        }
+      })
       .state('about', {
         url: '/about',
         views: {
