@@ -35,6 +35,19 @@ angular
           }
         }
       })
+      .state('map', {
+        url: '/map?sourceTaxon&targetTaxon&interactionType',
+        views: {
+          'nav' : {
+            templateUrl: 'views/nav.html',
+            controller: 'NavCtrl'
+          },
+          'content' : {
+            templateUrl: 'views/map.html',
+            controller: 'MapCtrl'
+          }
+        }
+      })
       .state('play', {
         url: '/play',
         views: {
@@ -45,19 +58,6 @@ angular
           'content' : {
             templateUrl: 'views/play.html',
             controller: 'PlayCtrl'
-          }
-        }
-      })
-      .state('map', {
-        url: '/map',
-        views: {
-          'nav' : {
-            templateUrl: 'views/nav.html',
-            controller: 'NavCtrl'
-          },
-          'content' : {
-            templateUrl: 'views/map.html',
-            controller: 'MapCtrl'
           }
         }
       })

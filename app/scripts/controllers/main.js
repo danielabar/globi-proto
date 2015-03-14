@@ -130,4 +130,14 @@
     $state.transitionTo('main', $scope.query, {location: true, reload: true});
   });
 
+  $scope.$on('mapEvent', function(evt, eventData) {
+    $state.transitionTo('map', {
+        sourceTaxon: $state.params.name,
+        targetTaxon: eventData.imageData.scientificName,
+        interactionType: $state.params.interaction || 'preysOn'
+      },
+      {location: true, reload: true}
+    );
+  });
+
 });
