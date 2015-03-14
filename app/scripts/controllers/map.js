@@ -10,53 +10,63 @@
 angular.module('globiProtoApp')
   .controller('MapCtrl', function ($scope, $state, taxonInteractionDetails) {
 
+    // TODO in a real app, this should go in MarkerService
     var buildMarkers = function(data) {
-      var result = {};
-      var allMarkers = data.map(function(item) {
-        var obj = {
-          lat: item.latitude,
-          lng: item.longitude,
-          message: item.study,
-          focus: true,
-          draggable: false
-        };
-        return obj;
-      });
-      // TODO Filter by unique lat/lng/msg and keep count of how many of each and modify message accordingly
-      for(var i=0; i<allMarkers.length; i++) {
-        if (allMarkers[i].lat && allMarkers[i].lng) {
-          result['marker'+i] = allMarkers[i];
+      var uniqueHolder = {};
+      data.forEach(function(item) {
+        if (item.study && item.latitude && item.longitude) {
+          // str.replace(/\s|\-/g,'')
+          var uniqueKey = item.study.replace(/\s|\-/g, '') + item.latitude.toString().replace('-','#') + '_' + item.longitude.toString().replace('-','#');
+          if (uniqueHolder[uniqueKey]) {
+            uniqueHolder[uniqueKey].itemCount += 1;
+            uniqueHolder[uniqueKey].message = item.study + ', ' + uniqueHolder[uniqueKey].itemCount + ' Observations';
+          } else {
+            uniqueHolder[uniqueKey] = {
+              lat: item.latitude,
+              lng: item.longitude,
+              message: item.study + ', 1 Observations',
+              focus: true,
+              draggable: false,
+              itemCount: 1
+            };
+          }
         }
-      }
-      return result;
+      });
+      return uniqueHolder;
     };
 
+    var calculateCenter = function(markers) {
+      var totalLat = 0;
+      var totalLng = 0;
+      Object.keys(markers).forEach(function(key) {
+        totalLat += markers[key].lat;
+        totalLng += markers[key].lng;
+      });
+      return {
+        lat: totalLat / Object.keys(markers).length,
+        lng: totalLng / Object.keys(markers).length,
+        zoom: 2
+      };
+    };
+
+    $scope.center = {};
     taxonInteractionDetails.query({
       interactionType: $state.params.interactionType,
       sourceTaxon: $state.params.sourceTaxon,
       targetTaxon: $state.params.targetTaxon
     }, function(response) {
       $scope.markers = buildMarkers(response);
-      // TODO calc center based on avg lat and lng of markers
+      $scope.center = calculateCenter($scope.markers);
+      console.dir($scope.center);
       // TODO If no markers found - display error and/or redirect back to Learn
     }, function(err) {
       console.dir(err);
     });
 
-    $scope.center = {
-        lat: 45,
-        lng: 18,
-        zoom: 2
-    };
-
-    // $scope.markers = {
-    //   osloMarker: {
+    // $scope.center = {
     //     lat: 45,
     //     lng: 18,
-    //     // message: "I want to travel here!",
-    //     focus: true,
-    //     draggable: false
-    //   }
+    //     zoom: 2
     // };
 
   });
