@@ -22,8 +22,11 @@ angular.module('globiProtoApp')
         };
         return obj;
       });
+      // TODO Filter by unique lat/lng/msg and keep count of how many of each and modify message accordingly
       for(var i=0; i<allMarkers.length; i++) {
-        result['marker'+i] = allMarkers[i];
+        if (allMarkers[i].lat && allMarkers[i].lng) {
+          result['marker'+i] = allMarkers[i];
+        }
       }
       return result;
     };
@@ -34,11 +37,8 @@ angular.module('globiProtoApp')
       targetTaxon: $state.params.targetTaxon
     }, function(response) {
       $scope.markers = buildMarkers(response);
-      console.dir($scope.markers);
-      // TODO find unique markers (bring in angular underscore?)
-      // TOOD build markers (eventually custom template with citation & link to study if exists)
       // TODO calc center based on avg lat and lng of markers
-      // TODO If no markers found - display error
+      // TODO If no markers found - display error and/or redirect back to Learn
     }, function(err) {
       console.dir(err);
     });
@@ -46,7 +46,7 @@ angular.module('globiProtoApp')
     $scope.center = {
         lat: 45,
         lng: 18,
-        zoom: 1
+        zoom: 2
     };
 
     // $scope.markers = {
