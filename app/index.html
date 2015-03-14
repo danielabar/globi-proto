@@ -20,6 +20,9 @@
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css">
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
@@ -48,12 +51,16 @@
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/leaflet/dist/leaflet.js"></script>
+    <script src="bower_components/leaflet/dist/leaflet-src.js"></script>
+    <script src="bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/game.js"></script>
     <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/nav.js"></script>
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/about.js"></script>
     <script src="scripts/controllers/play.js"></script>
@@ -64,6 +71,7 @@
     <script src="scripts/controllers/imagetile.js"></script>
     <script src="scripts/services/interactiontypes.js"></script>
     <script src="scripts/services/taxoninteraction.js"></script>
+    <script src="scripts/controllers/map.js"></script>
     <!-- endbuild -->
 </body>
 </html>

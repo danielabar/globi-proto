@@ -17,7 +17,8 @@ angular
     'ngCookies',
     'ngSanitize',
     'ngTouch',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'leaflet-directive'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
@@ -25,7 +26,8 @@ angular
         url: '/main?name&interaction',
         views: {
           'nav' : {
-            templateUrl: 'views/nav.html'
+            templateUrl: 'views/nav.html',
+            controller: 'NavCtrl'
           },
           'content' : {
             templateUrl: 'views/main.html',
@@ -37,7 +39,8 @@ angular
         url: '/play',
         views: {
           'nav' : {
-            templateUrl: 'views/nav.html'
+            templateUrl: 'views/nav.html',
+            controller: 'NavCtrl'
           },
           'content' : {
             templateUrl: 'views/play.html',
@@ -45,11 +48,25 @@ angular
           }
         }
       })
+      .state('map', {
+        url: '/map',
+        views: {
+          'nav' : {
+            templateUrl: 'views/nav.html',
+            controller: 'NavCtrl'
+          },
+          'content' : {
+            templateUrl: 'views/map.html',
+            controller: 'MapCtrl'
+          }
+        }
+      })
       .state('about', {
         url: '/about',
         views: {
           'nav' : {
-            templateUrl: 'views/nav.html'
+            templateUrl: 'views/nav.html',
+            controller: 'NavCtrl'
           },
           'content' : {
             templateUrl: 'views/about.html',
