@@ -41,7 +41,8 @@
         commonName: response.commonName,
         thumbnailURL: response.thumbnailURL,
         imageURL: response.imageURL,
-        infoURL: response.infoURL
+        infoURL: response.infoURL,
+        smallCard: true
       };
     }, function(err) {
       console.dir(err);
