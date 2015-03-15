@@ -1,5 +1,7 @@
 'use strict';
 
+/*jshint camelcase: false*/
+
 /**
  * @ngdoc function
  * @name globiProtoApp.controller:MapCtrl
@@ -8,7 +10,7 @@
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
-  .controller('MapCtrl', function ($scope, $state, taxonInteractionDetails) {
+  .controller('MapCtrl', function ($scope, $state, taxonInteractionDetails, images) {
 
     // TODO in a real app, this should go in MarkerService
     var buildMarkers = function(data) {
@@ -49,24 +51,50 @@ angular.module('globiProtoApp')
       };
     };
 
+    var buildSourceImage = function(item) {
+      console.dir(item);
+      images.get({taxon: item['source_taxon_name']}).$promise.then(function(response) {
+        $scope.sourceTaxon = {
+          scientificName: response.scientificName,
+          commonName: response.commonName,
+          thumbnailURL: response.thumbnailURL,
+          imageURL: response.imageURL,
+          infoURL: response.infoURL,
+        };
+      }, function(err) {
+        console.dir(err);
+        $scope.taxon = {};
+      });
+    };
+
+    var buildTargetImage = function(item) {
+      images.get({taxon: item['target_taxon_name']}).$promise.then(function(response) {
+        $scope.targetTaxon = {
+          scientificName: response.scientificName,
+          commonName: response.commonName,
+          thumbnailURL: response.thumbnailURL,
+          imageURL: response.imageURL,
+          infoURL: response.infoURL,
+        };
+      }, function(err) {
+        console.dir(err);
+        $scope.taxon = {};
+      });
+    };
+
     $scope.center = {};
     taxonInteractionDetails.query({
       interactionType: $state.params.interactionType,
       sourceTaxon: $state.params.sourceTaxon,
       targetTaxon: $state.params.targetTaxon
     }, function(response) {
+      buildSourceImage(response[0]);
+      buildTargetImage(response[0]);
       $scope.markers = buildMarkers(response);
       $scope.center = calculateCenter($scope.markers);
-      console.dir($scope.center);
       // TODO If no markers found - display error and/or redirect back to Learn
     }, function(err) {
       console.dir(err);
     });
-
-    // $scope.center = {
-    //     lat: 45,
-    //     lng: 18,
-    //     zoom: 2
-    // };
 
   });

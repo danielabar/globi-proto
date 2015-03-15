@@ -15,5 +15,11 @@ angular.module('globiProtoApp')
         imageData: '=miniTile'
       },
       templateUrl: 'views/miniTile.html'
+      // link: function($scope) {
+      //   $scope.$on('taxonCardReady', function(evt, data) {
+      //     console.log('=== MINI TILE: ' + JSON.stringify(data));
+      //     $scope.imageData = data;
+      //   });
+      // }
     };
   });

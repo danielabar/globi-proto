@@ -34,6 +34,7 @@
     });
   };
 
+  // TODO Similar logic used in map.js, pull out to a service...
   var handleTaxonSelected = function(item) {
     images.get({taxon: item}).$promise.then(function(response) {
       $scope.taxon = {
@@ -42,7 +43,6 @@
         thumbnailURL: response.thumbnailURL,
         imageURL: response.imageURL,
         infoURL: response.infoURL,
-        smallCard: true
       };
     }, function(err) {
       console.dir(err);
