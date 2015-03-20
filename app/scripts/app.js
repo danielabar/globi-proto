@@ -48,6 +48,19 @@ angular
           }
         }
       })
+      .state('network', {
+        url: '/network?sourceTaxon&interactionType',
+        views: {
+          'nav' : {
+            templateUrl: 'views/nav.html',
+            controller: 'NavCtrl'
+          },
+          'content' : {
+            templateUrl: 'views/network.html',
+            controller: 'NetworkCtrl'
+          }
+        }
+      })
       .state('play', {
         url: '/play',
         views: {

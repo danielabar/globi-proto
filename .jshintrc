@@ -21,6 +21,7 @@
     "angular": false,
     "TP": false,
     "canvas": false,
-    "$": false
+    "$": false,
+    "d3": false
   }
 }
