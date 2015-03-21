@@ -25,4 +25,11 @@ angular.module('globiProtoApp')
       $rootScope.$broadcast('mapEvent', eventData);
     };
 
+    $scope.network = function(imageData) {
+      var eventData = {
+        imageData: imageData
+      };
+      $rootScope.$broadcast('networkEvent', eventData);
+    };
+
   });

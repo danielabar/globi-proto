@@ -49,7 +49,7 @@ angular
         }
       })
       .state('network', {
-        url: '/network?sourceTaxon&interactionType',
+        url: '/network?taxon&interaction',
         views: {
           'nav' : {
             templateUrl: 'views/nav.html',
