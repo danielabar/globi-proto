@@ -53,7 +53,7 @@ angular.module('globiProtoApp')
 
     var buildSourceImage = function(item) {
       console.dir(item);
-      images.get({taxon: item['source_taxon_name']}).$promise.then(function(response) {
+      images.get({taxon: item.source_taxon_name}).$promise.then(function(response) {
         $scope.sourceTaxon = {
           scientificName: response.scientificName,
           commonName: response.commonName,
@@ -68,7 +68,7 @@ angular.module('globiProtoApp')
     };
 
     var buildTargetImage = function(item) {
-      images.get({taxon: item['target_taxon_name']}).$promise.then(function(response) {
+      images.get({taxon: item.target_taxon_name}).$promise.then(function(response) {
         $scope.targetTaxon = {
           scientificName: response.scientificName,
           commonName: response.commonName,

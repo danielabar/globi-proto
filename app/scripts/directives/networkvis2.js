@@ -1,7 +1,13 @@
 angular.module('globiProtoApp')
   .directive('networkVis', function() {
 
+    var width = 960;
+    var height = 500;
 
+    var force = d3.layout.force()
+      .charge(-120)
+      .linkDistance(30)
+      .size([width, height]);
 
     return {
       restrict: 'E',
@@ -10,23 +16,14 @@ angular.module('globiProtoApp')
       },
       link: function(scope) {
 
+        // set up initial svg object
+        var svg = d3.select('body').append('svg')
+          .attr('width', width)
+          .attr('height', height);
+
         scope.$watch('val', function(newVal) {
           if (!newVal) {return; }
-          var width = 960;
-          var height = 500;
-
-          var svg = d3.select('body').append('svg')
-            .attr('width', width)
-            .attr('height', height);
-
           svg.selectAll('*').remove();
-
-          var force = d3.layout.force()
-            .charge(-120)
-            .linkDistance(30)
-            .size([width, height]);
-
-          console.dir(newVal);
 
           force
             .nodes(newVal.nodes)
