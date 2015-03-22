@@ -14,7 +14,7 @@ angular.module('globiProtoApp')
         var color = d3.scale.category10();
         var force = d3.layout.force()
           .charge(-120)
-          .linkDistance(30)
+          .linkDistance(80)
           .size([width, height]);
 
         // Init the vis
@@ -40,35 +40,78 @@ angular.module('globiProtoApp')
             .links(workingCopy.links)
             .start();
 
+          //Create all the line svgs but without locations yet
           var link = svg.selectAll('.link')
               .data(workingCopy.links)
-            .enter().append('line')
+              .enter().append('line')
               .attr('class', 'link')
-              .style('stroke-width', function(d) { return Math.sqrt(d.value); });
+              .style('stroke-width', function (d) {
+              return Math.sqrt(d.value);
+          });
+          // var link = svg.selectAll('.link')
+          //     .data(workingCopy.links)
+          //     .enter().append('line')
+          //     .attr('class', 'link')
+          //     .style('stroke-width', function(d) { return Math.sqrt(d.value); });
 
+          // Create all the circle svgs but without locations yet
           var node = svg.selectAll('.node')
-              .data(workingCopy.nodes)
-              .enter().append('circle')
-              .attr('class', 'node')
-              .attr('r', 5)
-              .style('fill', function(d) { return color(d.group); })
-              .on('click', function(item) {
-                console.log('=== NODE CLICKED: ' + JSON.stringify(item));
-                scope.$emit('nodeClicked', item);
-              })
-              .call(force.drag);
+            .data(workingCopy.nodes)
+            .enter().append('g')
+            .attr('class', 'node')
+            .on('click', function(item) { scope.$emit('nodeClicked', item); })
+            .call(force.drag);
 
-          node.append('title')
-              .text(function(d) { return d.name; });
+          node.append('circle')
+              .attr('r', 12)
+              .style('fill', function (d) {
+              return color(d.group);
+          });
+
+          node.append('text')
+            .attr('dx', 10)
+            .attr('dy', '.35em')
+            .text(function(d) { return d.name; })
+            // .style('stroke', 'gray');
+            .style('stroke', function(d) {return color(d.group);});
+
+          // var node = svg.selectAll('.node')
+          //     .data(workingCopy.nodes)
+          //     .enter().append('circle')
+          //     .attr('class', 'node')
+          //     .attr('r', 5)
+          //     .style('fill', function(d) { return color(d.group); })
+          //     .on('click', function(item) {
+          //       console.log('=== NODE CLICKED: ' + JSON.stringify(item));
+          //       scope.$emit('nodeClicked', item);
+          //     })
+          //     .call(force.drag);
+
+          // node.append('title')
+          //   .text(function(d) { return d.name; });
+
+          // Label the nodes
+          // node.append('text')
+          //   .attr('dx', 10)
+          //   .attr('dy', '.35em')
+          //   .text(function(d) { return d.name; })
+          //   .style('stroke', 'black');
 
           force.on('tick', function() {
             link.attr('x1', function(d) { return d.source.x; })
-                .attr('y1', function(d) { return d.source.y; })
-                .attr('x2', function(d) { return d.target.x; })
-                .attr('y2', function(d) { return d.target.y; });
+              .attr('y1', function(d) { return d.source.y; })
+              .attr('x2', function(d) { return d.target.x; })
+              .attr('y2', function(d) { return d.target.y; });
 
             node.attr('cx', function(d) { return d.x; })
-                .attr('cy', function(d) { return d.y; });
+              .attr('cy', function(d) { return d.y; });
+
+            // Labels
+            d3.selectAll('circle').attr('cx', function (d) { return d.x; })
+              .attr('cy', function (d) { return d.y; });
+            d3.selectAll('text').attr('x', function (d) { return d.x; })
+              .attr('y', function (d) { return d.y; });
+
           }); //force.on(tick)
         });//$scope.$watch
 
