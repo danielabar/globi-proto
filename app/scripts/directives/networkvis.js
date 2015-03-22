@@ -17,6 +17,35 @@ angular.module('globiProtoApp')
           .linkDistance(80)
           .size([width, height]);
 
+        // Collision Detection
+        var padding = 4;
+        var radius = 12;
+        var collide = function (alpha, nodes) {
+          var quadtree = d3.geom.quadtree(nodes);
+          return function(d) {
+            var rb = 2*radius + padding,
+              nx1 = d.x - rb,
+              nx2 = d.x + rb,
+              ny1 = d.y - rb,
+              ny2 = d.y + rb;
+          quadtree.visit(function(quad, x1, y1, x2, y2) {
+            if (quad.point && (quad.point !== d)) {
+              var x = d.x - quad.point.x,
+                y = d.y - quad.point.y,
+                l = Math.sqrt(x * x + y * y);
+              if (l < rb) {
+                l = (l - rb) / l * alpha;
+                d.x -= x *= l;
+                d.y -= y *= l;
+                quad.point.x += x;
+                quad.point.y += y;
+              }//if(l<rb)
+            }//if(quad.point...)
+            return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+          });//quadtree.visit...
+        };//return function(d)
+      };//collide
+
         // Init the vis
         var svg = d3.select(element[0]).append('svg')
           .attr('width', width)
@@ -82,6 +111,9 @@ angular.module('globiProtoApp')
               .attr('cy', function (d) { return d.y; });
             d3.selectAll('text').attr('x', function (d) { return d.x; })
               .attr('y', function (d) { return d.y; });
+
+            // Apply collision detection
+            node.each(collide(0.5, workingCopy.nodes));
 
           }); //force.on(tick)
         });//$scope.$watch
