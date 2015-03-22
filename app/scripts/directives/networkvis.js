@@ -24,11 +24,10 @@ angular.module('globiProtoApp')
 
         scope.$watch('val', function(newVal) {
 
-          console.log('=== NETWORK VIS DIRECTIVE newVal: ' + JSON.stringify(newVal, null, 2));
-
           // Nothing to do if no new data available
           if (!newVal) {return; }
 
+          // D3 modifies the data, can cause issues back on Angular side
           var workingCopy = angular.copy(newVal);
 
           // Clear out the old elements
@@ -42,17 +41,11 @@ angular.module('globiProtoApp')
 
           //Create all the line svgs but without locations yet
           var link = svg.selectAll('.link')
-              .data(workingCopy.links)
-              .enter().append('line')
-              .attr('class', 'link')
-              .style('stroke-width', function (d) {
-              return Math.sqrt(d.value);
-          });
-          // var link = svg.selectAll('.link')
-          //     .data(workingCopy.links)
-          //     .enter().append('line')
-          //     .attr('class', 'link')
-          //     .style('stroke-width', function(d) { return Math.sqrt(d.value); });
+            .data(workingCopy.links)
+            .enter().append('line')
+            .attr('class', 'link')
+            // .style('stroke-width', function (d) { return Math.sqrt(d.value); });
+            .style('stroke-width', '2' );
 
           // Create all the circle svgs but without locations yet
           var node = svg.selectAll('.node')
@@ -63,40 +56,19 @@ angular.module('globiProtoApp')
             .call(force.drag);
 
           node.append('circle')
-              .attr('r', 12)
-              .style('fill', function (d) {
-              return color(d.group);
+            .attr('r', 10)
+            .style('fill', function (d) {
+            return color(d.group);
           });
 
+          // Text labels
           node.append('text')
-            .attr('dx', 10)
-            .attr('dy', '.35em')
+            .attr('dx', 11)
+            .attr('dy', '.45em')
             .text(function(d) { return d.name; })
-            // .style('stroke', 'gray');
             .style('stroke', function(d) {return color(d.group);});
 
-          // var node = svg.selectAll('.node')
-          //     .data(workingCopy.nodes)
-          //     .enter().append('circle')
-          //     .attr('class', 'node')
-          //     .attr('r', 5)
-          //     .style('fill', function(d) { return color(d.group); })
-          //     .on('click', function(item) {
-          //       console.log('=== NODE CLICKED: ' + JSON.stringify(item));
-          //       scope.$emit('nodeClicked', item);
-          //     })
-          //     .call(force.drag);
-
-          // node.append('title')
-          //   .text(function(d) { return d.name; });
-
-          // Label the nodes
-          // node.append('text')
-          //   .attr('dx', 10)
-          //   .attr('dy', '.35em')
-          //   .text(function(d) { return d.name; })
-          //   .style('stroke', 'black');
-
+          // Provide SVGs co-ordinates
           force.on('tick', function() {
             link.attr('x1', function(d) { return d.source.x; })
               .attr('y1', function(d) { return d.source.y; })
@@ -106,7 +78,6 @@ angular.module('globiProtoApp')
             node.attr('cx', function(d) { return d.x; })
               .attr('cy', function(d) { return d.y; });
 
-            // Labels
             d3.selectAll('circle').attr('cx', function (d) { return d.x; })
               .attr('cy', function (d) { return d.y; });
             d3.selectAll('text').attr('x', function (d) { return d.x; })
