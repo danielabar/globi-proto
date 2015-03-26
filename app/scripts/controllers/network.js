@@ -10,7 +10,9 @@
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
-  .controller('NetworkCtrl', function ($scope, $state, taxonInteraction2) {
+  .controller('NetworkCtrl', function ($scope, $state, taxonInteraction2, graphService) {
+
+    var totalGraph = {};
 
     $scope.query = {
       taxon: $state.params.taxon || 'Thunnus obesus',
@@ -27,7 +29,9 @@ angular.module('globiProtoApp')
 
       // Iterate over the response to find target nodes (API sometimes returns targets that aren't linked to source)
       var targetNodes = [];
-      var numIterations = Math.min(10, response.length);
+      // temp debug limit to 3 to figure out whats wrong with delta calc
+      // var numIterations = Math.min(10, response.length);
+      var numIterations = Math.min(3, response.length);
       for (var i=0; i<numIterations; i++) {
         var item = response[i];
         // if (item.source && item.source.name === sourceNode.name) {
@@ -59,7 +63,7 @@ angular.module('globiProtoApp')
       var result = null;
       for (var i=0; i<nodes.length; i++) {
         if (name === nodes[i].name) {
-          result = i;
+          return i;
         }
       }
       return result;
@@ -68,7 +72,7 @@ angular.module('globiProtoApp')
     var mergeGraphData = function(currentGraph, newData, sourceNodeName) {
 
       // Merge nodes
-      var mergedNodes = currentGraph.nodes;
+      var mergedNodes = angular.copy(currentGraph.nodes);
       for (var i=0; i<newData.nodes.length; i++) {
         var item = newData.nodes[i];
         var index = getIndexOfNode(item.name, currentGraph.nodes);
@@ -78,12 +82,13 @@ angular.module('globiProtoApp')
       }
 
       // Merge links
-      var mergedLinks = currentGraph.links;
-      for (var j=1; j<newData.nodes.length; j++) {
+      var mergedLinks = angular.copy(currentGraph.links);
+      for (var j=0; j<newData.nodes.length; j++) {
         var curNode = newData.nodes[j];
         mergedLinks.push({
           source: getIndexOfNode(sourceNodeName, mergedNodes),
-          target: getIndexOfNode(curNode.name, mergedNodes)
+          target: getIndexOfNode(curNode.name, mergedNodes),
+          value: 1
         });
       }
 
@@ -97,15 +102,19 @@ angular.module('globiProtoApp')
     // TODO Make this a method like 'getData' not dependent on $scope so it can be re-used in 'nodeClicked' handler
     taxonInteraction2.query($scope.query, function(response) {
       $scope.graph = convertToGraph(response, $scope.query.taxon, 1);
+      totalGraph = angular.copy($scope.graph);
     }, function(err) {
       console.dir(err);
     });
 
     $scope.$on('nodeClicked', function(evt, data) {
-      console.log('=== RECEIVED NODE EVENT: ' + JSON.stringify(data));
       taxonInteraction2.query({taxon: data.name, interaction: $scope.query.interaction}, function(response) {
         var graphData = convertToGraph(response, $scope.query.taxon, data.group);
-        $scope.graph = mergeGraphData($scope.graph, graphData, data.name);
+        var mergedGraph = mergeGraphData(totalGraph, graphData, data.name);
+        var graphDelta = graphService.calcDiff(totalGraph, mergedGraph);
+        console.log('=== NETWORK: graphDelta = ' + JSON.stringify(graphDelta));
+        $scope.graph = graphDelta;
+        totalGraph = angular.copy(mergedGraph);
       }, function(err) {
         console.dir(err);
       });

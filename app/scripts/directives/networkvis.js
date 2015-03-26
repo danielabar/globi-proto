@@ -2,7 +2,7 @@
 // http://stackoverflow.com/questions/9539294/adding-new-nodes-to-force-directed-layout
 
 angular.module('globiProtoApp')
-  .directive('networkVis', function(graphService) {
+  .directive('networkVis', function() {
 
     return {
       restrict: 'E',
@@ -115,7 +115,7 @@ angular.module('globiProtoApp')
         };//update
 
         // D3 modifies the data, can cause issues back on Angular side
-        // var workingCopy;
+        var workingCopy;
 
         scope.$watch('val', function(newVal) {
 
@@ -123,12 +123,14 @@ angular.module('globiProtoApp')
           if (!newVal) {return; }
 
           // var graphDiff = graphService.calcDiff(workingCopy, newVal);
-          var graphDiff = graphService.calcDiff({nodes: nodes, links: links}, newVal);
 
-          // workingCopy = angular.copy(newVal);
+          workingCopy = angular.copy(newVal);
 
-          nodes.push.apply(nodes, graphDiff.nodes);
-          links.push.apply(links, graphDiff.links);
+          // console.dir(graphDiff);
+
+
+          nodes.push.apply(nodes, workingCopy.nodes);
+          links.push.apply(links, workingCopy.links);
           update();
 
           // for (var i=0; i<graphDiff.nodes.length; i++) {
