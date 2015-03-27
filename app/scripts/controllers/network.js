@@ -22,7 +22,7 @@ angular.module('globiProtoApp')
     taxonInteraction2.query($scope.query, function(response) {
       if (response.length > 0) {
         var sourceTaxon = {
-          name: response[0].source.name,
+          name: $scope.query.taxon,
           group: 1
         };
         $scope.graph = graphService.append(response, sourceTaxon);

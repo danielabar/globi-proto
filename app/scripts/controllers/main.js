@@ -1,5 +1,7 @@
 'use strict';
 
+/*jshint loopfunc: true */
+
 /**
  * @ngdoc function
  * @name globiProtoApp.controller:MainCtrl
@@ -8,15 +10,17 @@
  * Controller of the globiProtoApp
  */
  angular.module('globiProtoApp')
- .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope, interactionTypes, taxonInteraction, $state) {
+ .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope,
+   interactionTypes, taxonInteraction2, $state, maxApiResults) {
 
   var doSearch = function() {
     $scope.searchResults = [];
-    taxonInteraction.get({taxon: $scope.query.name, interaction: $scope.query.interaction}).$promise.then(function(response) {
-      if (response.data.length > 0) {
-        var speciesList = response.data[0][2];
-        speciesList.forEach(function(item) {
-          images.get({taxon: item}).$promise.then(function(imageResponse) {
+    taxonInteraction2.query({taxon: $scope.query.name, interaction: $scope.query.interaction}).$promise.then(function(response) {
+      if (response.length > 0) {
+        var numIterations = Math.min(response.length, maxApiResults);
+        for (var i=0; i<numIterations; i++) {
+          var interaction = response[i];
+          images.get({taxon: interaction.target.name}).$promise.then(function(imageResponse) {
             $scope.searchResults.push({
               scientificName: imageResponse.scientificName,
               commonName: imageResponse.commonName,
@@ -29,7 +33,7 @@
           }, function(err) {
             console.dir(err);
           });
-        });
+        }
       } else {
         console.warn('No interactions found for: ' + JSON.stringify($scope.query));
       }
