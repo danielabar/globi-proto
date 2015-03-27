@@ -74,12 +74,15 @@ angular.module('globiProtoApp')
 
           var nodeEnter = node.enter().append('g')
             .attr('class', 'node')
-            .on('click', function(item) { scope.$emit('nodeClicked', item); })
             .call(force.drag);
 
           nodeEnter.append('circle')
             .attr('r', 10)
-            .style('fill', function (d) { return color(d.group); });
+            .style('fill', function (d) { return color(d.group); })
+            .on('click', function(item) {
+              item.circleColor = d3.select(this).attr('style').split('fill: ')[1];
+              scope.$emit('nodeClicked', item);
+            });
 
           // Text labels
           nodeEnter.append('text')
