@@ -12,21 +12,19 @@
 angular.module('globiProtoApp')
   .controller('MapCtrl', function ($scope, $state, taxonInteractionDetails, images) {
 
-    // TODO in a real app, this should go in MarkerService
     var buildMarkers = function(data) {
       var uniqueHolder = {};
       data.forEach(function(item) {
-        if (item.study && item.latitude && item.longitude) {
-          // str.replace(/\s|\-/g,'')
-          var uniqueKey = item.study.replace(/\s|\-/g, '') + item.latitude.toString().replace('-','#') + '_' + item.longitude.toString().replace('-','#');
+        if (item.study_title && item.latitude && item.longitude) {
+          var uniqueKey = item.study_title.replace(/\s|\-/g, '') + item.latitude.toString().replace('-','#') + '_' + item.longitude.toString().replace('-','#');
           if (uniqueHolder[uniqueKey]) {
             uniqueHolder[uniqueKey].itemCount += 1;
-            uniqueHolder[uniqueKey].message = item.study + ', ' + uniqueHolder[uniqueKey].itemCount + ' Observations';
+            uniqueHolder[uniqueKey].message = uniqueHolder[uniqueKey].itemCount + ' Observations, ' + '<a href="' + item.study_url + '">' + item.study_title + '</a>';
           } else {
             uniqueHolder[uniqueKey] = {
               lat: item.latitude,
               lng: item.longitude,
-              message: item.study + ', 1 Observations',
+              message: '1 Observation, ' + '<a href="' + item.study_url + '">' + item.study_title + '</a>',
               focus: true,
               draggable: false,
               itemCount: 1
@@ -52,7 +50,6 @@ angular.module('globiProtoApp')
     };
 
     var buildSourceImage = function(item) {
-      console.dir(item);
       images.get({taxon: item.source_taxon_name}).$promise.then(function(response) {
         $scope.sourceTaxon = {
           scientificName: response.scientificName,

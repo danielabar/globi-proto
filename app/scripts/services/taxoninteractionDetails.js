@@ -8,14 +8,6 @@
  * Factory in the globiProtoApp.
  */
 
- /*
- http://api.globalbioticinteractions.org/interaction?
-  interactionType=preysOn&
-  sourceTaxon=Thunnus alalunga&
-  targetTaxon=Gonatus steenstrup&
-  includeObservations=true
-*/
-
 angular.module('globiProtoApp')
   .factory('taxonInteractionDetails', function ($resource, apiUrl) {
     return $resource(apiUrl + '/interaction',
@@ -24,6 +16,7 @@ angular.module('globiProtoApp')
         sourceTaxon: '@sourceTaxon',
         targetTaxon: '@targetTaxon',
         includeObservations: 'true',
+        fields: 'study_title,study_url,latitude,longitude,source_taxon_name,target_taxon_name',
         type: 'json.v2'
       });
   });
