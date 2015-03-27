@@ -1,5 +1,11 @@
 <div class="network">
 
+  <!-- Breadcrumb -->
+  <ol class="breadcrumb">
+    <li ng-repeat="crumb in breadcrumbs">{{crumb.name}}</li>
+  </ol>
+
+  <!-- Graph Visualization -->
   <div class="row">
     <div class="col-xs-12">
       <network-vis val="graph"></network-vis>

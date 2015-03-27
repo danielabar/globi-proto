@@ -37,5 +37,6 @@ angular.module('globiProtoApp')
       });
     });
 
+    $scope.breadcrumbs = graphService.getPath();
 
   });

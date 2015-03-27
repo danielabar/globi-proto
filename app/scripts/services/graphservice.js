@@ -87,6 +87,10 @@ angular.module('globiProtoApp')
         return delta;
       },
 
+      getPath: function() {
+        return graph.path;
+      },
+
       isNodeInPath: function(nodeName) {
         if (getIndexOfNode(nodeName, graph.path) !== null) {
           return true;
