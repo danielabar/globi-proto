@@ -1,8 +1,5 @@
-// TODO: Update graph without redrawing the whole thing
-// http://stackoverflow.com/questions/9539294/adding-new-nodes-to-force-directed-layout
-
 angular.module('globiProtoApp')
-  .directive('networkVis', function() {
+  .directive('networkVis', function(graphService) {
 
     return {
       restrict: 'E',
@@ -60,9 +57,10 @@ angular.module('globiProtoApp')
           .attr('height', height);
 
         var update = function() {
+
+          // Links
           var link = svg.selectAll('.link')
             .data(links);
-            // .data(links, function(d) {return d.source + '-' + d.target;});
 
           link.enter().insert('line')
             .attr('class', 'link')
@@ -70,9 +68,9 @@ angular.module('globiProtoApp')
 
           link.exit().remove();
 
+          // Nodes
           var node = svg.selectAll('.node')
             .data(nodes);
-            // .data(nodes, function(d) {return d.name;});
 
           var nodeEnter = node.enter().append('g')
             .attr('class', 'node')
@@ -83,6 +81,7 @@ angular.module('globiProtoApp')
             .attr('r', 10)
             .style('fill', function (d) { return color(d.group); });
 
+          // Text labels
           nodeEnter.append('text')
             .attr('dx', 11)
             .attr('dy', '.45em')
@@ -128,6 +127,16 @@ angular.module('globiProtoApp')
           nodes.push.apply(nodes, workingCopy.nodes);
           links.push.apply(links, workingCopy.links);
           update();
+
+          // Redraw ALL the text labels based on path
+          d3.selectAll('text')
+            .style('stroke', function(d) {
+              if (graphService.isNodeInPath(d.name) || graphService.isNodeTargetOfPathTip(d.name)) {
+                return color(d.group);
+              } else {
+                return '#b3b1b1';
+              }
+            });
 
         });//$scope.$watch
 

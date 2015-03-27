@@ -55,7 +55,7 @@ angular.module('globiProtoApp')
 
         // Source node
         graph.path.push(sourceNode);
-        if (!getIndexOfNode(sourceNode.name, graph.nodes)) {
+        if (getIndexOfNode(sourceNode.name, graph.nodes) === null) {
           graph.nodes.push(sourceNode);
           delta.nodes.push(sourceNode);
         }
@@ -64,7 +64,7 @@ angular.module('globiProtoApp')
         // Target nodes
         for (var i=0; i<numIterations; i++) {
           curInteraction = interactions[i];
-          if (!getIndexOfNode(curInteraction.target.name, graph.nodes)) {
+          if (getIndexOfNode(curInteraction.target.name, graph.nodes) === null) {
             targetNode = {name: curInteraction.target.name, group: sourceNode.group +1};
             graph.nodes.push(targetNode);
             delta.nodes.push(targetNode);
@@ -84,9 +84,35 @@ angular.module('globiProtoApp')
             delta.links.push(candidateLink);
           }
         }
-        console.table(delta.nodes);
-        console.table(delta.links);
         return delta;
+      },
+
+      isNodeInPath: function(nodeName) {
+        if (getIndexOfNode(nodeName, graph.path) !== null) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+
+      isNodeTargetOfPathTip: function(nodeName) {
+        var nodePathTip;
+        var indexOfNodePathTip;
+        var indexOfNode = getIndexOfNode(nodeName, graph.nodes);
+
+        if (graph.path.length > 0 && getIndexOfNode !== null) {
+          nodePathTip = graph.path[graph.path.length-1];
+          console.log('=== NODE PATH TIP: ' + JSON.stringify(nodePathTip));
+          indexOfNodePathTip = getIndexOfNode(nodePathTip.name, graph.nodes);
+          for (var i = 0; i<graph.links.length; i++) {
+            var currentLink = graph.links[i];
+            if (currentLink.source === indexOfNodePathTip && currentLink.target === indexOfNode) {
+              return true;
+            }
+          }
+        }
+
+        return false;
       }
 
     };
