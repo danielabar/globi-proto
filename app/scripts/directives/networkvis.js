@@ -114,7 +114,6 @@ angular.module('globiProtoApp')
 
         };//update
 
-        // D3 modifies the data, can cause issues back on Angular side
         var workingCopy;
 
         scope.$watch('val', function(newVal) {
@@ -122,46 +121,13 @@ angular.module('globiProtoApp')
           // Nothing to do if no new data available
           if (!newVal) {return; }
 
-          // var graphDiff = graphService.calcDiff(workingCopy, newVal);
-
+          // D3 modifies the data, can cause issues back on Angular side
           workingCopy = angular.copy(newVal);
 
-          // console.dir(graphDiff);
-
-
+          // Append new graph data and update vis
           nodes.push.apply(nodes, workingCopy.nodes);
           links.push.apply(links, workingCopy.links);
           update();
-
-          // for (var i=0; i<graphDiff.nodes.length; i++) {
-          //   nodes.push(graphDiff.nodes[i]);
-          //   update();
-          // }
-          //
-          // for (var j=0; j<graphDiff.links.length; j++) {
-          //   links.push(graphDiff.links[j]);
-          //   update();
-          // }
-          // D3 modifies the data, can cause issues back on Angular side
-          // workingCopy = angular.copy(newVal);
-
-          // Clear out the old elements
-          // svg.selectAll('*').remove();
-
-          // Force layout
-          // force
-          //   .nodes(workingCopy.nodes)
-          //   .links(workingCopy.links)
-          //   .start();
-
-
-
-          // Create all the circle svgs but without locations yet
-
-          // Text labels
-
-
-          // Provide SVGs co-ordinates
 
         });//$scope.$watch
 

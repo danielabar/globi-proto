@@ -10,6 +10,13 @@
 angular.module('globiProtoApp')
   .factory('graphService', function () {
 
+    // Sanity (small for debugging now)
+    var MAX_LINKS_PER_NODE = 3;
+
+    // In-memory representation of entire graph
+    var graph = {nodes: [], links: [], path: []};
+
+    // Utility functions
     var getIndexOfNode = function(name, nodes) {
       var result = null;
       for (var i=0; i<nodes.length; i++) {
@@ -31,39 +38,52 @@ angular.module('globiProtoApp')
       return result;
     };
 
+    // Public API
     return {
-      calcDiff: function (oldGraph, newGraph) {
 
-        if (!oldGraph) {
-          return newGraph;
+      // Append to graph and return deltas
+      append: function(interactions, sourceNode) {
+        var delta = {nodes: [], links: []};
+        var targetNode;
+        var numIterations = Math.min(MAX_LINKS_PER_NODE, interactions.length);
+        var curInteraction;
+        var sourceNodeIndex;
+
+        // Source node
+        graph.path.push(sourceNode);
+        if (!getIndexOfNode(sourceNode.name, graph.nodes)) {
+          graph.nodes.push(sourceNode);
+          delta.nodes.push(sourceNode);
         }
+        sourceNodeIndex = getIndexOfNode(sourceNode.name, graph.nodes);
 
-        // Find nodes in newGraph that are not in oldGraph
-        var nodeDiff = [];
-        for (var i=0; i<newGraph.nodes.length; i++) {
-          var curNewNode = newGraph.nodes[i];
-          var nodeIndex = getIndexOfNode(curNewNode.name, oldGraph.nodes);
-          if (!nodeIndex) {
-            nodeDiff.push(curNewNode);
+        // Target nodes
+        for (var i=0; i<numIterations; i++) {
+          curInteraction = interactions[i];
+          if (!getIndexOfNode(curInteraction.target.name, graph.nodes)) {
+            targetNode = {name: curInteraction.target.name, group: sourceNode.group +1};
+            graph.nodes.push(targetNode);
+            delta.nodes.push(targetNode);
           }
         }
 
-        // Find links in newGraph that are not in oldGraph
-        var linkDiff = [];
-        for (var j=0; j<newGraph.links.length; j++) {
-          var curNewLink = newGraph.links[j];
-          var linkIndex = getIndexOfLink(curNewLink, oldGraph.links);
-          if (!linkIndex) {
-            linkDiff.push(curNewLink);
+        // Links
+        for (var j=0; j<numIterations; j++) {
+          curInteraction = interactions[j];
+          var candidateLink = {
+            source: sourceNodeIndex,
+            target: getIndexOfNode(curInteraction.target.name, graph.nodes),
+            value: 1
+          };
+          if (!getIndexOfLink(candidateLink, graph.links)) {
+            graph.links.push(candidateLink);
+            delta.links.push(candidateLink);
           }
         }
-
-        // Return the diff graph
-        return {
-          nodes: nodeDiff,
-          links: linkDiff
-        };
-
+        console.table(graph.nodes);
+        console.table(graph.links);
+        return delta;
       }
+
     };
   });
