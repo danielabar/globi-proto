@@ -22,20 +22,14 @@ angular.module('globiProtoApp')
         name: response[0].source.name,
         group: 1
       };
-      var graphDelta = graphService.append(response, sourceTaxon);
-      // console.table(graphDelta.nodes);
-      // console.table(graphDelta.links);
-      $scope.graph = graphDelta;
+      $scope.graph = graphService.append(response, sourceTaxon);
     }, function(err) {
       console.dir(err);
     });
 
     $scope.$on('nodeClicked', function(evt, taxon) {
       taxonInteraction2.query({taxon: taxon.name, interaction: $scope.query.interaction}, function(response) {
-        var graphDelta = graphService.append(response, taxon);
-        // console.table(graphDelta.nodes);
-        // console.table(graphDelta.links);
-        $scope.graph = angular.copy(graphDelta);
+        $scope.graph = graphService.append(response, taxon);
       }, function(err) {
         console.dir(err);
       });

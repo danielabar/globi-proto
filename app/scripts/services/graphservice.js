@@ -10,8 +10,8 @@
 angular.module('globiProtoApp')
   .factory('graphService', function () {
 
-    // Sanity (small for debugging now)
-    var MAX_LINKS_PER_NODE = 3;
+    // Sanity
+    var MAX_LINKS_PER_NODE = 10;
 
     // In-memory representation of entire graph
     var graph = {nodes: [], links: [], path: []};
@@ -80,8 +80,6 @@ angular.module('globiProtoApp')
             delta.links.push(candidateLink);
           }
         }
-        console.table(graph.nodes);
-        console.table(graph.links);
         return delta;
       }
 
