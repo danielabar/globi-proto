@@ -8,10 +8,7 @@
  * Factory in the globiProtoApp.
  */
 angular.module('globiProtoApp')
-  .factory('graphService', function () {
-
-    // Sanity
-    var MAX_LINKS_PER_NODE = 10;
+  .factory('graphService', function (maxApiResults) {
 
     // In-memory representation of entire graph
     var graph = {nodes: [], links: [], path: []};
@@ -57,7 +54,7 @@ angular.module('globiProtoApp')
       append: function(interactions, sourceNode) {
         var delta = {nodes: [], links: []};
         var targetNode;
-        var numIterations = Math.min(MAX_LINKS_PER_NODE, interactions.length);
+        var numIterations = Math.min(maxApiResults, interactions.length);
         var curInteraction;
         var sourceNodeIndex;
         var nodeAtPathTip;
