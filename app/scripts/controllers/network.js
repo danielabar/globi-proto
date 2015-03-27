@@ -12,6 +12,8 @@
 angular.module('globiProtoApp')
   .controller('NetworkCtrl', function ($scope, $state, taxonInteraction2, graphService) {
 
+    graphService.init();
+
     $scope.query = {
       taxon: $state.params.taxon || 'Thunnus obesus',
       interaction: $state.params.interaction || 'eats'

@@ -41,6 +41,10 @@ angular.module('globiProtoApp')
     // Public API
     return {
 
+      init: function() {
+        graph = {nodes: [], links: [], path: []};
+      },
+
       // Append to graph and return deltas
       append: function(interactions, sourceNode) {
         var delta = {nodes: [], links: []};
@@ -80,6 +84,8 @@ angular.module('globiProtoApp')
             delta.links.push(candidateLink);
           }
         }
+        console.table(delta.nodes);
+        console.table(delta.links);
         return delta;
       }
 

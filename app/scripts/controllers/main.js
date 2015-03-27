@@ -144,7 +144,7 @@
   $scope.$on('networkEvent', function(evt, eventData) {
     $state.transitionTo('network', {
         taxon: eventData.imageData.scientificName,
-        interaction: $state.params.interaction || 'preysOn'
+        interaction: $state.params.interaction || 'eats'
       },
       {location: true, reload: true}
     );
