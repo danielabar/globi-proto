@@ -38,9 +38,17 @@ angular.module('globiProtoApp')
       return result;
     };
 
+    var getNodeAtPathTip = function() {
+      if (graph.path.length > 0) {
+        return graph.path[graph.path.length-1];
+      }
+      return null;
+    };
+
     // Public API
     return {
 
+      // Initialize a new empty graph
       init: function() {
         graph = {nodes: [], links: [], path: []};
       },
@@ -52,9 +60,22 @@ angular.module('globiProtoApp')
         var numIterations = Math.min(MAX_LINKS_PER_NODE, interactions.length);
         var curInteraction;
         var sourceNodeIndex;
+        var nodeAtPathTip;
+
+        // Maintain current path
+        nodeAtPathTip = getNodeAtPathTip();
+        if (!nodeAtPathTip) {
+          graph.path.push(sourceNode);
+        }
+        if (nodeAtPathTip && (nodeAtPathTip.group !== sourceNode.group)) {
+          graph.path.push(sourceNode);
+        }
+        if (nodeAtPathTip && (nodeAtPathTip.group === sourceNode.group)) {
+          graph.path.pop();
+          graph.path.push(sourceNode);
+        }
 
         // Source node
-        graph.path.push(sourceNode);
         if (getIndexOfNode(sourceNode.name, graph.nodes) === null) {
           graph.nodes.push(sourceNode);
           delta.nodes.push(sourceNode);
@@ -106,7 +127,6 @@ angular.module('globiProtoApp')
 
         if (graph.path.length > 0 && getIndexOfNode !== null) {
           nodePathTip = graph.path[graph.path.length-1];
-          console.log('=== NODE PATH TIP: ' + JSON.stringify(nodePathTip));
           indexOfNodePathTip = getIndexOfNode(nodePathTip.name, graph.nodes);
           for (var i = 0; i<graph.links.length; i++) {
             var currentLink = graph.links[i];

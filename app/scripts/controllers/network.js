@@ -20,11 +20,15 @@ angular.module('globiProtoApp')
     };
 
     taxonInteraction2.query($scope.query, function(response) {
-      var sourceTaxon = {
-        name: response[0].source.name,
-        group: 1
-      };
-      $scope.graph = graphService.append(response, sourceTaxon);
+      if (response.length > 0) {
+        var sourceTaxon = {
+          name: response[0].source.name,
+          group: 1
+        };
+        $scope.graph = graphService.append(response, sourceTaxon);
+      } else {
+        console.warn('No interactions found for: ' + JSON.stringify($scope.query));
+      }
     }, function(err) {
       console.dir(err);
     });

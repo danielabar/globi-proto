@@ -13,26 +13,30 @@
   var doSearch = function() {
     $scope.searchResults = [];
     taxonInteraction.get({taxon: $scope.query.name, interaction: $scope.query.interaction}).$promise.then(function(response) {
-      var speciesList = response.data[0][2];
-      speciesList.forEach(function(item) {
-        images.get({taxon: item}).$promise.then(function(imageResponse) {
-          $scope.searchResults.push({
-            scientificName: imageResponse.scientificName,
-            commonName: imageResponse.commonName,
-            thumbnailURL: imageResponse.thumbnailURL,
-            imageURL: imageResponse.imageURL,
-            infoURL: imageResponse.infoURL
+      if (response.data.length > 0) {
+        var speciesList = response.data[0][2];
+        speciesList.forEach(function(item) {
+          images.get({taxon: item}).$promise.then(function(imageResponse) {
+            $scope.searchResults.push({
+              scientificName: imageResponse.scientificName,
+              commonName: imageResponse.commonName,
+              thumbnailURL: imageResponse.thumbnailURL,
+              imageURL: imageResponse.imageURL,
+              infoURL: imageResponse.infoURL
+            });
+            $rootScope.$emit('taxonEvent', $scope.searchResults[$scope.searchResults.length-1]);
+            $rootScope.$broadcast('taxonEvent', $scope.searchResults[$scope.searchResults.length-1]);
+          }, function(err) {
+            console.dir(err);
           });
-          $rootScope.$emit('taxonEvent', $scope.searchResults[$scope.searchResults.length-1]);
-          $rootScope.$broadcast('taxonEvent', $scope.searchResults[$scope.searchResults.length-1]);
-        }, function(err) {
-          console.dir(err);
         });
-      });
+      } else {
+        console.warn('No interactions found for: ' + JSON.stringify($scope.query));
+      }
     }, function(err) {
       console.dir(err);
     });
-  };
+  };//doSearch
 
   // TODO Similar logic used in map.js, pull out to a service...
   var handleTaxonSelected = function(item) {
