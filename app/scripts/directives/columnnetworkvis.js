@@ -10,6 +10,9 @@ angular.module('globiProtoApp')
   .directive('columnNetworkVis', function () {
     return {
       restrict: 'E',
+      scope: {
+        val: '='
+      },
       link: function postLink(scope, element) {
 
         // Constants
@@ -22,59 +25,62 @@ angular.module('globiProtoApp')
           .attr('width', width)
           .attr('height', height);
 
-        // TODO Refresh graph with new nodes and links
-        // var update = function() {
+        // Keep reference to nodes and links to support updates
+        var nodes = [];
+        var links = [];
 
-        // };//update
+        // Implement D3 general updating pattern
+        var update = function() {
 
-        // Just draw a static vis for now
-        // http://thinkingonthinking.com/Getting-Started-With-D3/
-        var nodes = [
-          {name: 'A', group: 1, x: width/6, y: height/2},
+          // Node groups (circle + label)
+          var node = svg.selectAll('.node').data(nodes);
+          var nodeEnter = node.enter().append('g')
+            .attr('class', 'node');
 
-          {name: 'B', group: 2, x: (width/6)*2, y: height/3},
-          {name: 'C', group: 2, x: (width/6)*2, y: height/3*2},
-          {name: 'D', group: 2, x: (width/6)*2, y: height/3*3},
+          // Node circles
+          nodeEnter.append('circle')
+            .attr('cx', function(d) { return d.x; })
+            .attr('cy', function(d) { return d.y; })
+            .attr('r', 10)
+            .style('fill', function (d) { return color(d.group); })
+            .on('click', function(item) {
+              item.circleColor = d3.select(this).attr('style').split('fill: ')[1];
+              scope.$emit('columnNodeClicked', item);
+            });
 
-          {name: 'E', group: 3, x: (width/6)*3, y: height/3},
-          {name: 'F', group: 3, x: (width/6)*3, y: height/3*2}
-        ];
+          // Node labels
+          nodeEnter.append('text')
+            .attr('dx', 11)
+            .attr('dy', '.45em')
+            .text(function(d) { return d.name; })
+            .style('stroke', function(d) {return color(d.group);});
 
-        var links = [
-          {source: nodes[0], target: nodes[1]},
-          {source: nodes[0], target: nodes[2]},
-          {source: nodes[0], target: nodes[3]},
+          node.exit().remove();
 
-          {source: nodes[3], target: nodes[4]},
-          {source: nodes[3], target: nodes[5]}
-        ];
+          // Links between nodes
+          var link = svg.selectAll('.link').data(links);
+          link.enter().insert('line')
+            .attr('class', 'link')
+            .attr('x1', function(d) { return d.source.x; })
+            .attr('y1', function(d) { return d.source.y; })
+            .attr('x2', function(d) { return d.target.x; })
+            .attr('y2', function(d) { return d.target.y; })
+            .style('stroke-width', '2');
 
-        // Render the nodes as circles
-        svg.selectAll('circle.nodes')
-          .data(nodes)
-          .enter()
-          .append('svg:circle')
-          .attr('cx', function(d) { return d.x; })
-          .attr('cy', function(d) { return d.y; })
-          .attr('r', '10px')
-          .style('fill', function (d) { return color(d.group); });
+          link.exit().remove();
 
-        // Render the links as lines connecting the nodes
-        svg.selectAll('.line')
-          .data(links)
-          .enter()
-          .append('line')
-          .attr('x1', function(d) { return d.source.x; })
-          .attr('y1', function(d) { return d.source.y; })
-          .attr('x2', function(d) { return d.target.x; })
-          .attr('y2', function(d) { return d.target.y; })
-          .style('stroke', 'rgb(56, 65, 67)');
+        };//update
 
         // Watch for new graph data in scope
         scope.$watch('val', function(newVal) {
 
           // Nothing to do if no new data available
           if (!newVal) {return; }
+
+          // Append new graph data and update vis
+          nodes.push.apply(nodes, newVal.nodes);
+          links.push.apply(links, newVal.links);
+          update();
 
         });//scope.$watch
 
