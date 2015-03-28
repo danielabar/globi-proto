@@ -8,10 +8,13 @@
  * Factory in the globiProtoApp.
  */
 angular.module('globiProtoApp')
-  .factory('graphService', function (maxApiResults) {
+  .factory('graphService', function (maxApiResults, columnGraphValues) {
 
     // In-memory representation of entire graph
     var graph = {nodes: [], links: [], path: []};
+
+    // Column graph calculation constants
+    var widthPerGroup = columnGraphValues.width / columnGraphValues.maxLevel;
 
     // Utility functions
     var getIndexOfNode = function(name, nodes) {
@@ -40,6 +43,45 @@ angular.module('globiProtoApp')
         return graph.path[graph.path.length-1];
       }
       return null;
+    };
+
+    var numNodesForGroup = function(group) {
+      var result = 0;
+      graph.nodes.forEach(function(node) {
+        if (node.group === group) {
+          result += 1;
+        }
+      });
+      return result;
+    };
+
+    var indexOfNodeWithinGroup = function(node) {
+      var nodesInGroup = graph.nodes.filter(function(item) {
+        return item.group === node.group;
+      });
+      for (var i=0; i<nodesInGroup.length; i++) {
+        if (graph.nodes[i].name === node.name) {
+          return i;
+        }
+      }
+      return 1;
+    };
+
+    var calculateNodeXPosition = function(node) {
+      return node.group * widthPerGroup;
+    };
+
+    var calculateNodeYPosition = function(node) {
+      var numNodesInGroup = numNodesForGroup(node.group);
+      var index = indexOfNodeWithinGroup(node);
+      return (columnGraphValues.height / numNodesInGroup) * index;
+    };
+
+    var populateNodePosition = function(node) {
+      node.xPos = calculateNodeXPosition(node);
+      node.yPos = calculateNodeYPosition(node);
+      // temp debug
+      console.log('=== GRAPH SERIVCE: ' + node.name + ' xPos = ' + node.xPos + ', yPos = ' + node.yPos);
     };
 
     // Public API
@@ -76,6 +118,7 @@ angular.module('globiProtoApp')
         if (getIndexOfNode(sourceNode.name, graph.nodes) === null) {
           graph.nodes.push(sourceNode);
           delta.nodes.push(sourceNode);
+          populateNodePosition(sourceNode);
         }
         sourceNodeIndex = getIndexOfNode(sourceNode.name, graph.nodes);
 
@@ -86,9 +129,11 @@ angular.module('globiProtoApp')
             targetNode = {name: curInteraction.target.name, group: sourceNode.group +1};
             graph.nodes.push(targetNode);
             delta.nodes.push(targetNode);
+            populateNodePosition(targetNode);
           }
         }
 
+        // TODO: Detect linkbacks, link to node that already existed
         // Links
         for (var j=0; j<numIterations; j++) {
           curInteraction = interactions[j];

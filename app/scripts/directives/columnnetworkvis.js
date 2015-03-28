@@ -7,7 +7,7 @@
  * # columnNetworkVis
  */
 angular.module('globiProtoApp')
-  .directive('columnNetworkVis', function () {
+  .directive('columnNetworkVis', function (columnGraphValues, graphService) {
     return {
       restrict: 'E',
       scope: {
@@ -15,15 +15,13 @@ angular.module('globiProtoApp')
       },
       link: function postLink(scope, element) {
 
-        // Constants
-        var width = 960;
-        var height = 500;
+        // Color scale
         var color = d3.scale.category10();
 
         // Init the vis
         var svg = d3.select(element[0]).append('svg')
-          .attr('width', width)
-          .attr('height', height);
+          .attr('width', columnGraphValues.width)
+          .attr('height', columnGraphValues.height);
 
         // Keep reference to nodes and links to support updates
         var nodes = [];
@@ -39,19 +37,21 @@ angular.module('globiProtoApp')
 
           // Node circles
           nodeEnter.append('circle')
-            .attr('cx', function(d) { return d.x; })
-            .attr('cy', function(d) { return d.y; })
+            .attr('cx', function(d) { return d.xPos; })
+            .attr('cy', function(d) { return d.yPos; })
             .attr('r', 10)
             .style('fill', function (d) { return color(d.group); })
             .on('click', function(item) {
               item.circleColor = d3.select(this).attr('style').split('fill: ')[1];
-              scope.$emit('columnNodeClicked', item);
+              scope.$emit('nodeClicked', item);
             });
 
           // Node labels
           nodeEnter.append('text')
-            .attr('dx', 11)
-            .attr('dy', '.45em')
+            // .attr('dx', 11)
+            .attr('dx', function(d) {return d.xPos + 10;})
+            .attr('dy', function(d) {return d.yPos + 10;})
+            // .attr('dy', '.45em')
             .text(function(d) { return d.name; })
             .style('stroke', function(d) {return color(d.group);});
 
@@ -61,10 +61,10 @@ angular.module('globiProtoApp')
           var link = svg.selectAll('.link').data(links);
           link.enter().insert('line')
             .attr('class', 'link')
-            .attr('x1', function(d) { return d.source.x; })
-            .attr('y1', function(d) { return d.source.y; })
-            .attr('x2', function(d) { return d.target.x; })
-            .attr('y2', function(d) { return d.target.y; })
+            .attr('x1', function(d) { return nodes[d.source].xPos; })
+            .attr('y1', function(d) { return nodes[d.source].yPos; })
+            .attr('x2', function(d) { return nodes[d.target].xPos; })
+            .attr('y2', function(d) { return nodes[d.target].yPos; })
             .style('stroke-width', '2');
 
           link.exit().remove();
@@ -81,6 +81,16 @@ angular.module('globiProtoApp')
           nodes.push.apply(nodes, newVal.nodes);
           links.push.apply(links, newVal.links);
           update();
+
+          // Redraw ALL the text labels based on path
+          d3.selectAll('text')
+            .style('stroke', function(d) {
+              if (graphService.isNodeInPath(d.name) || graphService.isNodeTargetOfPathTip(d.name)) {
+                return color(d.group);
+              } else {
+                return '#b3b1b1';
+              }
+            });
 
         });//scope.$watch
 
