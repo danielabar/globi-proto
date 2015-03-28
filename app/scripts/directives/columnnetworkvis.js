@@ -35,16 +35,33 @@ angular.module('globiProtoApp')
           var nodeEnter = node.enter().append('g')
             .attr('class', 'node');
 
-          // Node circles
-          nodeEnter.append('circle')
-            .attr('cx', function(d) { return d.xPos; })
-            .attr('cy', function(d) { return d.yPos; })
-            .attr('r', 10)
+          // Node circles (initial positions start them at their respective sources, then later will transition)
+          var circles = nodeEnter.append('circle')
+            .attr('cx', function(d) { return d.initialXPos; })
+            .attr('cy', function(d) { return d.initialYPos; })
+            .attr('r', 1)
             .style('fill', function (d) { return color(d.group); })
             .on('click', function(item) {
               item.circleColor = d3.select(this).attr('style').split('fill: ')[1];
               scope.$emit('nodeClicked', item);
             });
+
+          // Now transition all the circles to their new positions
+          // Pass a function to delay to stagger the transitions,
+          // (otherwise circles all bounce at once and look like they're attached)
+          circles.transition()
+            .delay(function(d, i) {
+              // first circle will be not delayed (0*100=0)
+              // second circle will be delayed by 100ms (1*100=100)
+              // third circle will be delayed by 2*100=200ms
+              // etc.
+              return i * 50;
+            })
+            .duration(300)
+            .ease('linear')
+            .attr('r', 10)
+            .attr('cx', function(d) { return d.xPos; })
+            .attr('cy', function(d) { return d.yPos; });
 
           // Node labels
           nodeEnter.append('text')

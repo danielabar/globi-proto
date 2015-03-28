@@ -151,6 +151,15 @@ angular.module('globiProtoApp')
             delta.links.push(candidateLink);
           }
         }
+
+        // Transitions
+        delta.links.forEach(function(link) {
+          var sourceNode = graph.nodes[link.source];
+          var targetNode = graph.nodes[link.target];
+          targetNode.initialXPos = sourceNode.xPos;
+          targetNode.initialYPos = sourceNode.yPos;
+        });
+
         return delta;
       },
 
