@@ -48,10 +48,8 @@ angular.module('globiProtoApp')
 
           // Node labels
           nodeEnter.append('text')
-            // .attr('dx', 11)
             .attr('dx', function(d) {return d.xPos + 10;})
-            .attr('dy', function(d) {return d.yPos + 10;})
-            // .attr('dy', '.45em')
+            .attr('dy', function(d) {return d.yPos + 5;})
             .text(function(d) { return d.name; })
             .style('stroke', function(d) {return color(d.group);});
 

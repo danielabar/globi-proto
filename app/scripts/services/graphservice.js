@@ -59,12 +59,13 @@ angular.module('globiProtoApp')
       var nodesInGroup = graph.nodes.filter(function(item) {
         return item.group === node.group;
       });
+      console.log('=== group: ' + node.group + ', nodesInGroup: ' + JSON.stringify(nodesInGroup));
       for (var i=0; i<nodesInGroup.length; i++) {
-        if (graph.nodes[i].name === node.name) {
+        if (nodesInGroup[i].name === node.name) {
           return i;
         }
       }
-      return 1;
+      return 0;
     };
 
     var calculateNodeXPosition = function(node) {
@@ -73,15 +74,15 @@ angular.module('globiProtoApp')
 
     var calculateNodeYPosition = function(node) {
       var numNodesInGroup = numNodesForGroup(node.group);
+      var spacer = columnGraphValues.height / (numNodesInGroup + 1);
       var index = indexOfNodeWithinGroup(node);
-      return (columnGraphValues.height / numNodesInGroup) * index;
+      return (index + 1) * spacer;
+      // return (columnGraphValues.height / (numNodesInGroup+1)) * (index+1);
     };
 
     var populateNodePosition = function(node) {
       node.xPos = calculateNodeXPosition(node);
       node.yPos = calculateNodeYPosition(node);
-      // temp debug
-      console.log('=== GRAPH SERIVCE: ' + node.name + ' xPos = ' + node.xPos + ', yPos = ' + node.yPos);
     };
 
     // Public API
@@ -118,7 +119,6 @@ angular.module('globiProtoApp')
         if (getIndexOfNode(sourceNode.name, graph.nodes) === null) {
           graph.nodes.push(sourceNode);
           delta.nodes.push(sourceNode);
-          populateNodePosition(sourceNode);
         }
         sourceNodeIndex = getIndexOfNode(sourceNode.name, graph.nodes);
 
@@ -129,9 +129,13 @@ angular.module('globiProtoApp')
             targetNode = {name: curInteraction.target.name, group: sourceNode.group +1};
             graph.nodes.push(targetNode);
             delta.nodes.push(targetNode);
-            populateNodePosition(targetNode);
           }
         }
+
+        // Node positions
+        delta.nodes.forEach(function(node) {
+          populateNodePosition(node);
+        });
 
         // TODO: Detect linkbacks, link to node that already existed
         // Links
