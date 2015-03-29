@@ -105,6 +105,11 @@ angular.module('globiProtoApp')
               } else {
                 return '#b3b1b1';
               }
+            })
+            .style('font-size', function(d) {
+              if (!graphService.isNodeInPath(d.name) && !graphService.isNodeTargetOfPathTip(d.name)) {
+                return '10px';
+              }
             });
 
         });//scope.$watch
