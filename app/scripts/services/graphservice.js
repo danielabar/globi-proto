@@ -59,7 +59,6 @@ angular.module('globiProtoApp')
       var nodesInGroup = graph.nodes.filter(function(item) {
         return item.group === node.group;
       });
-      console.log('=== group: ' + node.group + ', nodesInGroup: ' + JSON.stringify(nodesInGroup));
       for (var i=0; i<nodesInGroup.length; i++) {
         if (nodesInGroup[i].name === node.name) {
           return i;
@@ -137,7 +136,6 @@ angular.module('globiProtoApp')
           populateNodePosition(node);
         });
 
-        // TODO: Detect linkbacks, link to node that already existed
         // Links
         for (var j=0; j<numIterations; j++) {
           curInteraction = interactions[j];
@@ -151,6 +149,15 @@ angular.module('globiProtoApp')
             delta.links.push(candidateLink);
           }
         }
+
+        // Flag linkbacks
+        delta.links.forEach(function(link) {
+          var targetNode = graph.nodes[link.target];
+          var positionInDelta = getIndexOfNode(targetNode.name, delta.nodes);
+          if (positionInDelta === null) {
+            link.linkBack = true;
+          }
+        });
 
         // Transitions
         delta.links.forEach(function(link) {

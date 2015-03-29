@@ -69,7 +69,14 @@ angular.module('globiProtoApp')
           // Links between nodes (initial positions make x2/y2 points the same as x1/y1)
           var link = svg.selectAll('.link').data(links);
           var lineLinks = link.enter().insert('line')
-            .attr('class', 'link')
+            // .attr('class', 'link')
+            .attr('class', function(d) {
+              if (d.linkBack) {
+                return 'linkback';
+              } else {
+                return 'link';
+              }
+            })
             .attr('x1', function(d) { return nodes[d.source].xPos; })
             .attr('y1', function(d) { return nodes[d.source].yPos; })
             .attr('x2', function(d) { return nodes[d.source].xPos; })
