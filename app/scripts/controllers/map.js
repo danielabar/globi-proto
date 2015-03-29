@@ -10,7 +10,14 @@
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
-  .controller('MapCtrl', function ($scope, $state, taxonInteractionDetails, images) {
+  .controller('MapCtrl', function ($scope, $state, taxonInteractionDetails, images, toaster) {
+
+    // Pre-populate a good example if one is not provided by the user
+    $scope.query = {
+      sourceTaxon: $state.params.sourceTaxon || 'Sphyrnidae',
+      interactionType: $state.params.interactionType || 'eats',
+      targetTaxon: $state.params.targetTaxon || 'Actinopterygii'
+    };
 
     var buildMarkers = function(data) {
       var uniqueHolder = {};
@@ -80,16 +87,15 @@ angular.module('globiProtoApp')
     };
 
     $scope.center = {};
-    taxonInteractionDetails.query({
-      interactionType: $state.params.interactionType,
-      sourceTaxon: $state.params.sourceTaxon,
-      targetTaxon: $state.params.targetTaxon
-    }, function(response) {
+    taxonInteractionDetails.query($scope.query, function(response) {
       buildSourceImage(response[0]);
       buildTargetImage(response[0]);
       $scope.markers = buildMarkers(response);
-      $scope.center = calculateCenter($scope.markers);
-      // TODO If no markers found - display error and/or redirect back to Learn
+      if (angular.equals({}, $scope.markers)) {
+        toaster.pop('note', 'Sorry', 'No geographic information found for: ' + $scope.query.sourceTaxon + ' ' + $scope.query.interactionType + ' ' + $scope.query.targetTaxon);
+      } else {
+        $scope.center = calculateCenter($scope.markers);
+      }
     }, function(err) {
       console.dir(err);
     });

@@ -14,6 +14,7 @@ angular.module('globiProtoApp')
 
     graphService.init();
 
+    // Pre-populate a good example if one is not provided by the user
     $scope.query = {
       taxon: $state.params.taxon || 'Thunnus obesus',
       interaction: $state.params.interaction || 'eats'

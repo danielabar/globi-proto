@@ -10,7 +10,7 @@
  * Controller of the globiProtoApp
  */
  angular.module('globiProtoApp')
- .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope,
+ .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope, toaster,
    interactionTypes, taxonInteraction2, $state, interactionService, maxApiResults) {
 
   var doSearch = function() {
@@ -36,7 +36,7 @@
           });
         }
       } else {
-        console.warn('No interactions found for: ' + JSON.stringify($scope.query));
+        toaster.pop('note', 'Sorry', 'No interactions found for: ' + $scope.query.name + ' ' + $scope.query.interaction);
       }
     }, function(err) {
       console.dir(err);
