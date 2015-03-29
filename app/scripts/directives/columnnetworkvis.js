@@ -46,16 +46,10 @@ angular.module('globiProtoApp')
               scope.$emit('nodeClicked', item);
             });
 
-          // Now transition all the circles to their new positions
-          // Pass a function to delay to stagger the transitions,
-          // (otherwise circles all bounce at once and look like they're attached)
+          // Transition circles to their new positions
           circles.transition()
             .delay(function(d, i) {
-              // first circle will be not delayed (0*100=0)
-              // second circle will be delayed by 100ms (1*100=100)
-              // third circle will be delayed by 2*100=200ms
-              // etc.
-              return i * 50;
+              return i * 10;
             })
             .duration(300)
             .ease('linear')
@@ -72,15 +66,25 @@ angular.module('globiProtoApp')
 
           node.exit().remove();
 
-          // Links between nodes
+          // Links between nodes (initial positions make x2/y2 points the same as x1/y1)
           var link = svg.selectAll('.link').data(links);
-          link.enter().insert('line')
+          var lineLinks = link.enter().insert('line')
             .attr('class', 'link')
             .attr('x1', function(d) { return nodes[d.source].xPos; })
             .attr('y1', function(d) { return nodes[d.source].yPos; })
-            .attr('x2', function(d) { return nodes[d.target].xPos; })
-            .attr('y2', function(d) { return nodes[d.target].yPos; })
+            .attr('x2', function(d) { return nodes[d.source].xPos; })
+            .attr('y2', function(d) { return nodes[d.source].yPos; })
             .style('stroke-width', '2');
+
+          // Transition line links end points to their new positions
+          lineLinks.transition()
+            .delay(function(d, i) {
+              return i * 10;
+            })
+            .duration(300)
+            .ease('linear')
+            .attr('x2', function(d) { return nodes[d.target].xPos; })
+            .attr('y2', function(d) { return nodes[d.target].yPos; });
 
           link.exit().remove();
 
@@ -97,7 +101,7 @@ angular.module('globiProtoApp')
           links.push.apply(links, newVal.links);
           update();
 
-          // Redraw ALL the text labels based on path
+          // Redraw ALL the text labels based on path, de-emphasize those not on path
           d3.selectAll('text')
             .style('stroke', function(d) {
               if (graphService.isNodeInPath(d.name) || graphService.isNodeTargetOfPathTip(d.name)) {
