@@ -23,19 +23,19 @@ angular.module('globiProtoApp')
           .attr('width', columnGraphValues.width)
           .attr('height', columnGraphValues.height);
 
-          // Define arrow
-          svg.append('svg:defs').selectAll('marker')
-            .data(['arrow'])
-            .enter().append('svg:marker')
-            .attr('id', String)
-            .attr('viewBox', '0 -5 10 10')
-            .attr('refX', 10)
-            .attr('refY', 0)
-            .attr('markerWidth', 10)
-            .attr('markerHeight', 10)
-            .attr('orient', 'auto')
-            .append('svg:path')
-            .attr('d', 'M0,-5L10,0L0,0');
+        // Define arrow
+        svg.append('svg:defs').selectAll('marker')
+          .data(['arrow'])
+          .enter().append('svg:marker')
+          .attr('id', String)
+          .attr('viewBox', '0 -5 10 10')
+          .attr('refX', 10)
+          .attr('refY', 0)
+          .attr('markerWidth', 10)
+          .attr('markerHeight', 10)
+          .attr('orient', 'auto')
+          .append('svg:path')
+          .attr('d', 'M0,-5L10,0L0,0');
 
         // Keep reference to nodes and links to support updates
         var nodes = [];
@@ -91,7 +91,6 @@ angular.module('globiProtoApp')
                 return 'link';
               }
             })
-            // .attr('class', 'link arrow')
             .attr('marker-end', 'url(#arrow)')
             .attr('x1', function(d) { return nodes[d.source].xPos; })
             .attr('y1', function(d) { return nodes[d.source].yPos; })
