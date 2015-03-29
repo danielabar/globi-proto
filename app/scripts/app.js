@@ -14,6 +14,7 @@ angular
     'ngResource',
     'ngProgress',
     'ngAnimate',
+    'toaster',
     'ngAria',
     'ngCookies',
     'ngSanitize',

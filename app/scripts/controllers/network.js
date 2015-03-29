@@ -10,7 +10,7 @@
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
-  .controller('NetworkCtrl', function ($scope, $state, taxonInteraction2, graphService) {
+  .controller('NetworkCtrl', function ($scope, $state, taxonInteraction2, graphService, toaster) {
 
     graphService.init();
 
@@ -29,7 +29,7 @@ angular.module('globiProtoApp')
         $scope.graph = graphData;
         $scope.columnGraph = graphData;
       } else {
-        console.warn('No interactions found for: ' + JSON.stringify($scope.query));
+        toaster.pop('note', 'Sorry', 'No interactions found for: ' + $scope.query.taxon + ' ' + $scope.query.interaction);
       }
     }, function(err) {
       console.dir(err);
@@ -37,37 +37,18 @@ angular.module('globiProtoApp')
 
     $scope.$on('nodeClicked', function(evt, taxon) {
       taxonInteraction2.query({taxon: taxon.name, interaction: $scope.query.interaction}, function(response) {
-        var graphData = graphService.append(response, taxon);
-        $scope.graph = graphData;
-        $scope.columnGraph = graphData;
+        if (response.length > 0) {
+          var graphData = graphService.append(response, taxon);
+          $scope.graph = graphData;
+          $scope.columnGraph = graphData;
+        } else {
+          toaster.pop('note', 'Sorry', 'No interactions found for: ' + taxon.name + ' ' + $scope.query.interaction);
+        }
       }, function(err) {
         console.dir(err);
       });
     });
 
     $scope.breadcrumbs = graphService.getPath();
-
-    // Hard code some data for column graph POC
-    // var width = 960;
-    // var height = 500;
-    // var nodes = [
-    //   {name: 'A', group: 1, x: width/6, y: height/2},
-    //   {name: 'B', group: 2, x: (width/6)*2, y: height/3},
-    //   {name: 'C', group: 2, x: (width/6)*2, y: height/3*2},
-    //   {name: 'D', group: 2, x: (width/6)*2, y: height/3*3},
-    //   {name: 'E', group: 3, x: (width/6)*3, y: height/3},
-    //   {name: 'F', group: 3, x: (width/6)*3, y: height/3*2}
-    // ];
-    // var links = [
-    //   {source: 0, target: 1},
-    //   {source: 0, target: 2},
-    //   {source: 0, target: 3},
-    //   {source: 3, target: 4},
-    //   {source: 3, target: 5}
-    // ];
-    // $scope.columnGraph = {
-    //   nodes: nodes,
-    //   links: links
-    // };
 
   });
