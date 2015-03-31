@@ -9,5 +9,8 @@
  */
 angular.module('globiProtoApp')
   .factory('taxonInteraction2', function ($resource, apiUrl) {
-    return $resource(apiUrl + '/taxon/:taxon/:interaction', {taxon: '@taxon', interaction: '@interaction', type: 'json.v2'});
+    return $resource(apiUrl + '/taxon/:taxon/:interaction', {
+      taxon: '@taxon',
+      interaction: '@interaction',
+      type: 'json.v2'});
   });

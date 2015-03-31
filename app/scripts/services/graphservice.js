@@ -124,8 +124,9 @@ angular.module('globiProtoApp')
         // Target nodes
         for (var i=0; i<numIterations; i++) {
           curInteraction = interactions[i];
-          if (getIndexOfNode(curInteraction.target.name, graph.nodes) === null) {
-            targetNode = {name: curInteraction.target.name, group: sourceNode.group +1};
+          if (getIndexOfNode(curInteraction.target_taxon_name, graph.nodes) === null) {
+            targetNode = {name: curInteraction.target_taxon_name, group: sourceNode.group +1};
+            // TODO pass curInteraction.target_taxon_path to KingdomService to populate targetNode.kingdom
             graph.nodes.push(targetNode);
             delta.nodes.push(targetNode);
           }
@@ -141,7 +142,7 @@ angular.module('globiProtoApp')
           curInteraction = interactions[j];
           var candidateLink = {
             source: sourceNodeIndex,
-            target: getIndexOfNode(curInteraction.target.name, graph.nodes),
+            target: getIndexOfNode(curInteraction.target_taxon_name, graph.nodes),
             value: 1
           };
           if (!getIndexOfLink(candidateLink, graph.links)) {

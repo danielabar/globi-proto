@@ -10,17 +10,17 @@
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
-  .controller('NetworkCtrl', function ($scope, $state, taxonInteraction2, graphService, toaster) {
+  .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, graphService, toaster) {
 
     graphService.init();
 
     // Pre-populate a good example if one is not provided by the user
     $scope.query = {
-      taxon: $state.params.taxon || 'Thunnus obesus',
-      interaction: $state.params.interaction || 'eats'
+      sourceTaxon: $state.params.taxon || 'Thunnus obesus',
+      interactionType: $state.params.interaction || 'eats'
     };
 
-    taxonInteraction2.query($scope.query, function(response) {
+    taxonInteractionFields.query($scope.query, function(response) {
       if (response.length > 0) {
         var sourceTaxon = {
           name: $scope.query.taxon,
@@ -37,13 +37,13 @@ angular.module('globiProtoApp')
     });
 
     $scope.$on('nodeClicked', function(evt, taxon) {
-      taxonInteraction2.query({taxon: taxon.name, interaction: $scope.query.interaction}, function(response) {
+      taxonInteractionFields.query({sourceTaxon: taxon.name, interactionType: $scope.query.interactionType}, function(response) {
         if (response.length > 0) {
           var graphData = graphService.append(response, taxon);
           $scope.graph = graphData;
           $scope.columnGraph = graphData;
         } else {
-          toaster.pop('note', 'Sorry', 'No interactions found for: ' + taxon.name + ' ' + $scope.query.interaction);
+          toaster.pop('note', 'Sorry', 'No interactions found for: ' + taxon.name + ' ' + $scope.query.interactionType);
         }
       }, function(err) {
         console.dir(err);

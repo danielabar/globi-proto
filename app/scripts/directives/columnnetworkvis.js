@@ -5,6 +5,9 @@
  * @name globiProtoApp.directive:columnNetworkVis
  * @description
  * # columnNetworkVis
+ * D3 Symbol Reference: https://github.com/mbostock/d3/wiki/SVG-Shapes#symbol_type
+ * SO Example: http://stackoverflow.com/questions/15352033/unique-symbols-for-each-data-set-in-d3-scatterplot
+ * SO Example: http://stackoverflow.com/questions/23224285/change-the-size-of-a-symbol-with-a-transition-in-d3-js
  */
 angular.module('globiProtoApp')
   .directive('columnNetworkVis', function (columnGraphValues, graphService) {
@@ -23,7 +26,7 @@ angular.module('globiProtoApp')
           .attr('width', columnGraphValues.width)
           .attr('height', columnGraphValues.height);
 
-        // Define arrow
+        // Define arrow (TODO kind of ugly, needs some love)
         svg.append('svg:defs').selectAll('marker')
           .data(['arrow'])
           .enter().append('svg:marker')
@@ -49,27 +52,26 @@ angular.module('globiProtoApp')
           var nodeEnter = node.enter().append('g')
             .attr('class', 'node');
 
-          // Node circles (initial positions start them at their respective sources, then later will transition)
-          var circles = nodeEnter.append('circle')
-            .attr('cx', function(d) { return d.initialXPos; })
-            .attr('cy', function(d) { return d.initialYPos; })
-            .attr('r', 1)
+          // TODO: pass d.kingdom to KingdomGraphService to find rotation, symbol, and fill
+          // Node sahpes (initial positions start them at their respective sources, then later will transition)
+          // To generate different shapes, can conditionally rotate a symbol
+          var circles = nodeEnter.append('path')
+            .attr('transform', function(d) { return 'translate(' + d.initialXPos + ',' + d.initialYPos + ') rotate(90)'; })
+            .attr('d', d3.svg.symbol().type('circle').size(150))
             .style('fill', function (d) { return color(d.group); })
             .on('click', function(item) {
               item.circleColor = d3.select(this).attr('style').split('fill: ')[1];
               scope.$emit('nodeClicked', item);
             });
 
-          // Transition circles to their new positions
+          // Transition shapes to their new positions (use KingdomGraphService mapping for rotation)
           circles.transition()
             .delay(function(d, i) {
               return i * 10;
             })
             .duration(300)
             .ease('linear')
-            .attr('r', 10)
-            .attr('cx', function(d) { return d.xPos; })
-            .attr('cy', function(d) { return d.yPos; });
+            .attr('transform', function(d) { return 'translate(' + d.xPos + ',' + d.yPos + ') rotate(90)'; });
 
           // Node labels
           nodeEnter.append('text')
@@ -83,7 +85,6 @@ angular.module('globiProtoApp')
           // Links between nodes (initial positions make x2/y2 points the same as x1/y1)
           var link = svg.selectAll('.link').data(links);
           var lineLinks = link.enter().insert('line')
-            // .attr('class', 'link')
             .attr('class', function(d) {
               if (d.linkBack) {
                 return 'linkback';
