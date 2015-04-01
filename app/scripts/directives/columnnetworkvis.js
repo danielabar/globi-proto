@@ -10,7 +10,7 @@
  * SO Example: http://stackoverflow.com/questions/23224285/change-the-size-of-a-symbol-with-a-transition-in-d3-js
  */
 angular.module('globiProtoApp')
-  .directive('columnNetworkVis', function (columnGraphValues, graphService) {
+  .directive('columnNetworkVis', function (columnGraphValues, graphService, kingdomService) {
     return {
       restrict: 'E',
       scope: {
@@ -52,17 +52,15 @@ angular.module('globiProtoApp')
           var nodeEnter = node.enter().append('g')
             .attr('class', 'node');
 
-          // TODO: pass d.kingdom to KingdomService to find rotation, symbol, and fill
           // Node shapes (initial positions start them at their respective sources, then later will transition)
           // To generate different shapes, can conditionally rotate a symbol
           var shapes = nodeEnter.append('path')
             .attr('transform', function(d) {
-              // console.log('=== COL GRAPH transform d = ' + JSON.stringify(d));
               return 'translate(' + d.initialXPos + ',' + d.initialYPos + ') rotate(90)';
             })
-            .attr('d', function() {
-              // console.log('=== COL GRAPH symbol d = ' + JSON.stringify(d));
-              return d3.svg.symbol().type('circle').size(150)();
+            .attr('d', function(d) {
+              // console.log('=== COL VIS SHAPE: ' + kingdomService.shape(d.kingdom));
+              return d3.svg.symbol().type(kingdomService.shapeInfo(d.kingdom).shape).size(150)();
             })
             .style('fill', function (d) { return color(d.group); })
             .on('click', function(item) {
