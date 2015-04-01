@@ -8,7 +8,7 @@
  * Factory in the globiProtoApp.
  */
 angular.module('globiProtoApp')
-  .factory('graphService', function (maxApiResults, columnGraphValues) {
+  .factory('graphService', function (maxApiResults, columnGraphValues, kingdomService) {
 
     // In-memory representation of entire graph
     var graph = {nodes: [], links: [], path: []};
@@ -76,7 +76,6 @@ angular.module('globiProtoApp')
       var spacer = columnGraphValues.height / (numNodesInGroup + 1);
       var index = indexOfNodeWithinGroup(node);
       return (index + 1) * spacer;
-      // return (columnGraphValues.height / (numNodesInGroup+1)) * (index+1);
     };
 
     var populateNodePosition = function(node) {
@@ -96,6 +95,7 @@ angular.module('globiProtoApp')
       append: function(interactions, sourceNode) {
         var delta = {nodes: [], links: []};
         var targetNode;
+        // TODO: If we're going to display less than actual results, populate message in return about how many cut off
         var numIterations = Math.min(maxApiResults, interactions.length);
         var curInteraction;
         var sourceNodeIndex;
@@ -125,8 +125,11 @@ angular.module('globiProtoApp')
         for (var i=0; i<numIterations; i++) {
           curInteraction = interactions[i];
           if (getIndexOfNode(curInteraction.target_taxon_name, graph.nodes) === null) {
-            targetNode = {name: curInteraction.target_taxon_name, group: sourceNode.group +1};
-            // TODO pass curInteraction.target_taxon_path to KingdomService to populate targetNode.kingdom
+            targetNode = {
+              name: curInteraction.target_taxon_name,
+              group: sourceNode.group +1,
+              kingdom: kingdomService.extractKingdom(curInteraction.target_taxon_path)
+            };
             graph.nodes.push(targetNode);
             delta.nodes.push(targetNode);
           }

@@ -52,20 +52,26 @@ angular.module('globiProtoApp')
           var nodeEnter = node.enter().append('g')
             .attr('class', 'node');
 
-          // TODO: pass d.kingdom to KingdomGraphService to find rotation, symbol, and fill
-          // Node sahpes (initial positions start them at their respective sources, then later will transition)
+          // TODO: pass d.kingdom to KingdomService to find rotation, symbol, and fill
+          // Node shapes (initial positions start them at their respective sources, then later will transition)
           // To generate different shapes, can conditionally rotate a symbol
-          var circles = nodeEnter.append('path')
-            .attr('transform', function(d) { return 'translate(' + d.initialXPos + ',' + d.initialYPos + ') rotate(90)'; })
-            .attr('d', d3.svg.symbol().type('circle').size(150))
+          var shapes = nodeEnter.append('path')
+            .attr('transform', function(d) {
+              // console.log('=== COL GRAPH transform d = ' + JSON.stringify(d));
+              return 'translate(' + d.initialXPos + ',' + d.initialYPos + ') rotate(90)';
+            })
+            .attr('d', function() {
+              // console.log('=== COL GRAPH symbol d = ' + JSON.stringify(d));
+              return d3.svg.symbol().type('circle').size(150)();
+            })
             .style('fill', function (d) { return color(d.group); })
             .on('click', function(item) {
               item.circleColor = d3.select(this).attr('style').split('fill: ')[1];
               scope.$emit('nodeClicked', item);
             });
 
-          // Transition shapes to their new positions (use KingdomGraphService mapping for rotation)
-          circles.transition()
+          // Transition shapes to their new positions (use KingdomService mapping for rotation)
+          shapes.transition()
             .delay(function(d, i) {
               return i * 10;
             })
