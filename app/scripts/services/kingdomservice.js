@@ -56,7 +56,6 @@ angular.module('globiProtoApp')
     return {
 
       extractKingdom: function (taxonPath) {
-        console.log('=== KINGDOM SERVICE: taxonPath = ' + taxonPath);
         if (taxonPath) {
           var parts = taxonPath.split('|');
           return parts[0].trim();
@@ -66,7 +65,6 @@ angular.module('globiProtoApp')
       },
 
       shapeInfo: function(kingdom) {
-        console.log('=== KINGDOM SERVICE: kingdom = ' + kingdom);
         var result = KINGDOM_VIS[kingdom];
         return result || KINGDOM_VIS[DEFAULT_KINGDOM];
       }

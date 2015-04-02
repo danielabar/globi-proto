@@ -54,16 +54,20 @@ angular.module('globiProtoApp')
 
           // Node shapes (initial positions start them at their respective sources, then later will transition)
           // To generate different shapes, can conditionally rotate a symbol
-          // TODO: conditionally on kingdom: .attr('fill', 'transparent')
           var shapes = nodeEnter.append('path')
             .attr('transform', function(d) {
               return 'translate(' + d.initialXPos + ',' + d.initialYPos + ') rotate(90)';
             })
             .attr('d', function(d) {
-              // return d3.svg.symbol().type(kingdomService.shapeInfo(d.kingdom).shape).size(150)();
               return d3Extension.getSymbol(kingdomService.shapeInfo(d.kingdom).shape, 150);
             })
-            .style('fill', function (d) { return color(d.group); })
+            .style('fill', function (d) {
+              if (!kingdomService.shapeInfo(d.kingdom).empty) {
+                return color(d.group);
+              } else {
+                return 'transparent';
+              }
+            })
             .attr('stroke', function (d) { return color(d.group); })
             .on('click', function(item) {
               item.circleColor = d3.select(this).attr('style').split('fill: ')[1];

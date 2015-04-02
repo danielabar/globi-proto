@@ -13,7 +13,6 @@ angular.module('globiProtoApp')
     var customSymbolTypes = d3.map({
       'star': function(size) {
         size = Math.sqrt(size);
-        console.log('=== D3 Extension: Generating star of size: ' + size);
         return 'M' + (-size/2) + ',' + (-size/2) +
           'l' + size + ',' + size +
           'm0,' + -(size) +
@@ -58,7 +57,7 @@ angular.module('globiProtoApp')
     };
 
 
-    // Public API here
+    // Public API
     return {
       getSymbol: function (type, size) {
         size = size || 64;
