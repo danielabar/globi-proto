@@ -67,6 +67,15 @@ angular.module('globiProtoApp')
       return 0;
     };
 
+    var findSourceTaxonPath = function(name, interactions) {
+      for (var i=0; i<interactions.length; i++) {
+        var curInteraction = interactions[i];
+        if (name === curInteraction.source_taxon_name) {
+          return curInteraction.source_taxon_path;
+        }
+      }
+    };
+
     var calculateNodeXPosition = function(node) {
       return node.group * widthPerGroup;
     };
@@ -116,6 +125,7 @@ angular.module('globiProtoApp')
 
         // Source node
         if (getIndexOfNode(sourceNode.name, graph.nodes) === null) {
+          sourceNode.kingdom = kingdomService.extractKingdom(findSourceTaxonPath(sourceNode.name, interactions));
           graph.nodes.push(sourceNode);
           delta.nodes.push(sourceNode);
         }

@@ -53,7 +53,6 @@ angular.module('globiProtoApp')
             .attr('class', 'node');
 
           // Node shapes (initial positions start them at their respective sources, then later will transition)
-          // To generate different shapes, can conditionally rotate a symbol
           var shapes = nodeEnter.append('path')
             .attr('transform', function(d) {
               if (kingdomService.shapeInfo(d.kingdom).rotate) {
