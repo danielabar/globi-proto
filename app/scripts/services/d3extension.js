@@ -4,12 +4,13 @@
  * @ngdoc service
  * @name globiProtoApp.d3Extension
  * @description
- * # TODO Use this to get path for star http://www.smiffysplace.com/stars.html
- * Factory in the globiProtoApp.
+ * http://jsbin.com/xohox/1/edit?js,output
+ * http://stackoverflow.com/questions/25332120/create-additional-d3-js-symbols
  */
 angular.module('globiProtoApp')
   .factory('d3Extension', function () {
 
+    // TODO Use this to get path for star http://www.smiffysplace.com/stars.html
     var customSymbolTypes = d3.map({
       'star': function(size) {
         size = Math.sqrt(size);

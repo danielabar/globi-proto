@@ -56,7 +56,11 @@ angular.module('globiProtoApp')
           // To generate different shapes, can conditionally rotate a symbol
           var shapes = nodeEnter.append('path')
             .attr('transform', function(d) {
-              return 'translate(' + d.initialXPos + ',' + d.initialYPos + ') rotate(90)';
+              if (kingdomService.shapeInfo(d.kingdom).rotate) {
+                return 'translate(' + d.initialXPos + ',' + d.initialYPos + ') rotate(' + kingdomService.shapeInfo(d.kingdom).rotate + ')';
+              } else {
+                return 'translate(' + d.initialXPos + ',' + d.initialYPos + ')';
+              }
             })
             .attr('d', function(d) {
               return d3Extension.getSymbol(kingdomService.shapeInfo(d.kingdom).shape, 150);
@@ -81,7 +85,13 @@ angular.module('globiProtoApp')
             })
             .duration(300)
             .ease('linear')
-            .attr('transform', function(d) { return 'translate(' + d.xPos + ',' + d.yPos + ') rotate(90)'; });
+            .attr('transform', function(d) {
+              if (kingdomService.shapeInfo(d.kingdom).rotate) {
+                return 'translate(' + d.xPos + ',' + d.yPos + ') rotate(' + kingdomService.shapeInfo(d.kingdom).rotate + ')';
+              } else {
+                return 'translate(' + d.xPos + ',' + d.yPos + ')';
+              }
+            });
 
           // Node labels
           nodeEnter.append('text')
