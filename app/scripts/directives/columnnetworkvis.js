@@ -10,7 +10,7 @@
  * SO Example: http://stackoverflow.com/questions/23224285/change-the-size-of-a-symbol-with-a-transition-in-d3-js
  */
 angular.module('globiProtoApp')
-  .directive('columnNetworkVis', function (columnGraphValues, graphService, kingdomService) {
+  .directive('columnNetworkVis', function (columnGraphValues, graphService, kingdomService, d3Extension) {
     return {
       restrict: 'E',
       scope: {
@@ -47,22 +47,24 @@ angular.module('globiProtoApp')
         // Implement D3 general updating pattern
         var update = function() {
 
-          // Node groups (circle + label)
+          // Node groups (shape + label)
           var node = svg.selectAll('.node').data(nodes);
           var nodeEnter = node.enter().append('g')
             .attr('class', 'node');
 
           // Node shapes (initial positions start them at their respective sources, then later will transition)
           // To generate different shapes, can conditionally rotate a symbol
+          // TODO: conditionally on kingdom: .attr('fill', 'transparent')
           var shapes = nodeEnter.append('path')
             .attr('transform', function(d) {
               return 'translate(' + d.initialXPos + ',' + d.initialYPos + ') rotate(90)';
             })
             .attr('d', function(d) {
-              // console.log('=== COL VIS SHAPE: ' + kingdomService.shape(d.kingdom));
-              return d3.svg.symbol().type(kingdomService.shapeInfo(d.kingdom).shape).size(150)();
+              // return d3.svg.symbol().type(kingdomService.shapeInfo(d.kingdom).shape).size(150)();
+              return d3Extension.getSymbol(kingdomService.shapeInfo(d.kingdom).shape, 150);
             })
             .style('fill', function (d) { return color(d.group); })
+            .attr('stroke', function (d) { return color(d.group); })
             .on('click', function(item) {
               item.circleColor = d3.select(this).attr('style').split('fill: ')[1];
               scope.$emit('nodeClicked', item);

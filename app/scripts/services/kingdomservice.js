@@ -12,7 +12,6 @@ angular.module('globiProtoApp')
 
     var DEFAULT_KINGDOM = 'Null';
 
-    // TODO: Bacteria star???
     var KINGDOM_VIS = {
       'Null' : {
         shape: 'circle',
@@ -20,6 +19,9 @@ angular.module('globiProtoApp')
       },
       'Animalia' : {
         shape: 'circle'
+      },
+      'Bacteria' : {
+        shape: 'star'
       },
       'Chromista' : {
         shape: 'triangle-down'
