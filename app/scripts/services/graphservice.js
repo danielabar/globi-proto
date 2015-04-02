@@ -8,7 +8,7 @@
  * Factory in the globiProtoApp.
  */
 angular.module('globiProtoApp')
-  .factory('graphService', function (maxApiResults, columnGraphValues) {
+  .factory('graphService', function (maxApiResults, columnGraphValues, kingdomService) {
 
     // In-memory representation of entire graph
     var graph = {nodes: [], links: [], path: []};
@@ -67,6 +67,15 @@ angular.module('globiProtoApp')
       return 0;
     };
 
+    var findSourceTaxonPath = function(name, interactions) {
+      for (var i=0; i<interactions.length; i++) {
+        var curInteraction = interactions[i];
+        if (name === curInteraction.source_taxon_name) {
+          return curInteraction.source_taxon_path;
+        }
+      }
+    };
+
     var calculateNodeXPosition = function(node) {
       return node.group * widthPerGroup;
     };
@@ -76,7 +85,6 @@ angular.module('globiProtoApp')
       var spacer = columnGraphValues.height / (numNodesInGroup + 1);
       var index = indexOfNodeWithinGroup(node);
       return (index + 1) * spacer;
-      // return (columnGraphValues.height / (numNodesInGroup+1)) * (index+1);
     };
 
     var populateNodePosition = function(node) {
@@ -96,6 +104,7 @@ angular.module('globiProtoApp')
       append: function(interactions, sourceNode) {
         var delta = {nodes: [], links: []};
         var targetNode;
+        // TODO: If we're going to display less than actual results, populate message in return about how many cut off
         var numIterations = Math.min(maxApiResults, interactions.length);
         var curInteraction;
         var sourceNodeIndex;
@@ -116,6 +125,7 @@ angular.module('globiProtoApp')
 
         // Source node
         if (getIndexOfNode(sourceNode.name, graph.nodes) === null) {
+          sourceNode.kingdom = kingdomService.extractKingdom(findSourceTaxonPath(sourceNode.name, interactions));
           graph.nodes.push(sourceNode);
           delta.nodes.push(sourceNode);
         }
@@ -124,8 +134,12 @@ angular.module('globiProtoApp')
         // Target nodes
         for (var i=0; i<numIterations; i++) {
           curInteraction = interactions[i];
-          if (getIndexOfNode(curInteraction.target.name, graph.nodes) === null) {
-            targetNode = {name: curInteraction.target.name, group: sourceNode.group +1};
+          if (getIndexOfNode(curInteraction.target_taxon_name, graph.nodes) === null) {
+            targetNode = {
+              name: curInteraction.target_taxon_name,
+              group: sourceNode.group +1,
+              kingdom: kingdomService.extractKingdom(curInteraction.target_taxon_path)
+            };
             graph.nodes.push(targetNode);
             delta.nodes.push(targetNode);
           }
@@ -141,7 +155,7 @@ angular.module('globiProtoApp')
           curInteraction = interactions[j];
           var candidateLink = {
             source: sourceNodeIndex,
-            target: getIndexOfNode(curInteraction.target.name, graph.nodes),
+            target: getIndexOfNode(curInteraction.target_taxon_name, graph.nodes),
             value: 1
           };
           if (!getIndexOfLink(candidateLink, graph.links)) {

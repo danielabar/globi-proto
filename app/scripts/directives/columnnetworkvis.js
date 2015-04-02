@@ -5,9 +5,12 @@
  * @name globiProtoApp.directive:columnNetworkVis
  * @description
  * # columnNetworkVis
+ * D3 Symbol Reference: https://github.com/mbostock/d3/wiki/SVG-Shapes#symbol_type
+ * SO Example: http://stackoverflow.com/questions/15352033/unique-symbols-for-each-data-set-in-d3-scatterplot
+ * SO Example: http://stackoverflow.com/questions/23224285/change-the-size-of-a-symbol-with-a-transition-in-d3-js
  */
 angular.module('globiProtoApp')
-  .directive('columnNetworkVis', function (columnGraphValues, graphService) {
+  .directive('columnNetworkVis', function (columnGraphValues, graphService, kingdomService, d3Extension) {
     return {
       restrict: 'E',
       scope: {
@@ -23,7 +26,7 @@ angular.module('globiProtoApp')
           .attr('width', columnGraphValues.width)
           .attr('height', columnGraphValues.height);
 
-        // Define arrow
+        // Define arrow (TODO kind of ugly, needs some love)
         svg.append('svg:defs').selectAll('marker')
           .data(['arrow'])
           .enter().append('svg:marker')
@@ -44,32 +47,50 @@ angular.module('globiProtoApp')
         // Implement D3 general updating pattern
         var update = function() {
 
-          // Node groups (circle + label)
+          // Node groups (shape + label)
           var node = svg.selectAll('.node').data(nodes);
           var nodeEnter = node.enter().append('g')
             .attr('class', 'node');
 
-          // Node circles (initial positions start them at their respective sources, then later will transition)
-          var circles = nodeEnter.append('circle')
-            .attr('cx', function(d) { return d.initialXPos; })
-            .attr('cy', function(d) { return d.initialYPos; })
-            .attr('r', 1)
-            .style('fill', function (d) { return color(d.group); })
+          // Node shapes (initial positions start them at their respective sources, then later will transition)
+          var shapes = nodeEnter.append('path')
+            .attr('transform', function(d) {
+              if (kingdomService.shapeInfo(d.kingdom).rotate) {
+                return 'translate(' + d.initialXPos + ',' + d.initialYPos + ') rotate(' + kingdomService.shapeInfo(d.kingdom).rotate + ')';
+              } else {
+                return 'translate(' + d.initialXPos + ',' + d.initialYPos + ')';
+              }
+            })
+            .attr('d', function(d) {
+              return d3Extension.getSymbol(kingdomService.shapeInfo(d.kingdom).shape, 150);
+            })
+            .style('fill', function (d) {
+              if (!kingdomService.shapeInfo(d.kingdom).empty) {
+                return color(d.group);
+              } else {
+                return 'transparent';
+              }
+            })
+            .attr('stroke', function (d) { return color(d.group); })
             .on('click', function(item) {
               item.circleColor = d3.select(this).attr('style').split('fill: ')[1];
               scope.$emit('nodeClicked', item);
             });
 
-          // Transition circles to their new positions
-          circles.transition()
+          // Transition shapes to their new positions (use KingdomService mapping for rotation)
+          shapes.transition()
             .delay(function(d, i) {
               return i * 10;
             })
             .duration(300)
             .ease('linear')
-            .attr('r', 10)
-            .attr('cx', function(d) { return d.xPos; })
-            .attr('cy', function(d) { return d.yPos; });
+            .attr('transform', function(d) {
+              if (kingdomService.shapeInfo(d.kingdom).rotate) {
+                return 'translate(' + d.xPos + ',' + d.yPos + ') rotate(' + kingdomService.shapeInfo(d.kingdom).rotate + ')';
+              } else {
+                return 'translate(' + d.xPos + ',' + d.yPos + ')';
+              }
+            });
 
           // Node labels
           nodeEnter.append('text')
@@ -83,7 +104,6 @@ angular.module('globiProtoApp')
           // Links between nodes (initial positions make x2/y2 points the same as x1/y1)
           var link = svg.selectAll('.link').data(links);
           var lineLinks = link.enter().insert('line')
-            // .attr('class', 'link')
             .attr('class', function(d) {
               if (d.linkBack) {
                 return 'linkback';
