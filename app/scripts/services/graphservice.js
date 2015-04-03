@@ -110,6 +110,11 @@ angular.module('globiProtoApp')
         var sourceNodeIndex;
         var nodeAtPathTip;
 
+        // Hack the first node color (because there's no click event to get it out of D3)
+        if (!sourceNode.circleColor) {
+          sourceNode.circleColor = '#1f77b4';
+        }
+
         // Maintain current path
         nodeAtPathTip = getNodeAtPathTip();
         if (!nodeAtPathTip) {
