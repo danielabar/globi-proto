@@ -73,7 +73,7 @@ angular.module('globiProtoApp')
             })
             .attr('stroke', function (d) { return color(d.group); })
             .on('click', function(item) {
-              item.circleColor = d3.select(this).attr('style').split('fill: ')[1];
+              item.circleColor = d3.select(this).attr('stroke');
               scope.$emit('nodeClicked', item);
             });
 
