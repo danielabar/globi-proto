@@ -52,7 +52,7 @@ angular.module('globiProtoApp')
           var nodeEnter = node.enter().append('g')
             .attr('class', 'node');
 
-          // Node shapes (initial positions start them at their respective sources, then later will transition)
+          // Node shapes initial positions
           var shapes = nodeEnter.append('path')
             .attr('transform', function(d) {
               if (kingdomService.shapeInfo(d.kingdom).rotate) {
@@ -77,7 +77,7 @@ angular.module('globiProtoApp')
               scope.$emit('nodeClicked', item);
             });
 
-          // Transition shapes to their new positions (use KingdomService mapping for rotation)
+          // Transition shapes to their new positions
           shapes.transition()
             .delay(function(d, i) {
               return i * 10;
@@ -101,24 +101,25 @@ angular.module('globiProtoApp')
 
           node.exit().remove();
 
-          // Links between nodes (initial positions make x2/y2 points the same as x1/y1)
+          // Links initial positions
           var link = svg.selectAll('.link').data(links);
           var lineLinks = link.enter().insert('line')
-            .attr('class', function(d) {
-              if (d.linkBack) {
-                return 'linkback';
-              } else {
-                return 'link';
-              }
-            })
+            .attr('class', 'link')
             .attr('marker-end', 'url(#arrow)')
             .attr('x1', function(d) { return nodes[d.source].xPos; })
             .attr('y1', function(d) { return nodes[d.source].yPos; })
             .attr('x2', function(d) { return nodes[d.source].xPos; })
             .attr('y2', function(d) { return nodes[d.source].yPos; })
-            .style('stroke-width', '2');
+            .style('stroke-width', '2')
+            .style('stroke-dasharray', function(d) {
+              if (d.linkBack) {
+                return '3, 3';
+              } else {
+                return '0, 0';
+              }
+            });
 
-          // Transition line links end points to their new positions
+          // Transition links end points to their new positions
           lineLinks.transition()
             .delay(function(d, i) {
               return i * 10;
@@ -143,7 +144,7 @@ angular.module('globiProtoApp')
           links.push.apply(links, newVal.links);
           update();
 
-          // Redraw ALL the text labels based on path, de-emphasize those not on path
+          // Redraw text labels based on path, de-emphasize those not on path
           d3.selectAll('text')
             .style('stroke', function(d) {
               if (graphService.isNodeInPath(d.name) || graphService.isNodeTargetOfPathTip(d.name)) {
