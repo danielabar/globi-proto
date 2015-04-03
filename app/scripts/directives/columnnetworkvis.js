@@ -97,14 +97,24 @@ angular.module('globiProtoApp')
             .attr('dx', function(d) {return d.xPos + 10;})
             .attr('dy', function(d) {return d.yPos + 5;})
             .text(function(d) { return d.name; })
-            .style('stroke', function(d) {return color(d.group);});
+            // .style('kerning', 20)
+            .style({
+              'letter-spacing': 2,
+              'stroke' : function(d) {return color(d.group);}
+            });
 
           node.exit().remove();
 
           // Links initial positions
           var link = svg.selectAll('.link').data(links);
           var lineLinks = link.enter().insert('line')
-            .attr('class', 'link')
+            .attr('class', function(d) {
+              if (d.linkBack) {
+                return 'linkback';
+              } else {
+                return 'link';
+              }
+            })
             .attr('marker-end', 'url(#arrow)')
             .attr('x1', function(d) { return nodes[d.source].xPos; })
             .attr('y1', function(d) { return nodes[d.source].yPos; })

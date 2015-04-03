@@ -1,24 +1,33 @@
 @edge:         #999;
+@edge-back:    #6f6f6f;
+@svg-bg:       white;
 
 svg {
-  background: white;
-}
 
-.node {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
+  background: @svg-bg;
 
-.node text {
-  font-weight: 100;
-  font-size: 14px;
-}
+  .node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+  }
 
-.link {
-  stroke: @edge;
-  stroke-opacity: .6;
-}
+  .node text {
+    font-weight: 100;
+    font-size: 14px;
+  }
 
-marker#arrow {
-  fill: @edge;
+  .link {
+    stroke: @edge;
+    stroke-opacity: .6;
+  }
+
+  .linkback {
+    stroke: @edge-back;
+    stroke-opacity: .8;
+  }
+
+  marker#arrow {
+    fill: @edge;
+  }
+
 }
