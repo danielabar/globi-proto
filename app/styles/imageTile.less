@@ -1,28 +1,75 @@
+/*
+.front-side-item {
+  -webkit-transform: translate3d(0,0,1px);
+  -moz-transform: translate3d(0,0,1px);
+  -ms-transform: translate3d(0,0,1px);
+  -o-transform: translate3d(0,0,1px);
+  transform: translate3d(0,0,1px);
+}
+
+.back-side-item {
+  -webkit-transform: rotateY(180deg) translate3d(0,0,0);
+  -moz-transform: rotateY(180deg) translate3d(0,0,0);
+  -ms-transform: rotateY(180deg) translate3d(0,0,0);
+  -o-transform: rotateY(180deg) translate3d(0,0,0);
+  transform: rotateY(180deg) translate3d(0,0,0);
+}
+
+.back-side {
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+*/
+
+.front-side-item {
+  width: @tile-width;
+}
+
+.back-side-item {
+  width: @tile-width;
+}
 
 .back-side {
   .back-side-item {
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.5s linear 0.25s,visibility 0s linear 0s;
+    -webkit-transition: opacity 0.5s ease, visibility 0s ease;
+    -moz-transition: opacity 0.5s ease, visibility 0s ease;
+    -o-transition: opacity 0.5s ease, visibility 0s ease;
+    transition: opacity 0.5s ease, visibility 0s ease;
   }
   .front-side-item {
     opacity: 0;
     visibility: collapse;
-    transition: opacity 0.5s linear, visibility 0s linear 0.5s;
-  }}
+    -webkit-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
+    -moz-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
+    -o-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
+    transition: opacity 0.5s ease, visibility 0s ease 0.5s;
+  }
+}
 
 .front-side {
   .back-side-item {
     opacity: 0;
     visibility: collapse;
-    transition: opacity 0.5s linear, visibility 0s linear 0.5s;
+    -webkit-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
+    -moz-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
+    -o-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
+    transition: opacity 0.5s ease, visibility 0s ease 0.5s;
   }
   .front-side-item {
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.5s linear 0.25s, visibility 0s linear 0s;
+    -webkit-transition: opacity 0.5s ease, visibility 0s ease;
+    -moz-transition: opacity 0.5s ease, visibility 0s ease;
+    -o-transition: opacity 0.5s ease, visibility 0s ease;
+    transition: opacity 0.5s ease, visibility 0s ease;
   }
 }
+
 
 .image-tile {
   background: @tile-bg;
@@ -33,6 +80,10 @@
   border-radius: 3px;
   -webkit-transition:width 0.25s ease, height 0.25s ease;
   transition:width 0.25s ease, height 0.25s ease;
+
+  -webkit-perspective: 800px;
+  -moz-perspective: 800px;
+  perspective: 800px;
 
   .image-content {
     position: absolute;
@@ -101,9 +152,6 @@
 
   .actions li {
     border-top: 1px solid @divider;
-    .back-side-item {
-      background: lightgray;
-    }
   }
 
   .actions span {
@@ -111,9 +159,9 @@
     -moz-border-radius: 100px;
     -webkit-border-radius: 100px;
     border-radius: 100px;
-    -moz-box-shadow: 0px 0px 2px @icon-border;
-    -webkit-box-shadow: 0px 0px 2px @icon-border;
-    box-shadow: 0px 0px 2px @icon-border;
+    -moz-box-shadow: 0 0 2px @icon-border;
+    -webkit-box-shadow: 0 0 2px @icon-border;
+    box-shadow: 0 0 2px @icon-border;
   }
 
 }

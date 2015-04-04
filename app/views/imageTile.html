@@ -1,20 +1,25 @@
 <li class="image-tile front-side">
-  <div class="image-content front-side-item" style="background-image: url({{imageData.thumbnailURL}});"></div>
-  <div class="image-description-1 front-side-item">{{imageData.scientificName}}
-    <div class="image-description-2">{{imageData.commonName}}</div>
+  <div class="front-side-item">
+    <div class="image-content" style="background-image: url({{imageData.thumbnailURL}});"></div>
+    <div class="image-description-1">{{imageData.scientificName}}
+      <div class="image-description-2">{{imageData.commonName}}</div>
+    </div>
+    <div class="actions">
+      <ul>
+        <li><a ng-click="flip(imageData)"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;Flip</a></li>
+      </ul>
+    </div>
   </div>
 
-
-  <div class="actions">
+  <div class="actions back-side-item">
     <ul>
-      <li class="back-side-item"><div class="image-description-3">{{imageData.scientificName}}</div></li>
-      <li class="back-side-item"><a ng-click="follow(imageData, 'eats')"><span class="glyphicon glyphicon-apple" aria-hidden="true"></span>&nbsp;Eats</a></li>
-      <li class="back-side-item"><a ng-click="follow(imageData, 'eatenBy')"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;Eaten by</a></li>
-      <li class="back-side-item"><a ng-href="{{imageData.infoURL}}"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;Site</a></li>
-      <li class="back-side-item"><a ng-click="map(imageData)"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>&nbsp;Map</a></li>
-      <li class="back-side-item"><a ng-click="network(imageData)"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>&nbsp;Network</a></li>
+      <li><div class="image-description-3">{{imageData.scientificName}}</div></li>
+      <li><a ng-click="follow(imageData, 'eats')"><span class="glyphicon glyphicon-apple" aria-hidden="true"></span>&nbsp;Eats</a></li>
+      <li><a ng-click="follow(imageData, 'eatenBy')"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;Eaten by</a></li>
+      <li><a ng-href="{{imageData.infoURL}}"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;Site</a></li>
+      <li><a ng-click="map(imageData)"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>&nbsp;Map</a></li>
+      <li><a ng-click="network(imageData)"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>&nbsp;Network</a></li>
       <li><a ng-click="flip(imageData)"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;Flip</a></li>
     </ul>
   </div>
-
 </li>
