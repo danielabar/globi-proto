@@ -37,9 +37,21 @@ angular.module('globiProtoApp')
     });
 
     $scope.$on('nodeClicked', function(evt, taxon) {
+      var graphData;
+
+      // temp debug to understand what level
+      console.log('=== NETWORK CLICK current group = ' + graphService.getCurrentGroupNumber());
+      console.log('=== NETWORK CLICK taxon.group = ' + taxon.group);
+      if (graphService.getCurrentGroupNumber() >= taxon.group) {
+        graphData = graphService.rewind(taxon);
+        console.log('=== NETWORK SHOULD REMOVE: ' + JSON.stringify(graphData, null, 2));
+        // graphData.action = 'remove';
+        // $scope.columnGraph = graphData;
+      }
+
       taxonInteractionFields.query({sourceTaxon: taxon.name, interactionType: $scope.query.interactionType}, function(response) {
         if (response.length > 0) {
-          var graphData = graphService.append(response, taxon);
+          graphData = graphService.append(response, taxon);
           $scope.graph = graphData;
           $scope.columnGraph = graphData;
         } else {

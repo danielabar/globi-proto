@@ -8,10 +8,12 @@
  * Factory in the globiProtoApp.
  */
 angular.module('globiProtoApp')
-  .factory('graphService', function (maxApiResults, columnGraphValues, kingdomService) {
+  .factory('graphService', function (columnGraphValues, kingdomService) {
 
     // In-memory representation of entire graph
     var graph = {nodes: [], links: [], path: []};
+
+    var deltaHistory = {};
 
     // Column graph calculation constants
     var widthPerGroup = columnGraphValues.width / columnGraphValues.maxLevel;
@@ -105,7 +107,7 @@ angular.module('globiProtoApp')
         var delta = {nodes: [], links: []};
         var targetNode;
         // TODO: If we're going to display less than actual results, populate message in return about how many cut off
-        var numIterations = Math.min(maxApiResults, interactions.length);
+        var numIterations = Math.min(columnGraphValues.maxNodesPerSource, interactions.length);
         var curInteraction;
         var sourceNodeIndex;
         var nodeAtPathTip;
@@ -186,6 +188,9 @@ angular.module('globiProtoApp')
           targetNode.initialYPos = sourceNode.yPos;
         });
 
+        // Maintain delta history
+        deltaHistory[sourceNode.name] = delta;
+
         return delta;
       },
 
@@ -218,6 +223,53 @@ angular.module('globiProtoApp')
         }
 
         return false;
+      },
+
+      getCurrentGroupNumber: function() {
+        return graph.path[graph.path.length-1].group;
+      },
+
+      rewind: function(sourceNode) {
+        var delta = {nodes: [], links: []};
+        var nodeIndexesToRemove = [];
+        var linkIndexesToRemoveHash = {}; // use a hash to avoid remove same link twice
+        var linkIndexesToRemove = [];
+
+        // TODO maintain path
+
+        // Identify nodes indicies that should be removed
+        for (var i=0; i<graph.nodes.length; i++) {
+          if (graph.nodes[i].group > sourceNode.group) {
+            nodeIndexesToRemove.push(i);
+            graph.nodes[i].originalIndex = i;
+            delta.nodes.push(graph.nodes[i]);
+          }
+        }
+
+        // Remove nodes in reverse order by index
+        nodeIndexesToRemove.sort(function(a,b){ return b - a; });
+        for (var j = nodeIndexesToRemove.length -1; j >= 0; j--) {
+          graph.nodes.splice(nodeIndexesToRemove[j],1);
+        }
+
+        // Identify unique link indicies that should be removed
+        delta.nodes.forEach(function(node) {
+          for (var k=0; k<graph.links.length; k++) {
+            if (graph.links[k].source === node.originalIndex || graph.links[k].target === node.originalIndex) {
+              linkIndexesToRemoveHash[k] = graph.links[k];
+            }
+          }
+        });
+
+        // Remove links in reverse order by index
+        linkIndexesToRemove = Object.keys(linkIndexesToRemoveHash);
+        linkIndexesToRemove.sort(function(a,b){ return b - a; });
+        for (var m = linkIndexesToRemove.length -1; m >= 0; m--) {
+          delta.links.push(graph.links[m]);
+          graph.links.splice(linkIndexesToRemove[m],1);
+        }
+
+        return delta;
       }
 
     };

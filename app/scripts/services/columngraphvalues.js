@@ -11,5 +11,6 @@ angular.module('globiProtoApp')
   .value('columnGraphValues', {
     width: 960,
     height: 500,
-    maxLevel: 10
+    maxLevel: 10,
+    maxNodesPerSource: 10
   });
