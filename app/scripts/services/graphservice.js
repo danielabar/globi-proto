@@ -69,6 +69,16 @@ angular.module('globiProtoApp')
       return 0;
     };
 
+    // var nodesInGroup = function(group) {
+    //   var result = [];
+    //   graph.nodes.forEach(function(node) {
+    //     if (node.group === group) {
+    //       result.push(node);
+    //     }
+    //   });
+    //   return result;
+    // };
+
     var findSourceTaxonPath = function(name, interactions) {
       for (var i=0; i<interactions.length; i++) {
         var curInteraction = interactions[i];
@@ -233,29 +243,25 @@ angular.module('globiProtoApp')
         // TODO: maybe delta only needs to contain indicies not the actual nodes and links
         var delta = {nodes: [], links: []};
         var nodeIndexesToRemove = [];
+        var nodeIndexesAtSourceLevel = [];
         var linkIndexesToRemoveHash = {}; // use a hash to avoid remove same link twice
         var linkIndexesToRemove = [];
 
         // TODO maintain path
 
-        // Identify nodes indicies that should be removed
+        // Identify node indicies that should be removed and those at same level for link cleanup
         for (var i=0; i<graph.nodes.length; i++) {
           if (graph.nodes[i].group > sourceNode.group) {
             nodeIndexesToRemove.push(i);
             graph.nodes[i].originalIndex = i;
             delta.nodes.push(graph.nodes[i]);
           }
+          if (graph.nodes[i].group === sourceNode.group) {
+            nodeIndexesAtSourceLevel.push(i);
+          }
         }
 
-        // Remove nodes in reverse order by index
-        nodeIndexesToRemove.sort(function(a,b){ return b - a; });
-        delta.nodeIndexesToRemove = nodeIndexesToRemove;
-        // for (var j = nodeIndexesToRemove.length -1; j >= 0; j--) {
-        for (var j = 0; j < nodeIndexesToRemove.length; j++) {
-          graph.nodes.splice(nodeIndexesToRemove[j],1);
-        }
-
-        // Identify unique link indicies that should be removed
+        // Identify unique link indicies to be removed based on nodes to be removed
         delta.nodes.forEach(function(node) {
           for (var k=0; k<graph.links.length; k++) {
             if (graph.links[k].source === node.originalIndex || graph.links[k].target === node.originalIndex) {
@@ -264,14 +270,29 @@ angular.module('globiProtoApp')
           }
         });
 
+        // Identify unique link indicies to be removed based on nodes at source level
+        nodeIndexesAtSourceLevel.forEach(function(nodeIndex) {
+          for (var n=0; n<graph.links.length; n++) {
+            if (graph.links[n].source === nodeIndex) {
+              linkIndexesToRemoveHash[n] = graph.links[n];
+            }
+          }
+        });
+
         // Remove links in reverse order by index
         linkIndexesToRemove = Object.keys(linkIndexesToRemoveHash);
         linkIndexesToRemove.sort(function(a,b){ return b - a; });
         delta.linkIndexesToRemove = linkIndexesToRemove;
-        // for (var m = linkIndexesToRemove.length -1; m >= 0; m--) {
         for (var m = 0; m < linkIndexesToRemove.length; m++) {
           delta.links.push(graph.links[m]);
           graph.links.splice(linkIndexesToRemove[m],1);
+        }
+
+        // Remove nodes in reverse order by index
+        nodeIndexesToRemove.sort(function(a,b){ return b - a; });
+        delta.nodeIndexesToRemove = nodeIndexesToRemove;
+        for (var j = 0; j < nodeIndexesToRemove.length; j++) {
+          graph.nodes.splice(nodeIndexesToRemove[j],1);
         }
 
         return delta;
