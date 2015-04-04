@@ -12,5 +12,5 @@ angular.module('globiProtoApp')
     width: 960,
     height: 500,
     maxLevel: 10,
-    maxNodesPerSource: 10
+    maxNodesPerSource: 5 // temporarily low to debug back navigation
   });

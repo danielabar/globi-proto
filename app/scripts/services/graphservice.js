@@ -230,6 +230,7 @@ angular.module('globiProtoApp')
       },
 
       rewind: function(sourceNode) {
+        // TODO: maybe delta only needs to contain indicies not the actual nodes and links
         var delta = {nodes: [], links: []};
         var nodeIndexesToRemove = [];
         var linkIndexesToRemoveHash = {}; // use a hash to avoid remove same link twice
@@ -248,7 +249,9 @@ angular.module('globiProtoApp')
 
         // Remove nodes in reverse order by index
         nodeIndexesToRemove.sort(function(a,b){ return b - a; });
-        for (var j = nodeIndexesToRemove.length -1; j >= 0; j--) {
+        delta.nodeIndexesToRemove = nodeIndexesToRemove;
+        // for (var j = nodeIndexesToRemove.length -1; j >= 0; j--) {
+        for (var j = 0; j < nodeIndexesToRemove.length; j++) {
           graph.nodes.splice(nodeIndexesToRemove[j],1);
         }
 
@@ -264,7 +267,9 @@ angular.module('globiProtoApp')
         // Remove links in reverse order by index
         linkIndexesToRemove = Object.keys(linkIndexesToRemoveHash);
         linkIndexesToRemove.sort(function(a,b){ return b - a; });
-        for (var m = linkIndexesToRemove.length -1; m >= 0; m--) {
+        delta.linkIndexesToRemove = linkIndexesToRemove;
+        // for (var m = linkIndexesToRemove.length -1; m >= 0; m--) {
+        for (var m = 0; m < linkIndexesToRemove.length; m++) {
           delta.links.push(graph.links[m]);
           graph.links.splice(linkIndexesToRemove[m],1);
         }

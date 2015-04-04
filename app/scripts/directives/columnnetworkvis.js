@@ -149,10 +149,21 @@ angular.module('globiProtoApp')
           // Nothing to do if no new data available
           if (!newVal) {return; }
 
-          // Append new graph data and update vis
-          nodes.push.apply(nodes, newVal.nodes);
-          links.push.apply(links, newVal.links);
-          update();
+          if (newVal.action === 'add') {
+            nodes.push.apply(nodes, newVal.nodes);
+            links.push.apply(links, newVal.links);
+            update();
+          }
+
+          if (newVal.action === 'remove') {
+            for (var j = 0; j < newVal.nodeIndexesToRemove.length; j++) {
+              nodes.splice(newVal.nodeIndexesToRemove[j],1);
+            }
+            for (var m = 0; m < newVal.linkIndexesToRemove.length; m++) {
+              links.splice(newVal.linkIndexesToRemove[m],1);
+            }
+            update();
+          }
 
           // Redraw text labels based on path, de-emphasize those not on path
           d3.selectAll('text')
