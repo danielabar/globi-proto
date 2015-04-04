@@ -1,72 +1,77 @@
-/*
-.front-side-item {
-  -webkit-transform: translate3d(0,0,1px);
-  -moz-transform: translate3d(0,0,1px);
-  -ms-transform: translate3d(0,0,1px);
-  -o-transform: translate3d(0,0,1px);
-  transform: translate3d(0,0,1px);
-}
-
-.back-side-item {
-  -webkit-transform: rotateY(180deg) translate3d(0,0,0);
-  -moz-transform: rotateY(180deg) translate3d(0,0,0);
-  -ms-transform: rotateY(180deg) translate3d(0,0,0);
-  -o-transform: rotateY(180deg) translate3d(0,0,0);
-  transform: rotateY(180deg) translate3d(0,0,0);
-}
-
-.back-side {
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-  -ms-transform: rotateY(180deg);
-  -o-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-}
-*/
-
 .front-side-item {
   width: @tile-width;
+  -webkit-transform: rotateY(0deg);
+  -moz-transform: rotateY(0deg);
+  -ms-transform: rotateY(0deg);
+  -o-transform: rotateY(0deg);
+  transform: rotateY(0deg);
 }
 
 .back-side-item {
   width: @tile-width;
+  -webkit-transform: rotateY(-90deg);
+  -moz-transform: rotateY(-90deg);
+  -ms-transform: rotateY(-90deg);
+  -o-transform: rotateY(-90deg);
+  transform: rotateY(-90deg);
 }
 
 .back-side {
   .back-side-item {
-    opacity: 1;
+    //opacity: 1;
     visibility: visible;
-    -webkit-transition: opacity 0.5s ease, visibility 0s ease;
-    -moz-transition: opacity 0.5s ease, visibility 0s ease;
-    -o-transition: opacity 0.5s ease, visibility 0s ease;
-    transition: opacity 0.5s ease, visibility 0s ease;
+    -webkit-transform: rotateY(0deg);
+    -moz-transform: rotateY(0deg);
+    -ms-transform: rotateY(0deg);
+    -o-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+    -webkit-transition: opacity 0.5s ease, transform 0.5s ease 0.5s, visibility 0s linear;
+    -moz-transition: opacity 0.5s ease, transform 0.5s ease 0.5s, visibility 0s linear;
+    -o-transition: opacity 0.5s ease, transform 0.5s ease 0.5s, visibility 0s linear;
+    transition: opacity 0.5s ease, transform 0.5s ease 0.5s, visibility 0s linear;
   }
   .front-side-item {
-    opacity: 0;
+    //opacity: 0;
     visibility: collapse;
-    -webkit-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
-    -moz-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
-    -o-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
-    transition: opacity 0.5s ease, visibility 0s ease 0.5s;
+    -webkit-transform: rotateY(90deg);
+    -moz-transform: rotateY(90deg);
+    -ms-transform: rotateY(90deg);
+    -o-transform: rotateY(90deg);
+    transform: rotateY(90deg);
+    -webkit-transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+    -moz-transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+    -o-transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+    transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
   }
 }
 
 .front-side {
   .back-side-item {
-    opacity: 0;
+    //opacity: 0;
     visibility: collapse;
-    -webkit-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
-    -moz-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
-    -o-transition: opacity 0.5s ease, visibility 0s ease 0.5s;
-    transition: opacity 0.5s ease, visibility 0s ease 0.5s;
+    -webkit-transform: rotateY(-90deg);
+    -moz-transform: rotateY(-90deg);
+    -ms-transform: rotateY(-90deg);
+    -o-transform: rotateY(-90deg);
+    transform: rotateY(-90deg);
+    -webkit-transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s ease 0.5s;
+    -moz-transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s ease 0.5s;
+    -o-transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s ease 0.5s;
+    transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s ease 0.5s;
   }
+
   .front-side-item {
-    opacity: 1;
+    //opacity: 1;
     visibility: visible;
-    -webkit-transition: opacity 0.5s ease, visibility 0s ease;
-    -moz-transition: opacity 0.5s ease, visibility 0s ease;
-    -o-transition: opacity 0.5s ease, visibility 0s ease;
-    transition: opacity 0.5s ease, visibility 0s ease;
+    -webkit-transform: rotateY(0deg);
+    -moz-transform: rotateY(0deg);
+    -ms-transform: rotateY(0deg);
+    -o-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+    -webkit-transition: opacity 0.5s ease, transform 0.5s ease 0.5s, visibility 0s ease;
+    -moz-transition: opacity 0.5s ease, transform 0.5s ease 0.5s, visibility 0s ease;
+    -o-transition: opacity 0.5s ease, transform 0.5s ease 0.5s, visibility 0s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease 0.5s, visibility 0s ease;
   }
 }
 
@@ -78,9 +83,17 @@
   width: @tile-width;
   height: @tile-height;
   border-radius: 3px;
-  -webkit-transition:width 0.25s ease, height 0.25s ease;
-  transition:width 0.25s ease, height 0.25s ease;
-
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform: rotateX(0) rotateY(0) rotateZ(0);
+  -moz-transform: rotateX(0) rotateY(0) rotateZ(0);
+  -ms-transform: rotateX(0) rotateY(0) rotateZ(0);
+  -o-transform: rotateX(0) rotateY(0) rotateZ(0);
+  transform: rotateX(0) rotateY(0) rotateZ(0);
+  -webkit-transition: 1s;
+  -moz-transition: 1s;
+  -o-transition: 1s;
+  transition: 1s;
   -webkit-perspective: 800px;
   -moz-perspective: 800px;
   perspective: 800px;
@@ -91,6 +104,7 @@
     top: -1px;
     background-size: auto 100%;
     background-repeat: no-repeat;
+    background-position: center top;
     width: 100%;
     height: @mini-image-height;
     margin-left: auto;
@@ -118,7 +132,7 @@
 
   .image-description-3 {
     //position: relative;
-    line-height: 1.1em;
+    line-height: 1.2em;
     text-align: center;
     color: @stefan-font-color;
     font-size: 1.1em;
