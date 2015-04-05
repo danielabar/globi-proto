@@ -13,8 +13,6 @@ angular.module('globiProtoApp')
     // In-memory representation of entire graph
     var graph = {nodes: [], links: [], path: []};
 
-    var deltaHistory = {};
-
     // Column graph calculation constants
     var widthPerGroup = columnGraphValues.width / columnGraphValues.maxLevel;
 
@@ -69,16 +67,6 @@ angular.module('globiProtoApp')
       return 0;
     };
 
-    // var nodesInGroup = function(group) {
-    //   var result = [];
-    //   graph.nodes.forEach(function(node) {
-    //     if (node.group === group) {
-    //       result.push(node);
-    //     }
-    //   });
-    //   return result;
-    // };
-
     var findSourceTaxonPath = function(name, interactions) {
       for (var i=0; i<interactions.length; i++) {
         var curInteraction = interactions[i];
@@ -131,14 +119,28 @@ angular.module('globiProtoApp')
         nodeAtPathTip = getNodeAtPathTip();
         if (!nodeAtPathTip) {
           graph.path.push(sourceNode);
+        } else {
+          // Append
+          if (sourceNode.group === (nodeAtPathTip.group + 1) ) {
+            graph.path.push(sourceNode);
+          }
+          // Replace
+          if (sourceNode.group === nodeAtPathTip.group) {
+            graph.path.pop();
+            graph.path.push(sourceNode);
+          }
+          // Rewind
+          if (sourceNode.group < nodeAtPathTip.group) {
+            graph.path.splice(sourceNode.group + 1, (getNodeAtPathTip.group - sourceNode.group));
+          }
         }
-        if (nodeAtPathTip && (nodeAtPathTip.group !== sourceNode.group)) {
-          graph.path.push(sourceNode);
-        }
-        if (nodeAtPathTip && (nodeAtPathTip.group === sourceNode.group)) {
-          graph.path.pop();
-          graph.path.push(sourceNode);
-        }
+        // temp debug path
+        var temppath = [];
+        graph.path.forEach(function(item) {
+          temppath.push(item.name);
+        });
+        console.log('GRAPH APPEND PATH = ' + JSON.stringify(temppath));
+        temppath = [];
 
         // Source node
         if (getIndexOfNode(sourceNode.name, graph.nodes) === null) {
@@ -198,9 +200,6 @@ angular.module('globiProtoApp')
           targetNode.initialYPos = sourceNode.yPos;
         });
 
-        // Maintain delta history
-        deltaHistory[sourceNode.name] = delta;
-
         return delta;
       },
 
@@ -246,8 +245,35 @@ angular.module('globiProtoApp')
         var nodeIndexesAtSourceLevel = [];
         var linkIndexesToRemoveHash = {}; // use a hash to avoid remove same link twice
         var linkIndexesToRemove = [];
+        var nodeAtPathTip;
 
-        // TODO maintain path
+        // FIXME dup logic in append method
+        // Maintain current path
+        nodeAtPathTip = getNodeAtPathTip();
+        if (!nodeAtPathTip) {
+          graph.path.push(sourceNode);
+        } else {
+          // Append
+          if (sourceNode.group === (nodeAtPathTip.group + 1) ) {
+            graph.path.push(sourceNode);
+          }
+          // Replace
+          if (sourceNode.group === nodeAtPathTip.group) {
+            graph.path.pop();
+            graph.path.push(sourceNode);
+          }
+          // Rewind
+          if (sourceNode.group < nodeAtPathTip.group) {
+            graph.path.splice(sourceNode.group, (nodeAtPathTip.group - sourceNode.group));
+          }
+        }
+        // temp debug path
+        var temppath = [];
+        graph.path.forEach(function(item) {
+          temppath.push(item.name);
+        });
+        console.log('GRAPH REWIND PATH = ' + JSON.stringify(temppath));
+        temppath = [];
 
         // Identify node indicies that should be removed and those at same level for link cleanup
         for (var i=0; i<graph.nodes.length; i++) {

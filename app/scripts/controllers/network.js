@@ -42,7 +42,6 @@ angular.module('globiProtoApp')
 
       if (graphService.getCurrentGroupNumber() >= taxon.group) {
         graphData = graphService.rewind(taxon);
-        console.dir(graphData);
         graphData.action = 'remove';
         $scope.columnGraph = graphData;
       }
