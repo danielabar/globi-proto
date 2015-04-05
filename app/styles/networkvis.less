@@ -9,16 +9,31 @@ svg {
   .node {
     stroke: #fff;
     stroke-width: 1.5px;
+
+    &:hover {
+      cursor: pointer
+    }
+
   }
 
   .node text {
     font-weight: 100;
     font-size: 14px;
+
+    &:hover {
+      cursor: default
+    }
+
   }
 
   .link {
     stroke: @edge;
     stroke-opacity: .6;
+
+    &:hover {
+      cursor: pointer
+    }
+
   }
 
   .linkback {
