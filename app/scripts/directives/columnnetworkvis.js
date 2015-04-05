@@ -97,7 +97,6 @@ angular.module('globiProtoApp')
             .attr('dx', function(d) {return d.xPos + 10;})
             .attr('dy', function(d) {return d.yPos + 5;})
             .text(function(d) { return d.name; })
-            // .style('kerning', 20)
             .style({
               'letter-spacing': 2,
               'stroke' : function(d) {return color(d.group);}
@@ -110,7 +109,8 @@ angular.module('globiProtoApp')
           var lineLinks = link.enter().insert('line')
             .attr('class', function(d) {
               if (d.linkBack) {
-                return 'linkback';
+                // EXTREMELY important to still maintain link class because that's how the elements are selected
+                return 'link linkback';
               } else {
                 return 'link';
               }
@@ -149,10 +149,21 @@ angular.module('globiProtoApp')
           // Nothing to do if no new data available
           if (!newVal) {return; }
 
-          // Append new graph data and update vis
-          nodes.push.apply(nodes, newVal.nodes);
-          links.push.apply(links, newVal.links);
-          update();
+          if (newVal.action === 'add') {
+            nodes.push.apply(nodes, newVal.nodes);
+            links.push.apply(links, newVal.links);
+            update();
+          }
+
+          if (newVal.action === 'remove') {
+            for (var j = 0; j < newVal.nodeIndexesToRemove.length; j++) {
+              nodes.splice(newVal.nodeIndexesToRemove[j],1);
+            }
+            for (var m = 0; m < newVal.linkIndexesToRemove.length; m++) {
+              links.splice(newVal.linkIndexesToRemove[m],1);
+            }
+            update();
+          }
 
           // Redraw text labels based on path, de-emphasize those not on path
           d3.selectAll('text')
