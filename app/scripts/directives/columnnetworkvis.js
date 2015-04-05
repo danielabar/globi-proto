@@ -110,7 +110,8 @@ angular.module('globiProtoApp')
           var lineLinks = link.enter().insert('line')
             .attr('class', function(d) {
               if (d.linkBack) {
-                return 'linkback';
+                // EXTREMELY important to still maintain link class because that's how the elements are selected
+                return 'link linkback';
               } else {
                 return 'link';
               }
