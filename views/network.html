@@ -1,6 +1,8 @@
-<div class="network"> <!-- Breadcrumb --> <ol class="breadcrumb"> <li ng-repeat="crumb in breadcrumbs" style="color: {{crumb.circleColor}}">{{crumb.name}}</li> </ol> <!-- Force Graph Visualization --> <!-- <div class="row">
-    <div class="col-xs-12">
-      <network-vis val="graph"></network-vis>
-    </div>
-  </div>
-   --> <!-- Column Graph Visualization --> <div class="row"> <div class="col-xs-12"> <column-network-vis val="columnGraph"></column-network-vis> </div> </div> </div>
+<div class="network"> <!-- Breadcrumb --> <ol class="breadcrumb"> <li ng-repeat="crumb in breadcrumbs" style="color: {{crumb.circleColor}}">{{crumb.name}}</li> </ol> <div class="row"> <!-- Info Dock work in progress... --> <!-- <div class="col-xs-2">
+      TODO only display if have interactionDetails, otherwise display msg like 'click link...'
+      <div class="info-dock" ng-show="interactionDetails">
+        <div data-image-tile="interactionDetails.sourceTaxonData"></div>
+        <p>{{interactionDetails.interactionType}}</p>
+        <div data-image-tile="interactionDetails.targetTaxonData"></div>
+      </div>
+    </div> --> <!-- Column Graph Visualization --> <div class="col-xs-10"> <column-network-vis val="columnGraph"></column-network-vis> </div> </div> </div>
