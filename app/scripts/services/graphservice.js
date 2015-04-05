@@ -92,6 +92,28 @@ angular.module('globiProtoApp')
       node.yPos = calculateNodeYPosition(node);
     };
 
+    // Modify graph.path given a new sourceNode
+    var maintainCurrentPath = function(sourceNode) {
+      var nodeAtPathTip = getNodeAtPathTip();
+      if (!nodeAtPathTip) {
+        graph.path.push(sourceNode);
+      } else {
+        // Append
+        if (sourceNode.group === (nodeAtPathTip.group + 1) ) {
+          graph.path.push(sourceNode);
+        }
+        // Replace
+        if (sourceNode.group === nodeAtPathTip.group) {
+          graph.path.pop();
+          graph.path.push(sourceNode);
+        }
+        // Rewind
+        if (sourceNode.group < nodeAtPathTip.group) {
+          graph.path.splice(sourceNode.group, (nodeAtPathTip.group - sourceNode.group));
+        }
+      }
+    };
+
     // Public API
     return {
 
@@ -104,11 +126,9 @@ angular.module('globiProtoApp')
       append: function(interactions, sourceNode) {
         var delta = {nodes: [], links: []};
         var targetNode;
-        // TODO: If we're going to display less than actual results, populate message in return about how many cut off
         var numIterations = Math.min(columnGraphValues.maxNodesPerSource, interactions.length);
         var curInteraction;
         var sourceNodeIndex;
-        var nodeAtPathTip;
 
         // Hack the first node color (because there's no click event to get it out of D3)
         if (!sourceNode.circleColor) {
@@ -116,31 +136,7 @@ angular.module('globiProtoApp')
         }
 
         // Maintain current path
-        nodeAtPathTip = getNodeAtPathTip();
-        if (!nodeAtPathTip) {
-          graph.path.push(sourceNode);
-        } else {
-          // Append
-          if (sourceNode.group === (nodeAtPathTip.group + 1) ) {
-            graph.path.push(sourceNode);
-          }
-          // Replace
-          if (sourceNode.group === nodeAtPathTip.group) {
-            graph.path.pop();
-            graph.path.push(sourceNode);
-          }
-          // Rewind
-          if (sourceNode.group < nodeAtPathTip.group) {
-            graph.path.splice(sourceNode.group + 1, (getNodeAtPathTip.group - sourceNode.group));
-          }
-        }
-        // temp debug path
-        var temppath = [];
-        graph.path.forEach(function(item) {
-          temppath.push(item.name);
-        });
-        console.log('GRAPH APPEND PATH = ' + JSON.stringify(temppath));
-        temppath = [];
+        maintainCurrentPath(sourceNode);
 
         // Source node
         if (getIndexOfNode(sourceNode.name, graph.nodes) === null) {
@@ -245,35 +241,9 @@ angular.module('globiProtoApp')
         var nodeIndexesAtSourceLevel = [];
         var linkIndexesToRemoveHash = {}; // use a hash to avoid remove same link twice
         var linkIndexesToRemove = [];
-        var nodeAtPathTip;
 
-        // FIXME dup logic in append method
         // Maintain current path
-        nodeAtPathTip = getNodeAtPathTip();
-        if (!nodeAtPathTip) {
-          graph.path.push(sourceNode);
-        } else {
-          // Append
-          if (sourceNode.group === (nodeAtPathTip.group + 1) ) {
-            graph.path.push(sourceNode);
-          }
-          // Replace
-          if (sourceNode.group === nodeAtPathTip.group) {
-            graph.path.pop();
-            graph.path.push(sourceNode);
-          }
-          // Rewind
-          if (sourceNode.group < nodeAtPathTip.group) {
-            graph.path.splice(sourceNode.group, (nodeAtPathTip.group - sourceNode.group));
-          }
-        }
-        // temp debug path
-        var temppath = [];
-        graph.path.forEach(function(item) {
-          temppath.push(item.name);
-        });
-        console.log('GRAPH REWIND PATH = ' + JSON.stringify(temppath));
-        temppath = [];
+        maintainCurrentPath(sourceNode);
 
         // Identify node indicies that should be removed and those at same level for link cleanup
         for (var i=0; i<graph.nodes.length; i++) {
