@@ -32,4 +32,8 @@ angular.module('globiProtoApp')
       $rootScope.$broadcast('networkEvent', eventData);
     };
 
+    $scope.flip = function(imageData) {
+      $scope.$emit('flipCard', imageData);
+    };
+
   });
