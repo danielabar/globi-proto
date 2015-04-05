@@ -19,7 +19,7 @@ angular.module('globiProtoApp')
 
       link: function(scope, element) {
         scope.$on('flipCard', function() {
-          console.log("flipCard");
+          // console.log("flipCard");
           if (element.hasClass('back-side')) {
             element.removeClass('back-side');
             element.addClass('front-side');
