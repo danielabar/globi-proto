@@ -27,19 +27,29 @@ angular.module('globiProtoApp')
           group: 1
         };
         var graphData = graphService.append(response, sourceTaxon);
+        graphData.action = 'add';
         $scope.graph = graphData;
         $scope.columnGraph = graphData;
       } else {
-        toaster.pop('note', 'Sorry', 'No interactions found for: ' + $scope.query.taxon + ' ' + $scope.query.interaction);
+        toaster.pop('note', 'Sorry', 'No interactions found for: ' + $scope.query.sourceTaxon + ' ' + $scope.query.interactionType);
       }
     }, function(err) {
       console.dir(err);
     });
 
     $scope.$on('nodeClicked', function(evt, taxon) {
+      var graphData;
+
+      if (graphService.getCurrentGroupNumber() >= taxon.group) {
+        graphData = graphService.rewind(taxon);
+        graphData.action = 'remove';
+        $scope.columnGraph = graphData;
+      }
+
       taxonInteractionFields.query({sourceTaxon: taxon.name, interactionType: $scope.query.interactionType}, function(response) {
         if (response.length > 0) {
-          var graphData = graphService.append(response, taxon);
+          graphData = graphService.append(response, taxon);
+          graphData.action = 'add';
           $scope.graph = graphData;
           $scope.columnGraph = graphData;
         } else {
