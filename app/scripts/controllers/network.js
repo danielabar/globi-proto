@@ -31,7 +31,7 @@ angular.module('globiProtoApp')
         $scope.graph = graphData;
         $scope.columnGraph = graphData;
       } else {
-        toaster.pop('note', 'Sorry', 'No interactions found for: ' + $scope.query.taxon + ' ' + $scope.query.interaction);
+        toaster.pop('note', 'Sorry', 'No interactions found for: ' + $scope.query.sourceTaxon + ' ' + $scope.query.interactionType);
       }
     }, function(err) {
       console.dir(err);

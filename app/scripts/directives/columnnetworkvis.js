@@ -97,7 +97,6 @@ angular.module('globiProtoApp')
             .attr('dx', function(d) {return d.xPos + 10;})
             .attr('dy', function(d) {return d.yPos + 5;})
             .text(function(d) { return d.name; })
-            // .style('kerning', 20)
             .style({
               'letter-spacing': 2,
               'stroke' : function(d) {return color(d.group);}
