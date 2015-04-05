@@ -5,16 +5,18 @@
     <li ng-repeat="crumb in breadcrumbs" style="color: {{crumb.circleColor}}">{{crumb.name}}</li>
   </ol>
 
-  <!-- Force Graph Visualization -->
-  <!-- <div class="row">
-    <div class="col-xs-12">
-      <network-vis val="graph"></network-vis>
-    </div>
-  </div>
-   -->
-  <!-- Column Graph Visualization -->
   <div class="row">
-    <div class="col-xs-12">
+
+    <!-- Info Dock -->
+    <div class="col-xs-2">
+      <!-- TODO: Make this a directive? -->
+      <div class="info-dock">
+        <p>Info Dock to go here</p>
+      </div>
+    </div>
+
+    <!-- Column Graph Visualization -->
+    <div class="col-xs-10">
       <column-network-vis val="columnGraph"></column-network-vis>
     </div>
   </div>
