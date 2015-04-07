@@ -1,26 +1,42 @@
 <div class="network">
-
-  <!-- Breadcrumb -->
-  <ol class="breadcrumb">
-    <li ng-repeat="crumb in breadcrumbs" style="color: {{crumb.circleColor}}">{{crumb.name}}</li>
-  </ol>
-
   <div class="row">
 
-    <!-- Info Dock work in progress... -->
-    <!-- <div class="col-xs-2">
-      TODO only display if have interactionDetails, otherwise display msg like 'click link...'
+    <!-- Info Dock -->
+    <div class="col-xs-3">
       <div class="info-dock" ng-show="interactionDetails">
-        <div data-image-tile="interactionDetails.sourceTaxonData"></div>
-        <p>{{interactionDetails.interactionType}}</p>
-        <div data-image-tile="interactionDetails.targetTaxonData"></div>
+
+        <!-- Dock Header -->
+        <h4 class="text-center">Details of selected interaction</h4>
+
+        <!-- Interaction Row -->
+        <div class="row">
+          <div class="col-xs-4">
+            <div data-image-tile="interactionDetails.sourceTaxonData"></div>
+          </div>
+          <div class="col-xs-2 text-center">
+            <p>{{interactionDetails.interactionType}}</p>
+          </div>
+          <div class="col-xs-4 text-right">
+            <div data-image-tile="interactionDetails.targetTaxonData"></div>
+          </div>
+        </div>
       </div>
-    </div> -->
+    </div><!--//Info Dock-->
 
     <!-- Column Graph Visualization -->
-    <div class="col-xs-10">
+    <div class="col-xs-7 graph-vis">
+      <ol class="breadcrumb">
+        <li ng-repeat="crumb in breadcrumbs" style="color: {{crumb.circleColor}}">{{crumb.name}}</li>
+      </ol>
       <column-network-vis val="columnGraph"></column-network-vis>
     </div>
-  </div>
 
-</div>
+    <!-- Legend -->
+    <div class="col-xs-2">
+      <h3>Legend</h3>
+      <p>The legend will go here</p>
+    </div>
+
+
+  </div><!--//row-->
+</div><!--//network-->

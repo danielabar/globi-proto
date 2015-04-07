@@ -23,9 +23,12 @@ angular.module('globiProtoApp')
 
         var shapeSize = 175;
 
+        // Maximize available size based on container
+        var svgWidth = element.parent().width();
+
         // Init the vis
         var svg = d3.select(element[0]).append('svg')
-          .attr('width', columnGraphValues.width)
+          .attr('width', svgWidth)
           .attr('height', columnGraphValues.height);
 
         // Define arrow (TODO kind of ugly, needs some love)
