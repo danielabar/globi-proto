@@ -10,7 +10,7 @@
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
-  .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, graphService, toaster) {
+  .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, graphService, interactionHelper, toaster) {
 
     graphService.init();
 
@@ -61,5 +61,11 @@ angular.module('globiProtoApp')
     });
 
     $scope.breadcrumbs = graphService.getPath();
+
+    $scope.$on('linkClicked', function(evt, linkItem) {
+      // TODO: Call graph service to get source and target node names given linkItem
+      console.dir(linkItem);
+      $scope.interactionDetails = interactionHelper.getSourceTargetDetails();
+    });
 
   });

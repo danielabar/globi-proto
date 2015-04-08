@@ -21,6 +21,8 @@ angular.module('globiProtoApp')
         // Color scale
         var color = d3.scale.category10();
 
+        var shapeSize = 175;
+
         // Init the vis
         var svg = d3.select(element[0]).append('svg')
           .attr('width', columnGraphValues.width)
@@ -62,7 +64,7 @@ angular.module('globiProtoApp')
               }
             })
             .attr('d', function(d) {
-              return d3Extension.getSymbol(kingdomService.shapeInfo(d.kingdom).shape, 150);
+              return d3Extension.getSymbol(kingdomService.shapeInfo(d.kingdom).shape, shapeSize);
             })
             .style('fill', function (d) {
               if (!kingdomService.shapeInfo(d.kingdom).empty) {
@@ -99,7 +101,7 @@ angular.module('globiProtoApp')
             .text(function(d) { return d.name; })
             .style({
               'letter-spacing': 2,
-              'stroke' : function(d) {return color(d.group);}
+              'fill' : function(d) {return color(d.group);}
             });
 
           node.exit().remove();
@@ -107,6 +109,15 @@ angular.module('globiProtoApp')
           // Links initial positions
           var link = svg.selectAll('.link').data(links);
           var lineLinks = link.enter().insert('line')
+            .on('mouseover', function() {
+              d3.select(this).style({'stroke-width': '3px', 'stroke' : '#2ED3DE'});
+            })
+            .on('mouseout', function() {
+              d3.select(this).style({'stroke-width': '2px', 'stroke' : '#999'});
+            })
+            .on('click', function(linkItem) {
+              scope.$emit('linkClicked', linkItem);
+            })
             .attr('class', function(d) {
               if (d.linkBack) {
                 // EXTREMELY important to still maintain link class because that's how the elements are selected
