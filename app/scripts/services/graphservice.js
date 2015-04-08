@@ -14,7 +14,7 @@ angular.module('globiProtoApp')
     var graph = {nodes: [], links: [], path: []};
 
     var widthPerGroup = function(graphWidth) {
-      return graphWidth / columnGraphValues.maxLevel;
+      return graphWidth / (columnGraphValues.maxLevel + 1);
     };
 
     // Utility functions
