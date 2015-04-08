@@ -10,7 +10,7 @@
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
-  .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, graphService, interactionHelper, toaster) {
+  .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, images, graphService, interactionHelper, toaster) {
 
     graphService.init();
 
@@ -61,6 +61,19 @@ angular.module('globiProtoApp')
     });
 
     $scope.breadcrumbs = graphService.getPath();
+
+    // Card data for subject taxon (starting point of the vis)
+    images.get({taxon: $scope.query.sourceTaxon}).$promise.then(function(response) {
+      $scope.subjectTaxon = {
+        scientificName: response.scientificName,
+        commonName: response.commonName,
+        thumbnailURL: response.thumbnailURL,
+        imageURL: response.imageURL,
+        infoURL: response.infoURL,
+      };
+    }, function(err) {
+      console.dir(err);
+    });
 
     $scope.$on('linkClicked', function(evt, linkItem) {
       // TODO: Call graph service to get source and target node names given linkItem
