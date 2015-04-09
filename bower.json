@@ -1,6 +1,6 @@
 {
   "name": "globi-proto",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "dependencies": {
     "jquery": "2.1.1",
     "bootstrap": "3.3.2",
