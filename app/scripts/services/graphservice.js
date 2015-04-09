@@ -295,6 +295,13 @@ angular.module('globiProtoApp')
           graph.nodes[link.target].initialXPos = graph.nodes[link.source].xPos;
           graph.nodes[link.target].initialYPos = graph.nodes[link.source].yPos;
         });
+      },
+
+      getLinkNodes: function(link) {
+        return {
+          sourceName: graph.nodes[link.source].name,
+          targetName: graph.nodes[link.target].name
+        };
       }
 
     };

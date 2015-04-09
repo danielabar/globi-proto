@@ -14,6 +14,10 @@ angular.module('globiProtoApp')
 
     graphService.init();
 
+    $scope.interactionDetails = {
+      show: false
+    };
+
     // Pre-populate a good example if one is not provided by the user
     $scope.query = {
       sourceTaxon: $state.params.taxon || 'Thunnus obesus',
@@ -76,9 +80,11 @@ angular.module('globiProtoApp')
     });
 
     $scope.$on('linkClicked', function(evt, linkItem) {
-      // TODO: Call graph service to get source and target node names given linkItem
-      console.dir(linkItem);
-      $scope.interactionDetails = interactionHelper.getSourceTargetDetails();
+      var linkNodes = graphService.getLinkNodes(linkItem);
+      interactionHelper.getSourceTargetDetails(linkNodes.sourceName, linkNodes.targetName).then(function(response) {
+        $scope.interactionDetails = response;
+        $scope.interactionDetails.show = true;
+      });
     });
 
   });
