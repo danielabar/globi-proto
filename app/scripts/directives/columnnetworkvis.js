@@ -21,7 +21,7 @@ angular.module('globiProtoApp')
         // Color scale
         var color = d3.scale.category10();
 
-        var shapeSize = 175;
+        var shapeSize = 200;
 
         // Maximize available size based on container
         var svgWidth = element.parent().width();
@@ -40,8 +40,8 @@ angular.module('globiProtoApp')
           .attr('viewBox', '0 -5 10 10')
           .attr('refX', 10)
           .attr('refY', 0)
-          .attr('markerWidth', 10)
-          .attr('markerHeight', 10)
+          .attr('markerWidth', 8)
+          .attr('markerHeight', 8)
           .attr('orient', 'auto')
           .append('svg:path')
           .attr('d', 'M0,-5L10,0L0,0');
@@ -114,7 +114,7 @@ angular.module('globiProtoApp')
           var link = svg.selectAll('.link').data(links);
           var lineLinks = link.enter().insert('line')
             .on('mouseover', function() {
-              d3.select(this).style({'stroke-width': '3px', 'stroke' : '#2ED3DE'});
+              d3.select(this).style({'stroke-width': '4px', 'stroke' : '#2ED3DE'});
             })
             .on('mouseout', function() {
               d3.select(this).style({'stroke-width': '2px', 'stroke' : '#999'});
