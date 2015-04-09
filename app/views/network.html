@@ -2,12 +2,12 @@
   <div class="row">
 
     <!-- Info Dock -->
-    <div class="col-xs-3">
+    <div class="col-xs-4">
       <div class="info-dock">
 
         <!-- Dock Header -->
         <div class="row">
-          <div class="col-xs-12">
+          <div class="col-xs-12 horizontal-center">
             <h3 class="text-center">{{query.interactionType | uppercase }} Network of</h3>
             <div data-image-tile="subjectTaxon"></div>
           </div>
@@ -33,19 +33,12 @@
     </div><!--//Info Dock col-xs-3-->
 
     <!-- Column Graph Visualization -->
-    <div class="col-xs-7 graph-vis">
+    <div class="col-xs-8 graph-vis">
       <ol class="breadcrumb">
         <li ng-repeat="crumb in breadcrumbs" style="color: {{crumb.circleColor}}">{{crumb.name}}</li>
       </ol>
       <column-network-vis val="columnGraph"></column-network-vis>
     </div>
-
-    <!-- Legend -->
-    <div class="col-xs-2">
-      <h3>Legend</h3>
-      <p>The legend will go here</p>
-    </div>
-
 
   </div><!--//row-->
 </div><!--//network-->
