@@ -13,8 +13,9 @@ angular.module('globiProtoApp')
     // In-memory representation of entire graph
     var graph = {nodes: [], links: [], path: []};
 
-    // Column graph calculation constants
-    var widthPerGroup = columnGraphValues.width / columnGraphValues.maxLevel;
+    var widthPerGroup = function(graphWidth) {
+      return graphWidth / (columnGraphValues.maxLevel + 1);
+    };
 
     // Utility functions
     var getIndexOfNode = function(name, nodes) {
@@ -76,20 +77,20 @@ angular.module('globiProtoApp')
       }
     };
 
-    var calculateNodeXPosition = function(node) {
-      return node.group * widthPerGroup;
+    var calculateNodeXPosition = function(node, graphWidth) {
+      return node.group * widthPerGroup(graphWidth);
     };
 
-    var calculateNodeYPosition = function(node) {
+    var calculateNodeYPosition = function(node, graphHeight) {
       var numNodesInGroup = numNodesForGroup(node.group);
-      var spacer = columnGraphValues.height / (numNodesInGroup + 1);
+      var spacer = graphHeight / (numNodesInGroup + 1);
       var index = indexOfNodeWithinGroup(node);
       return (index + 1) * spacer;
     };
 
-    var populateNodePosition = function(node) {
-      node.xPos = calculateNodeXPosition(node);
-      node.yPos = calculateNodeYPosition(node);
+    var populateNodePosition = function(node, graphWidth, graphHeight) {
+      node.xPos = calculateNodeXPosition(node, graphWidth);
+      node.yPos = calculateNodeYPosition(node, graphHeight);
     };
 
     // Modify graph.path given a new sourceNode
@@ -161,9 +162,9 @@ angular.module('globiProtoApp')
         }
 
         // Node positions
-        delta.nodes.forEach(function(node) {
-          populateNodePosition(node);
-        });
+        // delta.nodes.forEach(function(node) {
+        //   populateNodePosition(node);
+        // });
 
         // Links
         for (var j=0; j<numIterations; j++) {
@@ -186,14 +187,6 @@ angular.module('globiProtoApp')
           if (positionInDelta === null) {
             link.linkBack = true;
           }
-        });
-
-        // Transitions
-        delta.links.forEach(function(link) {
-          var sourceNode = graph.nodes[link.source];
-          var targetNode = graph.nodes[link.target];
-          targetNode.initialXPos = sourceNode.xPos;
-          targetNode.initialYPos = sourceNode.yPos;
         });
 
         return delta;
@@ -292,6 +285,23 @@ angular.module('globiProtoApp')
         }
 
         return delta;
+      },
+
+      calculateNodePositions: function(deltaNodes, deltaLinks, graphWidth, graphHeight) {
+        deltaNodes.forEach(function(node) {
+          populateNodePosition(node, graphWidth, graphHeight);
+        });
+        deltaLinks.forEach(function(link) {
+          graph.nodes[link.target].initialXPos = graph.nodes[link.source].xPos;
+          graph.nodes[link.target].initialYPos = graph.nodes[link.source].yPos;
+        });
+      },
+
+      getLinkNodes: function(link) {
+        return {
+          sourceName: graph.nodes[link.source].name,
+          targetName: graph.nodes[link.target].name
+        };
       }
 
     };

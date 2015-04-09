@@ -23,9 +23,13 @@ angular.module('globiProtoApp')
 
         var shapeSize = 175;
 
+        // Maximize available size based on container
+        var svgWidth = element.parent().width();
+        var svgHeight = columnGraphValues.height;
+
         // Init the vis
         var svg = d3.select(element[0]).append('svg')
-          .attr('width', columnGraphValues.width)
+          .attr('width', svgWidth)
           .attr('height', columnGraphValues.height);
 
         // Define arrow (TODO kind of ugly, needs some love)
@@ -163,6 +167,7 @@ angular.module('globiProtoApp')
           if (newVal.action === 'add') {
             nodes.push.apply(nodes, newVal.nodes);
             links.push.apply(links, newVal.links);
+            graphService.calculateNodePositions(newVal.nodes, newVal.links, svgWidth, svgHeight);
             update();
           }
 

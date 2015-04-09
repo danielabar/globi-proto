@@ -8,36 +8,43 @@
  * Factory in the globiProtoApp.
  */
 angular.module('globiProtoApp')
-  .factory('interactionHelper', function () {
+  .factory('interactionHelper', function (images, $q) {
+
+    var imagePromise = function(taxonName) {
+      var deferred = $q.defer();
+      var result = images.get({taxon: taxonName}, function() {
+        deferred.resolve(result);
+      });
+      return deferred.promise;
+    };
+
+    var parseImageResult = function(imageResponse) {
+      return {
+        scientificName: imageResponse.scientificName,
+        commonName: imageResponse.commonName,
+        thumbnailURL: imageResponse.thumbnailURL,
+        imageURL: imageResponse.imageURL,
+        infoURL: imageResponse.infoURL,
+      };
+    };
 
     // Public API
     return {
 
-      getSourceTargetDetails: function () {
-        // Hard code some data for proof of concept, the real thing will have to make a few http calls...
-        var result = {
-          sourceTaxonData: {
-            scientificName: 'Thunnus albacares',
-            commonName: 'Yellowfin Tuna',
-            thumbnailURL: 'http://media.eol.org/content/2009/05/21/17/48356_98_68.jpg',
-            imageURL: 'http://whatever',
-            infoURL: 'http://eol.org/pages/205934'
-          },
-          interactionType: 'eats',
-          targetTaxonData: {
-            scientificName: 'Teuthida',
-            commonName: 'Squid',
-            thumbnailURL: 'http://media.eol.org/content/2010/12/10/04/25917_98_68.jpg',
-            imageURL: 'http://whatever',
-            infoURL: 'http://eol.org/pages/2336'
-          },
-          studies: [
-            {studyTitle: 'foo', studyUrl: 'http://bar'},
-            {studyTitle: 'foo2', studyUrl: 'http://bar2'}
-          ],
-          hasGeo: true
-        };
-        return result;
+      getSourceTargetDetails: function (sourceNodeName, targetNodeName) {
+        var result;
+        var deferred = $q.defer();
+        $q.all([
+          imagePromise(sourceNodeName),
+          imagePromise(targetNodeName)
+        ]).then(function(data) {
+          result = {
+            sourceTaxonData: parseImageResult(data[0]),
+            targetTaxonData: parseImageResult(data[1])
+          };
+          deferred.resolve(result);
+        });
+        return deferred.promise;
       }
 
     };
