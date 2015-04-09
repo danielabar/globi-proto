@@ -15,6 +15,8 @@
 
         <!-- Dock Sub Header -->
         <div class="info-dock-interaction-details" ng-show="interactionDetails.show">
+
+          <!-- Source to Target Cards -->
           <h4 class="text-center">Details of selected interaction</h4>
           <div class="row">
             <div class="col-xs-5">
@@ -27,6 +29,15 @@
               <div data-image-tile="interactionDetails.targetTaxonData"></div>
             </div>
           </div>
+
+          <!-- Studies -->
+          <div class="studies" ng-show="interactionDetails.studies.length > 0">
+            <h4 class="text-center">References</h4>
+            <div class="list-group">
+              <a ng-repeat="study in studies" ng-href="{{study.studyUrl}}" class="list-group-item" target="_blank">{{study.studyTitle}}</a>
+            </div>
+          </div>
+
         </div><!--//Dock Sub Header-->
 
       </div><!--//Info Dock-->
