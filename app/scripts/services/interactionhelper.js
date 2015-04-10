@@ -40,12 +40,6 @@ angular.module('globiProtoApp')
       return deferred.promise;
     };
 
-    var parseInteractionDetailsResult = function(interactionDetailsResponse) {
-      return {
-        studies: parseStudies(interactionDetailsResponse)
-      };
-    };
-
     var parseStudies = function(interactionDetailsResponse) {
       var uniqueStudies = {};
       interactionDetailsResponse.forEach(function(detail) {
@@ -57,6 +51,43 @@ angular.module('globiProtoApp')
           studyUrl: uniqueStudies[studyTitle]
         };
       });
+    };
+
+    var parseGeo = function(interactionDetailsResponse) {
+      var uniqueHolder = {};
+      interactionDetailsResponse.forEach(function(interactionDetail) {
+        if (interactionDetail.study_title && interactionDetail.latitude && interactionDetail.longitude) {
+          var uniqueKey = interactionDetail.study_title.replace(/\s|\-/g, '') + interactionDetail.latitude.toString().replace('-','#') + '_' + interactionDetail.longitude.toString().replace('-','#');
+          if (uniqueHolder[uniqueKey]) {
+            uniqueHolder[uniqueKey].itemCount += 1;
+            uniqueHolder[uniqueKey].message = uniqueHolder[uniqueKey].itemCount + ' Observations, ' + '<a target="_blank" href="' + interactionDetail.study_url + '">' + interactionDetail.study_title + '</a>';
+          } else {
+            uniqueHolder[uniqueKey] = {
+              lat: interactionDetail.latitude,
+              lng: interactionDetail.longitude,
+              message: '1 Observation, ' + '<a target="_blank" href="' + interactionDetail.study_url + '">' + interactionDetail.study_title + '</a>',
+              focus: true,
+              draggable: false,
+              itemCount: 1
+            };
+          }
+        }
+      });
+      return uniqueHolder;
+    };
+
+    var calculateMapCenter = function(markers) {
+      var totalLat = 0;
+      var totalLng = 0;
+      Object.keys(markers).forEach(function(key) {
+        totalLat += markers[key].lat;
+        totalLng += markers[key].lng;
+      });
+      return {
+        lat: totalLat / Object.keys(markers).length,
+        lng: totalLng / Object.keys(markers).length,
+        zoom: 3
+      };
     };
 
     // Public API
@@ -73,8 +104,10 @@ angular.module('globiProtoApp')
           result = {
             sourceTaxonData: parseImageResult(data[0]),
             targetTaxonData: parseImageResult(data[1]),
-            studies: parseInteractionDetailsResult(data[2]).studies
+            studies: parseStudies(data[2]),
+            mapMarkers: parseGeo(data[2]),
           };
+          result.mapCenter = calculateMapCenter(result.mapMarkers);
           deferred.resolve(result);
         });
         return deferred.promise;
