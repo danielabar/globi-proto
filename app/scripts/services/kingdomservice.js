@@ -67,6 +67,17 @@ angular.module('globiProtoApp')
       shapeInfo: function(kingdom) {
         var result = KINGDOM_VIS[kingdom];
         return result || KINGDOM_VIS[DEFAULT_KINGDOM];
+      },
+
+      legend: function() {
+        return Object.keys(KINGDOM_VIS).map(function(key) {
+          return {
+            kingdom: key,
+            shape: KINGDOM_VIS[key].shape,
+            rotate: KINGDOM_VIS[key].rotate,
+            noFill: KINGDOM_VIS[key].empty
+          };
+        });
       }
 
     };

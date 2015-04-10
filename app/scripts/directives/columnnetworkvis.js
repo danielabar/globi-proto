@@ -50,6 +50,27 @@ angular.module('globiProtoApp')
         var nodes = [];
         var links = [];
 
+        // // Legend
+        // var legend = svg.selectAll('.legend')
+        //   .data(kingdomService.legend())
+        //   .enter().append('g')
+        //   .attr('class', 'legend')
+        //   .attr("transform", function(d, i) { return 'translate(0,' + i * 20 + ')'; });
+        //
+        // // Just draw rectangles for now...
+        // legend.append('rect')
+        //   .attr('x', 20)
+        //   .attr('width', 18)
+        //   .attr('height', 18)
+        //   .style('fill', '#000');
+        //
+        // legend.append('text')
+        //   .attr('x', 30)
+        //   .attr('y', 10)
+        //   .attr('dy', '.35em')
+        //   .style('text-anchor', 'end')
+        //   .text(function(d) { return d.kingdom; });
+
         // Implement D3 general updating pattern
         var update = function() {
 
@@ -100,6 +121,7 @@ angular.module('globiProtoApp')
 
           // Node labels
           nodeEnter.append('text')
+            .attr('class', 'node-label')
             .attr('dx', function(d) {return d.xPos + 10;})
             .attr('dy', function(d) {return d.yPos + 5;})
             .text(function(d) { return d.name; })
@@ -182,7 +204,7 @@ angular.module('globiProtoApp')
           }
 
           // Redraw text labels based on path, de-emphasize those not on path
-          d3.selectAll('text')
+          d3.selectAll('text.node-label')
             .style('stroke', function(d) {
               if (graphService.isNodeInPath(d.name) || graphService.isNodeTargetOfPathTip(d.name)) {
                 return color(d.group);
@@ -195,6 +217,28 @@ angular.module('globiProtoApp')
                 return '10px';
               }
             });
+
+            // Legend
+            var legend = svg.selectAll('.legend')
+              .data(kingdomService.legend())
+              .enter().append('g')
+              .attr('class', 'legend')
+              .attr('transform', function(d, i) { return 'translate(0,' + i * 20 + ')'; });
+
+            // Just draw rectangles for now...
+            legend.append('rect')
+              .attr('x', 30)
+              .attr('width', 18)
+              .attr('height', 18)
+              .style('fill', '#000');
+
+            legend.append('text')
+              .attr('x', 60)
+              .attr('y', 9)
+              .attr('dy', '.35em')
+              .style('text-anchor', 'start') // left align
+              .style('fill', '#000')
+              .text(function(d) { return d.kingdom; });
 
         });//scope.$watch
 
