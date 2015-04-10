@@ -80,8 +80,9 @@ angular.module('globiProtoApp')
     });
 
     $scope.$on('linkClicked', function(evt, linkItem) {
+      $scope.interactionDetails = {};
       var linkNodes = graphService.getLinkNodes(linkItem);
-      interactionHelper.getSourceTargetDetails(linkNodes.sourceName, linkNodes.targetName).then(function(response) {
+      interactionHelper.getSourceTargetDetails(linkNodes.sourceName, linkNodes.targetName, $scope.query.interactionType).then(function(response) {
         $scope.interactionDetails = response;
         $scope.interactionDetails.show = true;
       });
