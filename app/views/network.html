@@ -34,7 +34,7 @@
           <div class="studies" ng-show="interactionDetails.studies.length > 0">
             <h4 class="text-center">References</h4>
             <div class="list-group">
-              <a ng-repeat="study in studies" ng-href="{{study.studyUrl}}" class="list-group-item" target="_blank">{{study.studyTitle}}</a>
+              <a ng-repeat="study in interactionDetails.studies" ng-href="{{study.studyUrl}}" class="list-group-item" target="_blank">{{study.studyTitle}}</a>
             </div>
           </div>
 
@@ -43,12 +43,21 @@
       </div><!--//Info Dock-->
     </div><!--//Info Dock col-xs-3-->
 
-    <!-- Column Graph Visualization -->
+    <!-- Column Graph Visualization and Map -->
     <div class="col-xs-8 graph-vis">
       <ol class="breadcrumb">
         <li ng-repeat="crumb in breadcrumbs" style="color: {{crumb.circleColor}}">{{crumb.name}}</li>
       </ol>
       <column-network-vis val="columnGraph"></column-network-vis>
+
+      <leaflet
+        defaults="defaults"
+        center="interactionDetails.mapCenter"
+        markers="interactionDetails.mapMarkers"
+        height="480px"
+        width="960px">
+      </leaflet>
+
     </div>
 
   </div><!--//row-->

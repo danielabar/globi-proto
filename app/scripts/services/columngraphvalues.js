@@ -9,7 +9,7 @@
  */
 angular.module('globiProtoApp')
   .value('columnGraphValues', {
-    height: 700,
+    height: 600,
     maxLevel: 6,
-    maxNodesPerSource: 20
+    maxNodesPerSource: 15
   });
