@@ -1,0 +1,19 @@
+<div class="max-network-level">
+  <div class="modal-header">
+      <h3 class="modal-title">Maximum Network Level Reached</h3>
+  </div>
+  <div class="modal-body">
+      <p>
+        This version of <span class="app-name">Globi Explorer</span> supports up to {{modalData.maxLevel}} levels of network exploration.
+      </p>
+      <p>
+        To explore further, you can start a New Network for <span class="search-term">{{ modalData.taxon }} - {{ modalData.interaction }}</span>
+        <br>
+        Or Cancel to stay on the current page and select any earlier node in the network.
+      </p>
+  </div>
+  <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="ok()">New Network</button>
+      <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+  </div>
+</div>
