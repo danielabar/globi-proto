@@ -95,6 +95,10 @@ angular.module('globiProtoApp')
       });
     });
 
+    $scope.$on('maxLevelNodeClicked', function(evt, maxVal) {
+      toaster.pop('warning', 'Max reached', 'This version only supports up to ' + maxVal + ' levels of exploration. Please select any earlier node in the graph to continue.');
+    });
+
     $scope.$on('legendClicked', function(evt, legendItem) {
       if (legendItem.wiki) {
         $window.open(legendItem.wiki, '_blank');
