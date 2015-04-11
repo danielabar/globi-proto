@@ -20,6 +20,7 @@ angular.module('globiProtoApp')
 
         // Color scale
         var color = d3.scale.category10();
+        var legendColor = '#000';
 
         var shapeSize = 200;
         var shapeSizeLegend = 100;
@@ -69,21 +70,31 @@ angular.module('globiProtoApp')
           .attr('d', function(d) {
             return d3Extension.getSymbol(kingdomService.shapeInfo(d.kingdom).shape, shapeSizeLegend);
           })
-          .attr('stroke', '#000')
+          .attr('stroke', legendColor)
           .style('fill', function (d) {
             if (!kingdomService.shapeInfo(d.kingdom).empty) {
-              return '#000';
+              return legendColor;
             } else {
               return 'transparent';
             }
           });
 
         legend.append('text')
+          .attr('class', 'legend-text')
+          .on('mouseover', function() {
+            d3.select(this).style('fill', '#1588ec');
+          })
+          .on('mouseout', function() {
+            d3.select(this).style('fill', legendColor);
+          })
+          .on('click', function(legendItem) {
+            scope.$emit('legendClicked', legendItem);
+          })
           .attr('x', 60)
           .attr('y', 9)
           .attr('dy', '.35em')
           .style('text-anchor', 'start') // left align
-          .style('fill', '#000')
+          .style('fill', legendColor)
           .text(function(d) { return d.kingdom; });
 
         // Implement D3 general updating pattern
