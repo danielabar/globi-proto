@@ -37,42 +37,16 @@ angular
           }
         }
       })
-      .state('map', {
-        url: '/map?sourceTaxon&targetTaxon&interactionType',
-        views: {
-          'nav' : {
-            templateUrl: 'views/nav.html',
-            controller: 'NavCtrl'
-          },
-          'content' : {
-            templateUrl: 'views/map.html',
-            controller: 'MapCtrl'
-          }
-        }
-      })
       .state('network', {
         url: '/network?taxon&interaction',
         views: {
           'nav' : {
-            templateUrl: 'views/nav.html',
-            controller: 'NavCtrl'
+            templateUrl: 'views/navNetwork.html',
+            controller: 'NavNetworkCtrl'
           },
           'content' : {
             templateUrl: 'views/network.html',
             controller: 'NetworkCtrl'
-          }
-        }
-      })
-      .state('play', {
-        url: '/play',
-        views: {
-          'nav' : {
-            templateUrl: 'views/nav.html',
-            controller: 'NavCtrl'
-          },
-          'content' : {
-            templateUrl: 'views/play.html',
-            controller: 'PlayCtrl'
           }
         }
       })
