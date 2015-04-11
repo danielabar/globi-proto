@@ -22,7 +22,10 @@ angular.module('globiProtoApp')
         var svgWidth = element.parent().width();
         var svgHeight = columnGraphValues.height;
 
-        var color = d3.scale.category10();
+        var color = d3.scale.ordinal()
+          .domain([1, 2, 3, 4, 5, 6])
+          .range(['rgb(31, 119, 180)', 'rgb(255, 127, 14)' , 'rgb(44, 160, 44)', 'rgb(214, 39, 40)', 'rgb(148, 103, 189)', 'rgb(140, 86, 75)']);
+
         var shapeSize = 200;
 
         // Init the vis
