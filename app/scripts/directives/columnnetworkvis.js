@@ -10,7 +10,7 @@
  * SO Example: http://stackoverflow.com/questions/23224285/change-the-size-of-a-symbol-with-a-transition-in-d3-js
  */
 angular.module('globiProtoApp')
-  .directive('columnNetworkVis', function (columnGraphValues, graphService, kingdomService, d3Extension) {
+  .directive('columnNetworkVis', function (columnGraphValues, graphService, kingdomService, d3Extension, legendHelper) {
     return {
       restrict: 'E',
       scope: {
@@ -18,19 +18,12 @@ angular.module('globiProtoApp')
       },
       link: function postLink(scope, element) {
 
-        // Color scale
-        var color = d3.scale.category10();
-        // var color = d3.scale.ordinal()
-        //   .range(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
-        var legendColor = '#000';
-        var levelLegendColor = d3.scale.category10();
-
-        var shapeSize = 200;
-        var shapeSizeLegend = 100;
-
         // Maximize available size based on container
         var svgWidth = element.parent().width();
         var svgHeight = columnGraphValues.height;
+
+        var color = d3.scale.category10();
+        var shapeSize = 200;
 
         // Init the vis
         var svg = d3.select(element[0]).append('svg')
@@ -55,73 +48,11 @@ angular.module('globiProtoApp')
         var nodes = [];
         var links = [];
 
-        // Kingdom Legend
-        var legend = svg.selectAll('.legend')
-          .data(kingdomService.legend())
-          .enter().append('g')
-          .attr('class', 'legend')
-          .attr('transform', function(d, i) { return 'translate(0,' + (i+1) * 20 + ')'; });
+        // Draw legends
+        legendHelper.kingdom(svg, scope);
+        legendHelper.level(svg);
 
-        legend.append('path')
-          .attr('transform', function(d) {
-            if (kingdomService.shapeInfo(d.kingdom).rotate) {
-              return 'translate(' + 30 + ',' + 10 + ') rotate(' + kingdomService.shapeInfo(d.kingdom).rotate + ')';
-            } else {
-              return 'translate(' + 30 + ',' + 10 + ')';
-            }
-          })
-          .attr('d', function(d) {
-            return d3Extension.getSymbol(kingdomService.shapeInfo(d.kingdom).shape, shapeSizeLegend);
-          })
-          .attr('stroke', legendColor)
-          .style('fill', function (d) {
-            if (!kingdomService.shapeInfo(d.kingdom).empty) {
-              return legendColor;
-            } else {
-              return 'transparent';
-            }
-          });
-
-        legend.append('text')
-          .attr('class', 'legend-text')
-          .on('mouseover', function() {
-            d3.select(this).style('fill', '#1588ec');
-          })
-          .on('mouseout', function() {
-            d3.select(this).style('fill', legendColor);
-          })
-          .on('click', function(legendItem) {
-            scope.$emit('legendClicked', legendItem);
-          })
-          .attr('x', 60)
-          .attr('y', 9)
-          .attr('dy', '.35em')
-          .style('text-anchor', 'start') // left align
-          .style('fill', legendColor)
-          .text(function(d) { return d.kingdom; });
-
-        // Level legend
-        var levelData = ['1st level', '2nd level', '3rd level', '4th level', '5th level', '6th level'];
-        var levelLegend = svg.selectAll('.legendLevel')
-          .data(levelData)
-          .enter().append('g')
-          .attr('class', 'legend-level')
-          .attr('transform', function(d, i) { return 'translate(0,' + (i+16) * 21 + ')'; });
-
-        levelLegend.append('rect')
-          .attr('x', 20)
-          .attr('width', 18)
-          .attr('height', 18)
-          .style('fill', function(d, i) { return levelLegendColor(i); });
-
-        levelLegend.append('text')
-          .attr('x', 60)
-          .attr('y', 8)
-          .attr('dy', '.35em')
-          .style('text-anchor', 'start')
-          .text(function(d) { return d; });
-
-        // Implement D3 general updating pattern
+        // D3 General Updating Pattern
         var update = function() {
 
           // Node groups (shape + label)
