@@ -20,7 +20,10 @@ angular.module('globiProtoApp')
 
         // Color scale
         var color = d3.scale.category10();
+        // var color = d3.scale.ordinal()
+        //   .range(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
         var legendColor = '#000';
+        var levelLegendColor = d3.scale.category10();
 
         var shapeSize = 200;
         var shapeSizeLegend = 100;
@@ -52,7 +55,7 @@ angular.module('globiProtoApp')
         var nodes = [];
         var links = [];
 
-        // Legend
+        // Kingdom Legend
         var legend = svg.selectAll('.legend')
           .data(kingdomService.legend())
           .enter().append('g')
@@ -96,6 +99,27 @@ angular.module('globiProtoApp')
           .style('text-anchor', 'start') // left align
           .style('fill', legendColor)
           .text(function(d) { return d.kingdom; });
+
+        // Level legend
+        var levelData = ['1st level', '2nd level', '3rd level', '4th level', '5th level', '6th level'];
+        var levelLegend = svg.selectAll('.legendLevel')
+          .data(levelData)
+          .enter().append('g')
+          .attr('class', 'legend-level')
+          .attr('transform', function(d, i) { return 'translate(0,' + (i+16) * 21 + ')'; });
+
+        levelLegend.append('rect')
+          .attr('x', 20)
+          .attr('width', 18)
+          .attr('height', 18)
+          .style('fill', function(d, i) { return levelLegendColor(i); });
+
+        levelLegend.append('text')
+          .attr('x', 60)
+          .attr('y', 8)
+          .attr('dy', '.35em')
+          .style('text-anchor', 'start')
+          .text(function(d) { return d; });
 
         // Implement D3 general updating pattern
         var update = function() {
