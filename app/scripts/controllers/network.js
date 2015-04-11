@@ -112,14 +112,11 @@ angular.module('globiProtoApp')
       });
 
       modalInstance.result.then(function (modalData) {
-        console.log('=== MODAL RESPONSE: User wants new search for: ' + JSON.stringify(modalData));
         $state.transitionTo('network', {
           taxon: modalData.taxon,
           interaction: modalData.interaction
         }, {location: true, reload: true});
-      }, function () {
-        console.log('=== MODAL RESPONSE: User wants to stay on current page');
-      });
+      }, function () { });
     });
 
     $scope.$on('legendClicked', function(evt, legendItem) {
