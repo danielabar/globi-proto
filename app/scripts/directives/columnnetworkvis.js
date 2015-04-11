@@ -22,6 +22,7 @@ angular.module('globiProtoApp')
         var color = d3.scale.category10();
 
         var shapeSize = 200;
+        var shapeSizeLegend = 100;
 
         // Maximize available size based on container
         var svgWidth = element.parent().width();
@@ -50,26 +51,40 @@ angular.module('globiProtoApp')
         var nodes = [];
         var links = [];
 
-        // // Legend
-        // var legend = svg.selectAll('.legend')
-        //   .data(kingdomService.legend())
-        //   .enter().append('g')
-        //   .attr('class', 'legend')
-        //   .attr("transform", function(d, i) { return 'translate(0,' + i * 20 + ')'; });
-        //
-        // // Just draw rectangles for now...
-        // legend.append('rect')
-        //   .attr('x', 20)
-        //   .attr('width', 18)
-        //   .attr('height', 18)
-        //   .style('fill', '#000');
-        //
-        // legend.append('text')
-        //   .attr('x', 30)
-        //   .attr('y', 10)
-        //   .attr('dy', '.35em')
-        //   .style('text-anchor', 'end')
-        //   .text(function(d) { return d.kingdom; });
+        // Legend
+        var legend = svg.selectAll('.legend')
+          .data(kingdomService.legend())
+          .enter().append('g')
+          .attr('class', 'legend')
+          .attr('transform', function(d, i) { return 'translate(0,' + i * 20 + ')'; });
+
+        legend.append('path')
+          .attr('transform', function(d) {
+            if (kingdomService.shapeInfo(d.kingdom).rotate) {
+              return 'translate(' + 30 + ',' + 8 + ') rotate(' + kingdomService.shapeInfo(d.kingdom).rotate + ')';
+            } else {
+              return 'translate(' + 30 + ',' + 8 + ')';
+            }
+          })
+          .attr('d', function(d) {
+            return d3Extension.getSymbol(kingdomService.shapeInfo(d.kingdom).shape, shapeSizeLegend);
+          })
+          .attr('stroke', '#000')
+          .style('fill', function (d) {
+            if (!kingdomService.shapeInfo(d.kingdom).empty) {
+              return '#000';
+            } else {
+              return 'transparent';
+            }
+          });
+
+        legend.append('text')
+          .attr('x', 60)
+          .attr('y', 9)
+          .attr('dy', '.35em')
+          .style('text-anchor', 'start') // left align
+          .style('fill', '#000')
+          .text(function(d) { return d.kingdom; });
 
         // Implement D3 general updating pattern
         var update = function() {
@@ -217,28 +232,6 @@ angular.module('globiProtoApp')
                 return '10px';
               }
             });
-
-            // Legend
-            var legend = svg.selectAll('.legend')
-              .data(kingdomService.legend())
-              .enter().append('g')
-              .attr('class', 'legend')
-              .attr('transform', function(d, i) { return 'translate(0,' + i * 20 + ')'; });
-
-            // Just draw rectangles for now...
-            legend.append('rect')
-              .attr('x', 30)
-              .attr('width', 18)
-              .attr('height', 18)
-              .style('fill', '#000');
-
-            legend.append('text')
-              .attr('x', 60)
-              .attr('y', 9)
-              .attr('dy', '.35em')
-              .style('text-anchor', 'start') // left align
-              .style('fill', '#000')
-              .text(function(d) { return d.kingdom; });
 
         });//scope.$watch
 

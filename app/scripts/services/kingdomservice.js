@@ -75,7 +75,7 @@ angular.module('globiProtoApp')
             kingdom: key,
             shape: KINGDOM_VIS[key].shape,
             rotate: KINGDOM_VIS[key].rotate,
-            noFill: KINGDOM_VIS[key].empty
+            empty: KINGDOM_VIS[key].empty
           };
         });
       }
