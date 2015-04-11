@@ -1,0 +1,108 @@
+.transition(@property:all,@duration:1s,@timingFunc:ease-in-out) {
+  -moz-transition: @property @duration @timingFunc;
+  -webkit-transition: @property @duration @timingFunc;
+  -o-transition: @property @duration @timingFunc;
+  transition: @property @duration @timingFunc;
+}
+
+.opacity(@opacity: 0.5) {
+  -moz-opacity: @opacity;
+  -khtml-opacity: @opacity;
+  -webkit-opacity: @opacity;
+  opacity: @opacity;
+}
+
+/*Fades in, doesn't fade out*/
+.animate-show {
+  .transition(opacity);
+  .opacity(1);
+}
+
+.animate-show.ng-hide-remove {
+  display:block!important;
+}
+
+.animate-show.ng-hide-add {
+  .transition(none);
+  display:none;
+}
+
+.animate-show.ng-hide {
+  .opacity(0);
+}
+
+/*Fades in, doesn't fade out - inline-block*/
+.animate-show-inline-block {
+  .transition(opacity);
+  .opacity(1);
+}
+
+.animate-show-inline-block.ng-hide-remove {
+  display:inline-block!important;
+}
+
+.animate-show-inline-block.ng-hide-add {
+  .transition(none);
+  display:none;
+}
+
+.animate-show-inline-block.ng-hide {
+  .opacity(0);
+}
+
+/*Fades in and out*/
+.animate-show-hide {
+  .transition(opacity);
+  .opacity(1);
+}
+
+.animate-show-hide.ng-hide-add,
+.animate-show-hide.ng-hide-remove {
+  display:block!important;
+}
+
+.animate-show-hide.ng-hide {
+  .opacity(0);
+}
+
+/*Fades in and out, for ng-repeat*/
+.animate-repeat {
+}
+
+.animate-repeat.ng-move,
+.animate-repeat.ng-enter,
+.animate-repeat.ng-leave {
+  .transition(opacity,0.5s,linear);
+}
+
+.animate-repeat.ng-leave.ng-leave-active,
+.animate-repeat.ng-move,
+.animate-repeat.ng-enter {
+  .opacity(0);
+}
+
+.animate-repeat.ng-leave,
+.animate-repeat.ng-move.ng-move-active,
+.animate-repeat.ng-enter.ng-enter-active {
+  .opacity(1);
+}
+
+/*For ui-router view transitions*/
+/* Commented out because it creates some choppy effects */
+/* [ui-view], [data-ui-view] {
+  &.ng-enter {
+    .transition(opacity,0.5s,linear);
+    .opacity(0);
+  }
+  &.ng-enter-active {
+    .opacity(1);
+  }
+  &.ng-leave {
+    .transition(opacity,0.25s,linear);
+    .opacity(1);
+  }
+  &.ng-leave-active {
+    .opacity(0);
+  }
+}
+ */

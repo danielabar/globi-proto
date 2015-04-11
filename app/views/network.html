@@ -14,7 +14,7 @@
         </div>
 
         <!-- Dock Sub Header -->
-        <div class="info-dock-interaction-details" ng-show="interactionDetails.show">
+        <div class="info-dock-interaction-details animate-show" ng-show="interactionDetails.show">
 
           <!-- Source to Target Cards -->
           <h4 class="text-center">Details of selected interaction</h4>
@@ -31,7 +31,7 @@
           </div>
 
           <!-- Studies -->
-          <div class="studies" ng-show="interactionDetails.studies.length > 0">
+          <div class="studies animate-show" ng-show="interactionDetails.studies.length > 0">
             <h4 class="text-center">References</h4>
             <div class="list-group">
               <a ng-repeat="study in interactionDetails.studies" ng-href="{{study.studyUrl}}" class="list-group-item" target="_blank">{{study.studyTitle}}</a>

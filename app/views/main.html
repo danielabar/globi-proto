@@ -25,7 +25,7 @@
                 <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
               </div>
             </form>
-            <div ng-show="taxon.scientificName" data-image-tile="taxon" class="taxon-source"></div>
+            <div ng-show="taxon.scientificName" data-image-tile="taxon" class="taxon-source animate-show"></div>
           </div>
         </div>
 
@@ -42,7 +42,7 @@
           <div class="row">
             <div class="col-xs-12">
               <ul class="image-grid">
-                <li ng-repeat="sr in searchResults" data-image-tile="sr"></li>
+                <li ng-repeat="sr in searchResults" data-image-tile="sr" class="animate-repeat"></li>
               </ul>
             </div>
           </div>
