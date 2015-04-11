@@ -89,7 +89,7 @@ angular.module('globiProtoApp')
                 item.circleColor = d3.select(this).attr('stroke');
                 scope.$emit('nodeClicked', item);
               } else {
-                scope.$emit('maxLevelNodeClicked', columnGraphValues.maxLevel);
+                scope.$emit('maxLevelNodeClicked', {maxLevel: columnGraphValues.maxLevel, node: item});
               }
             });
 
