@@ -13,6 +13,8 @@ angular.module('globiProtoApp')
   .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, images,
       graphService, interactionHelper, toaster, $window, $modal) {
 
+    $scope.isHelpCollapsed = true;
+
     graphService.init();
 
     $scope.interactionDetails = {
