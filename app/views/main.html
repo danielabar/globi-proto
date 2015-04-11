@@ -14,7 +14,7 @@
                 <h3 class="text-center">{{query.interaction | uppercase }} Exploration of</h3>
                 <input id="speciesName" name="speciesName" type="text"
                        ng-model="query.name" class="form-control"
-                       placeholder="Animal (eg: tuna)"
+                       placeholder="Enter an animal to start..."
                        typeahead="taxonSelection as taxonSelection.scientificName for taxonSelection in getResults($viewValue)"
                        typeahead-template-url="views/taxonSelection.html"
                        typeahead-wait-ms="100"
@@ -25,16 +25,14 @@
                 <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
               </div>
             </form>
-            <div class="taxon-source-centered">
-              <div class="taxon-source-parent">
-                <div ng-show="taxon.scientificName" data-image-tile="taxon" class="taxon-source animate-show"></div>
-                <button ng-show="searchResults.length" ng-click="network()" class="btn btn-network animate-show">
-                  <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>&nbsp;Show Network&nbsp;
-                  <i class="glyphicon glyphicon-chevron-right"></i></button>
-                <div ng-show="taxon.scientificName && searchResults.length === 0">
-                  <i class="glyphicon glyphicon-info-sign animate-show animate-hide" aria-hidden="true"></i>
-                  &nbsp;Click "Eats" or "More Interactions" to get started
-                </div>
+            <div class="taxon-source-parent">
+              <div ng-show="taxon.scientificName" data-image-tile="taxon" class="taxon-source animate-show"></div>
+              <button ng-show="searchResults.length" ng-click="network()" class="btn btn-network animate-show">
+                <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>&nbsp;Show Network&nbsp;
+                <i class="glyphicon glyphicon-chevron-right"></i></button>
+              <div ng-show="taxon.scientificName && searchResults.length === 0">
+                <i class="glyphicon glyphicon-info-sign animate-show animate-hide" aria-hidden="true"></i>
+                &nbsp;Click "Eats" or "More Interactions" to get started
               </div>
             </div>
           </div>
