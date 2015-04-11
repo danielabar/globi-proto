@@ -56,14 +56,14 @@ angular.module('globiProtoApp')
           .data(kingdomService.legend())
           .enter().append('g')
           .attr('class', 'legend')
-          .attr('transform', function(d, i) { return 'translate(0,' + i * 20 + ')'; });
+          .attr('transform', function(d, i) { return 'translate(0,' + (i+1) * 20 + ')'; });
 
         legend.append('path')
           .attr('transform', function(d) {
             if (kingdomService.shapeInfo(d.kingdom).rotate) {
-              return 'translate(' + 30 + ',' + 8 + ') rotate(' + kingdomService.shapeInfo(d.kingdom).rotate + ')';
+              return 'translate(' + 30 + ',' + 10 + ') rotate(' + kingdomService.shapeInfo(d.kingdom).rotate + ')';
             } else {
-              return 'translate(' + 30 + ',' + 8 + ')';
+              return 'translate(' + 30 + ',' + 10 + ')';
             }
           })
           .attr('d', function(d) {
