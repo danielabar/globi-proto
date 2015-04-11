@@ -97,30 +97,18 @@ angular.module('globiProtoApp')
         legend.append('line')
           .attr('class', 'link-legend')
           .attr('marker-end', 'url(#arrow)')
-          .attr('x1', function(d) {
-            if (d.linkBack) {
-              return 65;
-            } else {
-              return 20;
-            }
-          })
-          .attr('x2', function(d) {
-            if (d.linkBack) {
-              return 20;
-            } else {
-              return 65;
-            }
-          })
-          // .attr('x1', 20)
-          // .attr('x2', 65)
+          .attr('x1', function(d) { if (d.linkBack) { return 65; } else { return 20; } })
+          .attr('x2', function(d) { if (d.linkBack) { return 20; } else { return 65; } })
           .style('stroke-width', '2')
-          .style('stroke-dasharray', function(d) {
-            if (d.linkBack) {
-              return '3, 3';
-            } else {
-              return '0, 0';
-            }
+          .style('stroke-dasharray', function(d) { if (d.linkBack) { return '3, 3'; } else { return '0, 0'; }
           });
+
+        legend.append('text')
+          .attr('x', 75)
+          .attr('y', 0)
+          .attr('dy', '.35em')
+          .style('text-anchor', 'start')
+          .text(function(d) { return d.description; });
       }
 
     };
