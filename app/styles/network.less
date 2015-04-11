@@ -17,6 +17,14 @@
 
     .instructions {
       color: @dock-font-inverse;
+      position: relative;
+
+      /* Must be absolutely positioned, otherwise help panel jumps around on collapse */
+      .help-icon {
+        position: absolute;
+        top: 1px;
+        right: 10px;
+      }
 
       .glyphicon {
         color: @dock-font;
