@@ -10,7 +10,7 @@
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
-  .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, images, graphService, interactionHelper, toaster) {
+  .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, images, graphService, interactionHelper, toaster, $window) {
 
     graphService.init();
 
@@ -86,6 +86,12 @@ angular.module('globiProtoApp')
         $scope.interactionDetails = response;
         $scope.interactionDetails.show = true;
       });
+    });
+
+    $scope.$on('legendClicked', function(evt, legendItem) {
+      if (legendItem.wiki) {
+        $window.open(legendItem.wiki, '_blank');
+      }
     });
 
   });

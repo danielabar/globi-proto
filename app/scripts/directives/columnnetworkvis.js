@@ -20,8 +20,10 @@ angular.module('globiProtoApp')
 
         // Color scale
         var color = d3.scale.category10();
+        var legendColor = '#000';
 
         var shapeSize = 200;
+        var shapeSizeLegend = 100;
 
         // Maximize available size based on container
         var svgWidth = element.parent().width();
@@ -49,6 +51,51 @@ angular.module('globiProtoApp')
         // Keep reference to nodes and links to support updates
         var nodes = [];
         var links = [];
+
+        // Legend
+        var legend = svg.selectAll('.legend')
+          .data(kingdomService.legend())
+          .enter().append('g')
+          .attr('class', 'legend')
+          .attr('transform', function(d, i) { return 'translate(0,' + (i+1) * 20 + ')'; });
+
+        legend.append('path')
+          .attr('transform', function(d) {
+            if (kingdomService.shapeInfo(d.kingdom).rotate) {
+              return 'translate(' + 30 + ',' + 10 + ') rotate(' + kingdomService.shapeInfo(d.kingdom).rotate + ')';
+            } else {
+              return 'translate(' + 30 + ',' + 10 + ')';
+            }
+          })
+          .attr('d', function(d) {
+            return d3Extension.getSymbol(kingdomService.shapeInfo(d.kingdom).shape, shapeSizeLegend);
+          })
+          .attr('stroke', legendColor)
+          .style('fill', function (d) {
+            if (!kingdomService.shapeInfo(d.kingdom).empty) {
+              return legendColor;
+            } else {
+              return 'transparent';
+            }
+          });
+
+        legend.append('text')
+          .attr('class', 'legend-text')
+          .on('mouseover', function() {
+            d3.select(this).style('fill', '#1588ec');
+          })
+          .on('mouseout', function() {
+            d3.select(this).style('fill', legendColor);
+          })
+          .on('click', function(legendItem) {
+            scope.$emit('legendClicked', legendItem);
+          })
+          .attr('x', 60)
+          .attr('y', 9)
+          .attr('dy', '.35em')
+          .style('text-anchor', 'start') // left align
+          .style('fill', legendColor)
+          .text(function(d) { return d.kingdom; });
 
         // Implement D3 general updating pattern
         var update = function() {
@@ -100,6 +147,7 @@ angular.module('globiProtoApp')
 
           // Node labels
           nodeEnter.append('text')
+            .attr('class', 'node-label')
             .attr('dx', function(d) {return d.xPos + 10;})
             .attr('dy', function(d) {return d.yPos + 5;})
             .text(function(d) { return d.name; })
@@ -182,7 +230,7 @@ angular.module('globiProtoApp')
           }
 
           // Redraw text labels based on path, de-emphasize those not on path
-          d3.selectAll('text')
+          d3.selectAll('text.node-label')
             .style('stroke', function(d) {
               if (graphService.isNodeInPath(d.name) || graphService.isNodeTargetOfPathTip(d.name)) {
                 return color(d.group);
