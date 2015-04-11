@@ -51,6 +51,7 @@ angular.module('globiProtoApp')
         // Draw legends
         legendHelper.kingdom(svg, scope);
         legendHelper.level(svg);
+        legendHelper.interaction(svg);
 
         // D3 General Updating Pattern
         var update = function() {

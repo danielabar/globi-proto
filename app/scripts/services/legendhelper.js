@@ -70,7 +70,7 @@ angular.module('globiProtoApp')
           .data(levelData)
           .enter().append('g')
           .attr('class', 'legend-level')
-          .attr('transform', function(d, i) { return 'translate(0,' + (i+16) * 21 + ')'; });
+          .attr('transform', function(d, i) { return 'translate(0,' + (i+17) * 21 + ')'; });
 
         legend.append('rect')
           .attr('x', 20)
@@ -84,6 +84,43 @@ angular.module('globiProtoApp')
           .attr('dy', '.35em')
           .style('text-anchor', 'start')
           .text(function(d) { return d; });
+      },
+
+      interaction: function(svg) {
+        var data = [{description: 'Forward link', linkBack: false}, {description: 'Back link', linkBack: true}];
+        var legend = svg.selectAll('.interactionLegend')
+          .data(data)
+          .enter().append('g')
+          .attr('class', 'interaction-legend')
+          .attr('transform', function(d, i) { return 'translate(0,' + (i+21) * 25 + ')'; });
+
+        legend.append('line')
+          .attr('class', 'link-legend')
+          .attr('marker-end', 'url(#arrow)')
+          .attr('x1', function(d) {
+            if (d.linkBack) {
+              return 65;
+            } else {
+              return 20;
+            }
+          })
+          .attr('x2', function(d) {
+            if (d.linkBack) {
+              return 20;
+            } else {
+              return 65;
+            }
+          })
+          // .attr('x1', 20)
+          // .attr('x2', 65)
+          .style('stroke-width', '2')
+          .style('stroke-dasharray', function(d) {
+            if (d.linkBack) {
+              return '3, 3';
+            } else {
+              return '0, 0';
+            }
+          });
       }
 
     };
