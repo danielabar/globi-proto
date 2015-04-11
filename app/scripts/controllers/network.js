@@ -24,6 +24,13 @@ angular.module('globiProtoApp')
       interactionType: $state.params.interaction || 'eats'
     };
 
+    $scope.$on('followEvent', function(evt, eventData) {
+      $state.transitionTo('network', {
+        taxon: eventData.imageData.scientificName,
+        interaction: eventData.interactionType
+      }, {location: true, reload: true});
+    });
+
     taxonInteractionFields.query($scope.query, function(response) {
       if (response.length > 0) {
         var sourceTaxon = {
