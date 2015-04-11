@@ -85,8 +85,12 @@ angular.module('globiProtoApp')
             })
             .attr('stroke', function (d) { return color(d.group); })
             .on('click', function(item) {
-              item.circleColor = d3.select(this).attr('stroke');
-              scope.$emit('nodeClicked', item);
+              if (item.group < columnGraphValues.maxLevel) {
+                item.circleColor = d3.select(this).attr('stroke');
+                scope.$emit('nodeClicked', item);
+              } else {
+                scope.$emit('maxLevelNodeClicked', {maxLevel: columnGraphValues.maxLevel, node: item});
+              }
             });
 
           // Transition shapes to their new positions

@@ -10,7 +10,8 @@
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
-  .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, images, graphService, interactionHelper, toaster, $window) {
+  .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, images,
+      graphService, interactionHelper, toaster, $window, $modal) {
 
     graphService.init();
 
@@ -93,6 +94,29 @@ angular.module('globiProtoApp')
         $scope.interactionDetails = response;
         $scope.interactionDetails.show = true;
       });
+    });
+
+    $scope.$on('maxLevelNodeClicked', function(evt, eventData) {
+      var modalInstance = $modal.open({
+        templateUrl: 'views/maxNetworkLevel.html',
+        controller: 'MaxNetworkLevelCtrl',
+        resolve: {
+          modalData: function () {
+            return {
+              maxLevel: eventData.maxLevel,
+              taxon: eventData.node.name,
+              interaction: $scope.query.interactionType
+            };
+          }
+        }
+      });
+
+      modalInstance.result.then(function (modalData) {
+        $state.transitionTo('network', {
+          taxon: modalData.taxon,
+          interaction: modalData.interaction
+        }, {location: true, reload: true});
+      }, function () { });
     });
 
     $scope.$on('legendClicked', function(evt, legendItem) {
