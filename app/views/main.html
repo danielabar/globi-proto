@@ -1,4 +1,4 @@
-<div class="network">
+<div class="main">
   <div class="row">
 
     <!-- Info Dock -->
@@ -25,7 +25,18 @@
                 <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
               </div>
             </form>
-            <div ng-show="taxon.scientificName" data-image-tile="taxon" class="taxon-source animate-show"></div>
+            <div class="taxon-source-centered">
+              <div class="taxon-source-parent">
+                <div ng-show="taxon.scientificName" data-image-tile="taxon" class="taxon-source animate-show"></div>
+                <button ng-show="searchResults.length" ng-click="network()" class="btn btn-network animate-show">
+                  <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>&nbsp;Show Network&nbsp;
+                  <i class="glyphicon glyphicon-chevron-right"></i></button>
+                <div ng-show="taxon.scientificName && searchResults.length === 0">
+                  <i class="glyphicon glyphicon-info-sign animate-show animate-hide" aria-hidden="true"></i>
+                  &nbsp;Click "Eats" or "More Interactions" to get started
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -35,18 +46,18 @@
     </div><!--//Info Dock col-xs-3-->
 
 
-      <!-- Cards Visualization -->
-      <div class="col-xs-8 graph-vis">
+    <!-- Cards Visualization -->
+    <div class="col-xs-8 graph-vis">
 
-        <div class="search-results">
-          <div class="row">
-            <div class="col-xs-12">
-              <ul class="image-grid">
-                <li ng-repeat="sr in searchResults" data-image-tile="sr" class="animate-repeat"></li>
-              </ul>
-            </div>
+      <div class="search-results">
+        <div class="row">
+          <div class="col-xs-12">
+            <ul class="image-grid">
+              <li ng-repeat="sr in searchResults" data-image-tile="sr" class="animate-repeat"></li>
+            </ul>
           </div>
         </div>
       </div>
+    </div>
   </div><!--//row-->
 </div><!--//main-->
