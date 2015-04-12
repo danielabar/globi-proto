@@ -87,7 +87,7 @@ angular.module('globiProtoApp')
         commonName: response.commonName,
         thumbnailURL: response.thumbnailURL,
         imageURL: response.imageURL,
-        infoURL: response.infoURL,
+        infoURL: response.infoURL
       };
     }, function(err) {
       console.dir(err);
@@ -103,9 +103,13 @@ angular.module('globiProtoApp')
           var mapMarkers = $scope.interactionDetails.mapMarkers;
           var markersArray = [];
           Object.keys(mapMarkers).forEach(function(key) {
-            markersArray.push(L.latLng(mapMarkers[key].lat, mapMarkers[key].lng));
+            if (mapMarkers.hasOwnProperty(key)) {
+              markersArray.push(L.latLng(mapMarkers[key].lat, mapMarkers[key].lng));
+            }
           });
-          map.fitBounds(new L.latLngBounds(markersArray));
+          if (markersArray.length) {
+            map.fitBounds(new L.latLngBounds(markersArray));
+          }
         });
       });
     });
