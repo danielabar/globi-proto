@@ -40,15 +40,23 @@ angular.module('globiProtoApp')
       return deferred.promise;
     };
 
+    // study_title is used as the unique id
     var parseStudies = function(interactionDetailsResponse) {
       var uniqueStudies = {};
       interactionDetailsResponse.forEach(function(detail) {
-        uniqueStudies[detail.study_title] = detail.study_url;
+        // uniqueStudies[detail.study_title] = detail.study_url;
+        uniqueStudies[detail.study_title] = {
+          studyUrl: detail.study_url,
+          studyCitation: detail.study_citation,
+          studySourceCitation: detail.study_source_citation
+        };
       });
       return Object.keys(uniqueStudies).map(function(studyTitle) {
         return {
           studyTitle: studyTitle,
-          studyUrl: uniqueStudies[studyTitle]
+          studyUrl: uniqueStudies[studyTitle].studyUrl,
+          studyCitation: uniqueStudies[studyTitle].studyCitation,
+          studySourceCitation: uniqueStudies[studyTitle].studySourceCitation
         };
       });
     };
