@@ -99,8 +99,6 @@ angular.module('globiProtoApp')
       interactionHelper.getSourceTargetDetails(linkNodes.sourceName, linkNodes.targetName, $scope.query.interactionType).then(function(response) {
         $scope.interactionDetails = response;
         $scope.interactionDetails.show = true;
-        // TODO Pull this out to a factory like mapHelper
-        // TODO If no lat/lngs available, reset to some reasonable default?
         leafletData.getMap('interactionMap').then(function(map) {
           var mapMarkers = $scope.interactionDetails.mapMarkers;
           var markersArray = [];
