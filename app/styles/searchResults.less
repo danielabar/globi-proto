@@ -1,6 +1,7 @@
 .form-control {
   display: inline;
-  width: 75%;
+  width: 70%;
+  margin-right: 5px;
 }
 
 .taxon-source-parent {
@@ -15,8 +16,9 @@
 
 .btn-network {
   margin-top: 10px;
-  display: inline-block;
-  width: 100%;
+  border-radius: 5px;
+  color: #337ab7;
+  width: @tile-width;
 }
 
 .main {
@@ -43,6 +45,39 @@
       i {
         padding: 5px 2px;
         display: inline-block;
+      }
+    }
+
+    .instructions {
+      color: @dock-font-inverse;
+      position: relative;
+
+      /* Must be absolutely positioned, otherwise help panel jumps around on collapse */
+      .help-icon {
+        position: absolute;
+        top: 1px;
+        right: 10px;
+      }
+
+      .glyphicon {
+        color: @dock-font;
+        font-size: 1.5em;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      .panel-default .panel-heading {
+        color: @dock-font-inverse;
+      }
+
+      .btn {
+        width: 100%;
       }
     }
   }
