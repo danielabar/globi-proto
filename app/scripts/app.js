@@ -24,6 +24,18 @@ angular
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     $stateProvider
+      .state('landing', {
+        url: '/landing',
+        views: {
+          'nav' : {
+            templateUrl: 'views/nav.html',
+            controller: 'NavCtrl'
+          },
+          'content' : {
+            templateUrl: 'views/landing.html'
+          }
+        }
+      })
       .state('main', {
         url: '/main?name&interaction',
         views: {
@@ -49,21 +61,8 @@ angular
             controller: 'NetworkCtrl'
           }
         }
-      })
-      .state('about', {
-        url: '/about',
-        views: {
-          'nav' : {
-            templateUrl: 'views/nav.html',
-            controller: 'NavCtrl'
-          },
-          'content' : {
-            templateUrl: 'views/about.html',
-            controller: 'AboutCtrl'
-          }
-        }
       });
-    $urlRouterProvider.otherwise('/main');
+    $urlRouterProvider.otherwise('/landing');
 
     // Connect all HTTP events to the $rootScope bus, so that we can connect them to ngProgress in run() function
     $httpProvider.interceptors.push(function($q, $rootScope){
