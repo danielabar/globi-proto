@@ -15,6 +15,10 @@ angular.module('globiProtoApp')
 
     $scope.isHelpCollapsed = true;
 
+    $scope.mapDefaults = {
+      scrollWheelZoom: false
+    };
+
     graphService.init();
 
     $scope.interactionDetails = {
