@@ -24,6 +24,9 @@ module.exports = function (grunt) {
   // Define the configuration for all the tasks
   grunt.initConfig({
 
+    // Read package for version number
+    pkg: grunt.file.readJSON('package.json'),
+
     // Project settings
     yeoman: appConfig,
 
@@ -419,6 +422,18 @@ module.exports = function (grunt) {
       }
     },
 
+    // Replace release number in templates
+    replace: {
+      releaseNumber: {
+        src: ['<%= yeoman.app %>/views/aboutMenu.html'],
+        dest: ['<%= yeoman.dist %>/views/aboutMenu.html'],
+        replacements: [{
+          from: '{releaseNumber}',
+          to: '<%= pkg.version %>'
+        }]
+      }
+    },
+
     // Deploy
     'gh-pages': {
       dist: {
@@ -472,6 +487,7 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
+    'replace:releaseNumber',
     'cdnify',
     'cssmin',
     'uglify',
