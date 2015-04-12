@@ -51,7 +51,7 @@
         commonName: response.commonName,
         thumbnailURL: response.thumbnailURL,
         imageURL: response.imageURL,
-        infoURL: response.infoURL,
+        infoURL: response.infoURL
       };
     }, function(err) {
       console.dir(err);
@@ -133,30 +133,39 @@
     $state.transitionTo('main', $scope.query, {location: true, reload: true});
   };
 
-  $scope.$on('followEvent', function(evt, eventData) {
-    $scope.query.name = eventData.imageData.scientificName;
-    $scope.query.interaction = eventData.interactionType;
-    $scope.searchResults = [];
-    $state.transitionTo('main', $scope.query, {location: true, reload: true});
-  });
+    $scope.network = function() {
+      $state.transitionTo('network', {
+          taxon: $scope.query.name,
+          interaction: $state.params.interaction || 'eats'
+        },
+        {location: true, reload: true}
+      );
+    };
 
-  $scope.$on('mapEvent', function(evt, eventData) {
-    $state.transitionTo('map', {
-        sourceTaxon: $state.params.name,
-        targetTaxon: eventData.imageData.scientificName,
-        interactionType: $state.params.interaction || 'preysOn'
-      },
-      {location: true, reload: true}
-    );
-  });
+    $scope.$on('followEvent', function(evt, eventData) {
+      $scope.query.name = eventData.imageData.scientificName;
+      $scope.query.interaction = eventData.interactionType;
+      $scope.searchResults = [];
+      $state.transitionTo('main', $scope.query, {location: true, reload: true});
+    });
 
-  $scope.$on('networkEvent', function(evt, eventData) {
-    $state.transitionTo('network', {
-        taxon: eventData.imageData.scientificName,
-        interaction: $state.params.interaction || 'eats'
-      },
-      {location: true, reload: true}
-    );
-  });
+    $scope.$on('mapEvent', function(evt, eventData) {
+      $state.transitionTo('map', {
+          sourceTaxon: $state.params.name,
+          targetTaxon: eventData.imageData.scientificName,
+          interactionType: $state.params.interaction || 'preysOn'
+        },
+        {location: true, reload: true}
+      );
+    });
+
+    $scope.$on('networkEvent', function(evt, eventData) {
+      $state.transitionTo('network', {
+          taxon: eventData.imageData.scientificName,
+          interaction: $state.params.interaction || 'eats'
+        },
+        {location: true, reload: true}
+      );
+    });
 
 });
