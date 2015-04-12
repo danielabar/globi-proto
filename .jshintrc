@@ -22,6 +22,7 @@
     "TP": false,
     "canvas": false,
     "$": false,
-    "d3": false
+    "d3": false,
+    "L": false
   }
 }

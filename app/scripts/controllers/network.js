@@ -11,7 +11,7 @@
  */
 angular.module('globiProtoApp')
   .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, images,
-      graphService, interactionHelper, toaster, $window, $modal) {
+      graphService, interactionHelper, toaster, $window, $modal, leafletData) {
 
     $scope.isHelpCollapsed = true;
 
@@ -95,6 +95,23 @@ angular.module('globiProtoApp')
       interactionHelper.getSourceTargetDetails(linkNodes.sourceName, linkNodes.targetName, $scope.query.interactionType).then(function(response) {
         $scope.interactionDetails = response;
         $scope.interactionDetails.show = true;
+        // TODO Pull this out to a factory like mapHelper
+        // TODO If no lat/lngs available, reset to some reasonable default?
+        leafletData.getMap('interactionMap').then(function(map) {
+          var mapMarkers = $scope.interactionDetails.mapMarkers;
+          var markersArray = [];
+          Object.keys(mapMarkers).forEach(function(key) {
+            var latlng = L.latLng(mapMarkers[key].lat, mapMarkers[key].lng);
+            markersArray.push(latlng);
+            // latlngbounds.extend(latlng);
+          });
+          var latlngbounds = new L.latLngBounds(markersArray);
+          map.fitBounds(latlngbounds);
+          // map.fitBounds([
+          //     [40.712, -74.227],
+          //     [40.774, -74.125]
+          // ]);
+        });
       });
     });
 
