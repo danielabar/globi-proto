@@ -101,16 +101,9 @@ angular.module('globiProtoApp')
           var mapMarkers = $scope.interactionDetails.mapMarkers;
           var markersArray = [];
           Object.keys(mapMarkers).forEach(function(key) {
-            var latlng = L.latLng(mapMarkers[key].lat, mapMarkers[key].lng);
-            markersArray.push(latlng);
-            // latlngbounds.extend(latlng);
+            markersArray.push(L.latLng(mapMarkers[key].lat, mapMarkers[key].lng));
           });
-          var latlngbounds = new L.latLngBounds(markersArray);
-          map.fitBounds(latlngbounds);
-          // map.fitBounds([
-          //     [40.712, -74.227],
-          //     [40.774, -74.125]
-          // ]);
+          map.fitBounds(new L.latLngBounds(markersArray));
         });
       });
     });
