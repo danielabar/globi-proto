@@ -1,6 +1,7 @@
-@edge:         #999;
-@edge-back:    #6f6f6f;
-@svg-bg:       white;
+@edge:          #999;
+@edge-back:     #6f6f6f;
+@edge-selected: #2ED3DE;
+@svg-bg:        white;
 
 svg {
 
@@ -35,6 +36,7 @@ svg {
   .link {
     stroke: @edge;
     stroke-opacity: .3;
+    stroke-width: 2px;
 
     &:hover {
       cursor: pointer
@@ -42,19 +44,28 @@ svg {
 
   }
 
+  .link-selected {
+    stroke: @edge-selected;
+    stroke-width: 4px;
+  }
+
   .linkback {
     stroke: @edge-back;
     stroke-opacity: .3;
+    stroke-width: 2px;
+    stroke-dasharray: 3;
   }
 
   .link-legend {
     stroke: @edge;
     stroke-opacity: .5;
+    stroke-width: 2px;
   }
 
   .linkback-legend {
     stroke: @edge-back;
     stroke-opacity: .5;
+    stroke-width: 2px;
   }
 
   marker#arrow {
