@@ -45,7 +45,7 @@ angular.module('globiProtoApp')
           .attr('markerHeight', 8)
           .attr('orient', 'auto')
           .append('svg:path')
-          .attr('d', 'M0,-5L10,0L0,0');
+          .attr('d', 'M0,-4L10,0L0,4L10');
 
         // Keep reference to nodes and links to support updates
         var nodes = [];
@@ -67,11 +67,14 @@ angular.module('globiProtoApp')
           // Node shapes initial positions
           var shapes = nodeEnter.append('path')
             .attr('transform', function(d) {
-              if (kingdomService.shapeInfo(d.kingdom).rotate) {
-                return 'translate(' + d.initialXPos + ',' + d.initialYPos + ') rotate(' + kingdomService.shapeInfo(d.kingdom).rotate + ')';
-              } else {
-                return 'translate(' + d.initialXPos + ',' + d.initialYPos + ')';
+              if (d && d.initialXPos !== undefined) {
+                if (kingdomService.shapeInfo(d.kingdom).rotate) {
+                  return 'translate(' + d.initialXPos + ',' + d.initialYPos + ') rotate(' + kingdomService.shapeInfo(d.kingdom).rotate + ')';
+                } else {
+                  return 'translate(' + d.initialXPos + ',' + d.initialYPos + ')';
+                }
               }
+              return '';
             })
             .attr('d', function(d) {
               return d3Extension.getSymbol(kingdomService.shapeInfo(d.kingdom).shape, shapeSize);
@@ -125,35 +128,21 @@ angular.module('globiProtoApp')
           var link = svg.selectAll('.link').data(links);
           var lineLinks = link.enter().insert('line')
             .on('mouseover', function() {
-              d3.select(this).style({'stroke-width': '4px', 'stroke' : '#2ED3DE'});
+              d3.select(this).classed('link-selected', true);
             })
             .on('mouseout', function() {
-              d3.select(this).style({'stroke-width': '2px', 'stroke' : '#999'});
+              d3.select(this).classed('link-selected', false);
             })
             .on('click', function(linkItem) {
               scope.$emit('linkClicked', linkItem);
             })
-            .attr('class', function(d) {
-              if (d.linkBack) {
-                // EXTREMELY important to still maintain link class because that's how the elements are selected
-                return 'link linkback';
-              } else {
-                return 'link';
-              }
-            })
+            .classed('link', true)
+            .classed('linkback', function(d) { return d.linkBack; })
             .attr('marker-end', 'url(#arrow)')
             .attr('x1', function(d) { return nodes[d.source].xPos; })
             .attr('y1', function(d) { return nodes[d.source].yPos; })
             .attr('x2', function(d) { return nodes[d.source].xPos; })
-            .attr('y2', function(d) { return nodes[d.source].yPos; })
-            .style('stroke-width', '2')
-            .style('stroke-dasharray', function(d) {
-              if (d.linkBack) {
-                return '3, 3';
-              } else {
-                return '0, 0';
-              }
-            });
+            .attr('y2', function(d) { return nodes[d.source].yPos; });
 
           // Transition links end points to their new positions
           lineLinks.transition()
