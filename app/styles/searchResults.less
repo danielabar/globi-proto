@@ -1,11 +1,24 @@
 .form-control {
   display: inline;
-  width: 75%;
+  width: 70%;
+  margin-right: 5px;
+}
+
+.taxon-source-parent {
+  width: @tile-width;
 }
 
 .btn {
   width: 20%;
   color: #337ab7;
+  border-radius: 5px;
+}
+
+.btn-network {
+  margin-top: 10px;
+  border-radius: 5px;
+  color: #337ab7;
+  width: @tile-width;
 }
 
 .main {
@@ -18,8 +31,57 @@
     background: @dock-bg;
     color: @dock-font;
     padding: 1em;
+    .taxon-source-parent {
+      span {
+        padding: 5px 5px;
+        -moz-border-radius: 100px;
+        -webkit-border-radius: 100px;
+        border-radius: 100px;
+        -moz-box-shadow: 0 0 2px @icon-border;
+        -webkit-box-shadow: 0 0 2px @icon-border;
+        box-shadow: 0 0 2px @icon-border;
+      }
 
+      i {
+        padding: 5px 2px;
+        display: inline-block;
+      }
+    }
+
+    .instructions {
+      color: @dock-font-inverse;
+      position: relative;
+
+      /* Must be absolutely positioned, otherwise help panel jumps around on collapse */
+      .help-icon {
+        position: absolute;
+        top: 1px;
+        right: 10px;
+      }
+
+      .glyphicon {
+        color: @dock-font;
+        font-size: 1.5em;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      .panel-default .panel-heading {
+        color: @dock-font-inverse;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
   }
+
 }
 
 .search-results {
