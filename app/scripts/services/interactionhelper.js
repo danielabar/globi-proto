@@ -76,20 +76,6 @@ angular.module('globiProtoApp')
       return uniqueHolder;
     };
 
-    var calculateMapCenter = function(markers) {
-      var totalLat = 0;
-      var totalLng = 0;
-      Object.keys(markers).forEach(function(key) {
-        totalLat += markers[key].lat;
-        totalLng += markers[key].lng;
-      });
-      return {
-        lat: totalLat / Object.keys(markers).length,
-        lng: totalLng / Object.keys(markers).length,
-        zoom: 3
-      };
-    };
-
     // Public API
     return {
 
@@ -107,7 +93,6 @@ angular.module('globiProtoApp')
             studies: parseStudies(data[2]),
             mapMarkers: parseGeo(data[2]),
           };
-          result.mapCenter = calculateMapCenter(result.mapMarkers);
           deferred.resolve(result);
         });
         return deferred.promise;
