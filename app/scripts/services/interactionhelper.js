@@ -44,7 +44,6 @@ angular.module('globiProtoApp')
     var parseStudies = function(interactionDetailsResponse) {
       var uniqueStudies = {};
       interactionDetailsResponse.forEach(function(detail) {
-        // uniqueStudies[detail.study_title] = detail.study_url;
         uniqueStudies[detail.study_title] = {
           studyUrl: detail.study_url,
           studyCitation: detail.study_citation,
@@ -68,12 +67,13 @@ angular.module('globiProtoApp')
           var uniqueKey = interactionDetail.study_title.replace(/\s|\-/g, '') + interactionDetail.latitude.toString().replace('-','#') + '_' + interactionDetail.longitude.toString().replace('-','#');
           if (uniqueHolder[uniqueKey]) {
             uniqueHolder[uniqueKey].itemCount += 1;
-            uniqueHolder[uniqueKey].message = uniqueHolder[uniqueKey].itemCount + ' Observations, ' + '<a target="_blank" href="' + interactionDetail.study_url + '">' + interactionDetail.study_title + '</a>';
+            uniqueHolder[uniqueKey].message = '<a target="_blank" href="' + interactionDetail.study_url + '">' +
+              uniqueHolder[uniqueKey].itemCount + ' Observations</a>';
           } else {
             uniqueHolder[uniqueKey] = {
               lat: interactionDetail.latitude,
               lng: interactionDetail.longitude,
-              message: '1 Observation, ' + '<a target="_blank" href="' + interactionDetail.study_url + '">' + interactionDetail.study_title + '</a>',
+              message: '<a target="_blank" href="' + interactionDetail.study_url + '">' + '1 Observation</a>',
               focus: true,
               draggable: false,
               itemCount: 1
