@@ -67,7 +67,7 @@ angular
         views: {
           'nav' : {
             templateUrl: 'views/nav.html',
-            controller: 'NavNetworkCtrl'
+            controller: 'NavCtrl'
           },
           'content' : {
             templateUrl: 'views/labs.html'
