@@ -66,12 +66,11 @@ angular
         url: '/labs',
         views: {
           'nav' : {
-            templateUrl: 'views/navNetwork.html',
+            templateUrl: 'views/nav.html',
             controller: 'NavNetworkCtrl'
           },
           'content' : {
-            templateUrl: 'views/labs.html',
-            controller: 'NetworkCtrl'
+            templateUrl: 'views/labs.html'
           }
         }
       })
