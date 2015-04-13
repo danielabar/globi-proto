@@ -60,6 +60,16 @@ angular.module('globiProtoApp')
       });
     };
 
+    var buildGeoMessage = function(studyUrl, numObservations) {
+      var observationGrammar = numObservations > 1 ? 'Observations' : 'Observation';
+      if (studyUrl) {
+        return '<a target="_blank" href="' + studyUrl + '">' +
+          numObservations + ' ' + observationGrammar + '</a>';
+      } else {
+        return numObservations + ' ' + observationGrammar;
+      }
+    };
+
     var parseGeo = function(interactionDetailsResponse) {
       var uniqueHolder = {};
       interactionDetailsResponse.forEach(function(interactionDetail) {
@@ -67,13 +77,15 @@ angular.module('globiProtoApp')
           var uniqueKey = interactionDetail.study_title.replace(/\s|\-/g, '') + interactionDetail.latitude.toString().replace('-','#') + '_' + interactionDetail.longitude.toString().replace('-','#');
           if (uniqueHolder[uniqueKey]) {
             uniqueHolder[uniqueKey].itemCount += 1;
-            uniqueHolder[uniqueKey].message = '<a target="_blank" href="' + interactionDetail.study_url + '">' +
-              uniqueHolder[uniqueKey].itemCount + ' Observations</a>';
+            // uniqueHolder[uniqueKey].message = '<a target="_blank" href="' + interactionDetail.study_url + '">' +
+            //   uniqueHolder[uniqueKey].itemCount + ' Observations</a>';
+            uniqueHolder[uniqueKey].message = buildGeoMessage(interactionDetail.study_url, uniqueHolder[uniqueKey].itemCount);
           } else {
             uniqueHolder[uniqueKey] = {
               lat: interactionDetail.latitude,
               lng: interactionDetail.longitude,
-              message: '<a target="_blank" href="' + interactionDetail.study_url + '">' + '1 Observation</a>',
+              // message: '<a target="_blank" href="' + interactionDetail.study_url + '">' + '1 Observation</a>',
+              message: buildGeoMessage(interactionDetail.study_url, 1),
               focus: true,
               draggable: false,
               itemCount: 1
