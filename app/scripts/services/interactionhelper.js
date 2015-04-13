@@ -40,17 +40,34 @@ angular.module('globiProtoApp')
       return deferred.promise;
     };
 
+    // study_title is used as the unique id
     var parseStudies = function(interactionDetailsResponse) {
       var uniqueStudies = {};
       interactionDetailsResponse.forEach(function(detail) {
-        uniqueStudies[detail.study_title] = detail.study_url;
+        uniqueStudies[detail.study_title] = {
+          studyUrl: detail.study_url,
+          studyCitation: detail.study_citation,
+          studySourceCitation: detail.study_source_citation
+        };
       });
       return Object.keys(uniqueStudies).map(function(studyTitle) {
         return {
           studyTitle: studyTitle,
-          studyUrl: uniqueStudies[studyTitle]
+          studyUrl: uniqueStudies[studyTitle].studyUrl,
+          studyCitation: uniqueStudies[studyTitle].studyCitation,
+          studySourceCitation: uniqueStudies[studyTitle].studySourceCitation
         };
       });
+    };
+
+    var buildGeoMessage = function(studyUrl, numObservations) {
+      var observationGrammar = numObservations > 1 ? 'Observations' : 'Observation';
+      if (studyUrl) {
+        return '<a target="_blank" href="' + studyUrl + '">' +
+          numObservations + ' ' + observationGrammar + '</a>';
+      } else {
+        return numObservations + ' ' + observationGrammar;
+      }
     };
 
     var parseGeo = function(interactionDetailsResponse) {
@@ -60,12 +77,15 @@ angular.module('globiProtoApp')
           var uniqueKey = interactionDetail.study_title.replace(/\s|\-/g, '') + interactionDetail.latitude.toString().replace('-','#') + '_' + interactionDetail.longitude.toString().replace('-','#');
           if (uniqueHolder[uniqueKey]) {
             uniqueHolder[uniqueKey].itemCount += 1;
-            uniqueHolder[uniqueKey].message = uniqueHolder[uniqueKey].itemCount + ' Observations, ' + '<a target="_blank" href="' + interactionDetail.study_url + '">' + interactionDetail.study_title + '</a>';
+            // uniqueHolder[uniqueKey].message = '<a target="_blank" href="' + interactionDetail.study_url + '">' +
+            //   uniqueHolder[uniqueKey].itemCount + ' Observations</a>';
+            uniqueHolder[uniqueKey].message = buildGeoMessage(interactionDetail.study_url, uniqueHolder[uniqueKey].itemCount);
           } else {
             uniqueHolder[uniqueKey] = {
               lat: interactionDetail.latitude,
               lng: interactionDetail.longitude,
-              message: '1 Observation, ' + '<a target="_blank" href="' + interactionDetail.study_url + '">' + interactionDetail.study_title + '</a>',
+              // message: '<a target="_blank" href="' + interactionDetail.study_url + '">' + '1 Observation</a>',
+              message: buildGeoMessage(interactionDetail.study_url, 1),
               focus: true,
               draggable: false,
               itemCount: 1
