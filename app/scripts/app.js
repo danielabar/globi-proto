@@ -61,6 +61,31 @@ angular
             controller: 'NetworkCtrl'
           }
         }
+      })
+      .state('labs', {
+        url: '/labs',
+        views: {
+          'nav' : {
+            templateUrl: 'views/nav.html',
+            controller: 'NavCtrl'
+          },
+          'content' : {
+            templateUrl: 'views/labs.html'
+          }
+        }
+      })
+      .state('about', {
+        url: '/about',
+        views: {
+          'nav' : {
+            templateUrl: 'views/nav.html',
+            controller: 'NavCtrl'
+          },
+          'content' : {
+            templateUrl: 'views/about.html',
+            controller: 'AboutCtrl'
+          }
+        }
       });
     $urlRouterProvider.otherwise('/landing');
 
