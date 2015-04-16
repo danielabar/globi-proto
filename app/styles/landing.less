@@ -2,15 +2,22 @@
 
 .landing {
 
+  margin-left: @about-margin;
+  margin-right: @about-margin;
+
   .btn {
     border-radius: 0;
   }
 
   .jumbotron {
-    color: #fff;
+    color: #FEFEFE;
     background-image: url("../images/about-back-fish.jpg");
     background-size: cover;
     background-repeat: no-repeat;
+
+    .lead {
+      font-size: 22px;
+    }
 
     .btn {
       width: 30%;
@@ -22,6 +29,18 @@
     width: 40%;
   }
 
-  margin-left: @about-margin;
-  margin-right: @about-margin;
+  .supporting-material {
+
+    color: #E4F1FE;
+
+    h2 {
+      color: #FEFEFE;
+    }
+
+    p {
+      font-size: 16px;
+    }
+
+  }
+
 }
