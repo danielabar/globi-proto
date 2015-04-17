@@ -14,8 +14,8 @@ angular.module('globiProtoApp')
     var customSymbolTypes = d3.map({
       'star': function(size) {
         var i, r, yAngle, cmd, xsvg, ysvg, xResult, yResult, radiusi, radiuso;
-        var result = "";
-        var svgData = "";
+        var result = '';
+        var svgData = '';
         var baseAngle = (2 * Math.PI) / 10;
         var oddEven = 0;
         var counter = 0;
@@ -123,7 +123,7 @@ angular.module('globiProtoApp')
             yAngle = i;
           }
 
-          if (counter == 0)
+          if (counter === 0)
           {
             cmd = 'M';
           }
