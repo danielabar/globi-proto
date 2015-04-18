@@ -10,8 +10,12 @@
           <div class="col-xs-12 horizontal-center">
             <form class="form">
               <div class="form-group">
-                <!--<h3 class="text-center"><label for="speciesName">Explore Interactions of...</label></h3>-->
                 <h3 class="text-center">{{query.interaction | uppercase }} Exploration of</h3>
+
+                <div class="loading-spiner-holder" data-loading >
+                  <span class="glyphicon glyphicon-refresh spinning"></span>
+                </div>
+
                 <div class="text-center">
                   <input id="speciesName" name="speciesName" type="text"
                          ng-model="query.name"
@@ -68,9 +72,6 @@
         <div class="row">
           <div class="col-xs-12">
             <ul class="image-grid">
-              <div class="loading-spiner-holder" data-loading >
-                <span class="glyphicon glyphicon-refresh spinning"></span> Fetching results...
-              </div>
               <li ng-repeat="sr in searchResults" data-image-tile="sr" class="animate-repeat"></li>
             </ul>
           </div>
