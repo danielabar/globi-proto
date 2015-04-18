@@ -9,5 +9,8 @@
  */
 angular.module('globiProtoApp')
   .factory('images', function ($resource, apiUrl) {
-    return $resource(apiUrl + '/imagesForName/:taxon', {taxon: '@taxon'});
+    return $resource(apiUrl + '/imagesForName/:taxon',
+      {taxon: '@taxon'},
+      {'GET' : {cache: true}
+    });
   });
