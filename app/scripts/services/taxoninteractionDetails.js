@@ -4,7 +4,7 @@
  * @ngdoc service
  * @name globiProtoApp.taxonInteractionDetails
  * @description
- * # taxonInteractionDetails
+ * # Get interaction details between a specified source and target taxon
  * Factory in the globiProtoApp.
  */
 

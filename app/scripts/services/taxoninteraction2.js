@@ -4,13 +4,14 @@
  * @ngdoc service
  * @name globiProtoApp.taxonInteraction
  * @description
- * # taxonInteraction
+ * # Get all the interactions of a specified source taxon
  * Factory in the globiProtoApp.
  */
 angular.module('globiProtoApp')
-  .factory('taxonInteraction2', function ($resource, apiUrl) {
-    return $resource(apiUrl + '/taxon/:taxon/:interaction', {
-      taxon: '@taxon',
-      interaction: '@interaction',
-      type: 'json.v2'});
+  .factory('taxonInteraction2', function ($resource, apiUrl, maxApiResults) {
+    return $resource(apiUrl + '/interaction', {
+      sourceTaxon: '@sourceTaxon',
+      interactionType: '@interactionType',
+      type: 'json.v2',
+      limit: maxApiResults});
   });
