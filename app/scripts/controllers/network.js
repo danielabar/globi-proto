@@ -27,14 +27,14 @@ angular.module('globiProtoApp')
 
     // Pre-populate a good example if one is not provided by the user
     $scope.query = {
-      sourceTaxon: $state.params.taxon || 'Thunnus obesus',
-      interactionType: $state.params.interaction || 'eats'
+      sourceTaxon: $state.params.sourceTaxon || 'Thunnus obesus',
+      interactionType: $state.params.interactionType || 'eats'
     };
 
     $scope.$on('followEvent', function(evt, eventData) {
       $state.transitionTo('network', {
-        taxon: eventData.imageData.scientificName,
-        interaction: eventData.interactionType
+        sourceTaxon: eventData.imageData.scientificName,
+        interactionType: eventData.interactionType
       }, {location: true, reload: true});
     });
 
@@ -64,7 +64,10 @@ angular.module('globiProtoApp')
         $scope.columnGraph = graphData;
       }
 
-      taxonInteraction.query({sourceTaxon: taxon.name, interactionType: $scope.query.interactionType}, function(response) {
+      taxonInteraction.query({
+        sourceTaxon: taxon.name,
+        interactionType: $scope.query.interactionType
+      }, function(response) {
         if (response.length > 0) {
           graphData = graphService.append(response, taxon);
           graphData.action = 'add';
@@ -96,7 +99,9 @@ angular.module('globiProtoApp')
     $scope.$on('linkClicked', function(evt, linkItem) {
       $scope.interactionDetails = {};
       var linkNodes = graphService.getLinkNodes(linkItem);
-      interactionHelper.getSourceTargetDetails(linkNodes.sourceName, linkNodes.targetName, $scope.query.interactionType).then(function(response) {
+      interactionHelper.getSourceTargetDetails(
+        linkNodes.sourceName, linkNodes.targetName, $scope.query.interactionType
+      ).then(function(response) {
         $scope.interactionDetails = response;
         $scope.interactionDetails.show = true;
         leafletData.getMap('interactionMap').then(function(map) {

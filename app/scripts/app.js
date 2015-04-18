@@ -37,7 +37,7 @@ angular
         }
       })
       .state('main', {
-        url: '/main?name&interaction',
+        url: '/main?sourceTaxon&interactionType',
         views: {
           'nav' : {
             templateUrl: 'views/nav.html',
@@ -50,7 +50,7 @@ angular
         }
       })
       .state('network', {
-        url: '/network?taxon&interaction',
+        url: '/network?sourceTaxon&interactionType',
         views: {
           'nav' : {
             templateUrl: 'views/navNetwork.html',

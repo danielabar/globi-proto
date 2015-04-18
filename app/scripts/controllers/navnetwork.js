@@ -4,13 +4,13 @@
  * @ngdoc function
  * @name globiProtoApp.controller:NavnetworkCtrl
  * @description
- * # NavnetworkCtrl
+ * # Controller for network version of the top navigation bar.
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
   .controller('NavNetworkCtrl', function ($scope, $state) {
 
-    $scope.currentTaxon = $state.params.taxon;
+    $scope.currentTaxon = $state.params.sourceTaxon;
 
     $scope.$on('$stateChangeSuccess', function(event, toState) {
       $scope.state = toState.name;
@@ -19,7 +19,8 @@ angular.module('globiProtoApp')
     $scope.explore = function(evt) {
       evt.preventDefault();
       $state.transitionTo('main', {
-        name: $state.params.taxon, interaction: $state.params.interaction
+        sourceTaxon: $state.params.sourceTaxon,
+        interactionType: $state.params.interactionType
       }, {location: true, reload: true});
     };
 
