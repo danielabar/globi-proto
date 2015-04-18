@@ -9,12 +9,12 @@
  */
 
 angular.module('globiProtoApp')
-  .factory('taxonInteractionFields', function ($resource, apiUrl) {
-    return $resource(apiUrl + '/interaction',
-      {
-        interactionType: '@interactionType',
+  .factory('taxonInteractionFields', function ($resource, apiUrl, maxApiResults) {
+    return $resource(apiUrl + '/interaction', {
         sourceTaxon: '@sourceTaxon',
+        interactionType: '@interactionType',
         fields: 'source_taxon_name,source_taxon_path,interaction_type,target_taxon_name,target_taxon_path',
-        type: 'json.v2'
+        type: 'json.v2',
+        limit: maxApiResults
       });
   });

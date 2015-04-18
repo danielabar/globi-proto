@@ -13,5 +13,6 @@ angular.module('globiProtoApp')
       sourceTaxon: '@sourceTaxon',
       interactionType: '@interactionType',
       type: 'json.v2',
-      limit: maxApiResults});
+      limit: maxApiResults
+    });
   });
