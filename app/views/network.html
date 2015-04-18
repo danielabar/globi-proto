@@ -7,6 +7,9 @@
 
         <!-- Dock Header -->
         <h3 class="text-center">{{query.interactionType | uppercase }} Network of</h3>
+        <div class="loading-spiner-holder" data-loading >
+          <span class="glyphicon glyphicon-refresh spinning"></span> Fetching interactions...
+        </div>
         <div class="row">
           <div class="col-xs-6">
             <div data-image-tile="subjectTaxon"></div>
@@ -67,6 +70,7 @@
       <ol class="breadcrumb">
         <li ng-repeat="crumb in breadcrumbs" style="color: {{crumb.circleColor}}">{{crumb.name}}</li>
       </ol>
+
       <column-network-vis val="columnGraph"></column-network-vis>
 
       <leaflet

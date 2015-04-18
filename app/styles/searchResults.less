@@ -29,9 +29,18 @@
   }
 
   .info-dock {
+
+    position: relative;
     background: @dock-bg;
     color: @dock-font;
     padding: 1em;
+
+    .loading-spiner-holder {
+      position: absolute;
+      top: 5px;
+      right: 35px;
+    }
+
     .taxon-source-parent {
       span {
         padding: 5px 5px;
