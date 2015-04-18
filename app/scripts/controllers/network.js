@@ -136,8 +136,8 @@ angular.module('globiProtoApp')
 
       modalInstance.result.then(function (modalData) {
         $state.transitionTo('network', {
-          taxon: modalData.taxon,
-          interaction: modalData.interaction
+          sourceTaxon: modalData.taxon,
+          interactionType: modalData.interaction
         }, {location: true, reload: true});
       }, function () { });
     });
