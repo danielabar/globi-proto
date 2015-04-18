@@ -127,8 +127,8 @@ angular.module('globiProtoApp')
           modalData: function () {
             return {
               maxLevel: eventData.maxLevel,
-              taxon: eventData.node.name,
-              interaction: $scope.query.interactionType
+              sourceTaxon: eventData.node.name,
+              interactionType: $scope.query.interactionType
             };
           }
         }
@@ -136,8 +136,8 @@ angular.module('globiProtoApp')
 
       modalInstance.result.then(function (modalData) {
         $state.transitionTo('network', {
-          taxon: modalData.taxon,
-          interaction: modalData.interaction
+          sourceTaxon: modalData.sourceTaxon,
+          interactionType: modalData.interactionType
         }, {location: true, reload: true});
       }, function () { });
     });
