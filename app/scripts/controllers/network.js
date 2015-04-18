@@ -10,7 +10,7 @@
  * Controller of the globiProtoApp
  */
 angular.module('globiProtoApp')
-  .controller('NetworkCtrl', function ($scope, $state, taxonInteractionFields, images,
+  .controller('NetworkCtrl', function ($scope, $state, taxonInteraction, images,
       graphService, interactionHelper, toaster, $window, $modal, leafletData) {
 
     $scope.isHelpCollapsed = true;
@@ -38,7 +38,7 @@ angular.module('globiProtoApp')
       }, {location: true, reload: true});
     });
 
-    taxonInteractionFields.query($scope.query, function(response) {
+    taxonInteraction.query($scope.query, function(response) {
       if (response.length > 0) {
         var sourceTaxon = {
           name: $scope.query.sourceTaxon,
@@ -64,7 +64,7 @@ angular.module('globiProtoApp')
         $scope.columnGraph = graphData;
       }
 
-      taxonInteractionFields.query({sourceTaxon: taxon.name, interactionType: $scope.query.interactionType}, function(response) {
+      taxonInteraction.query({sourceTaxon: taxon.name, interactionType: $scope.query.interactionType}, function(response) {
         if (response.length > 0) {
           graphData = graphService.append(response, taxon);
           graphData.action = 'add';

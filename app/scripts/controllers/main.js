@@ -11,11 +11,11 @@
  */
  angular.module('globiProtoApp')
  .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope, toaster,
-   interactionTypes, taxonInteractionFields, $state, interactionService) {
+   interactionTypes, taxonInteraction, $state, interactionService) {
 
   var doSearch = function() {
     $scope.searchResults = [];
-    taxonInteractionFields.query({sourceTaxon: $scope.query.name, interactionType: $scope.query.interaction}).$promise.then(function(response) {
+    taxonInteraction.query({sourceTaxon: $scope.query.name, interactionType: $scope.query.interaction}).$promise.then(function(response) {
       if (response.length > 0) {
         var filteredResponse = interactionService.removeDuplicateTargets(response);
         for (var i=0; i<filteredResponse.length; i++) {
