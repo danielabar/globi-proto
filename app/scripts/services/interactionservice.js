@@ -16,7 +16,7 @@ angular.module('globiProtoApp')
         var result = [];
         var seen = {};
         interactions.forEach(function(interaction) {
-          seen[interaction.target.name] = interaction;
+          seen[interaction.target_taxon_name] = interaction;
         });
         Object.keys(seen).forEach(function(key) {
           result.push(seen[key]);

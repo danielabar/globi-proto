@@ -11,17 +11,18 @@
  */
  angular.module('globiProtoApp')
  .controller('MainCtrl', function ($scope, closeMatch, images, $rootScope, toaster,
-   interactionTypes, taxonInteraction2, $state, interactionService, maxApiResults) {
+   interactionTypes, taxonInteraction, $state, interactionService) {
 
   var doSearch = function() {
     $scope.searchResults = [];
-    taxonInteraction2.query({taxon: $scope.query.name, interaction: $scope.query.interaction}).$promise.then(function(response) {
+    taxonInteraction.query({
+      sourceTaxon: $scope.query.sourceTaxon,
+      interactionType: $scope.query.interactionType
+    }).$promise.then(function(response) {
       if (response.length > 0) {
         var filteredResponse = interactionService.removeDuplicateTargets(response);
-        var numIterations = Math.min(response.length, maxApiResults);
-        for (var i=0; i<numIterations; i++) {
-          var interaction = filteredResponse[i];
-          images.get({taxon: interaction.target.name}).$promise.then(function(imageResponse) {
+        for (var i=0; i<filteredResponse.length; i++) {
+          images.get({taxon: filteredResponse[i].target_taxon_name}).$promise.then(function(imageResponse) {
             $scope.searchResults.push({
               scientificName: imageResponse.scientificName,
               commonName: imageResponse.commonName,
@@ -43,7 +44,6 @@
     });
   };//doSearch
 
-  // TODO Similar logic used in map.js, pull out to a service...
   var handleTaxonSelected = function(item) {
     images.get({taxon: item}).$promise.then(function(response) {
       $scope.taxon = {
@@ -60,13 +60,13 @@
   };
 
   $scope.query = {
-    name: $state.params.name,
-    interaction: $state.params.interaction
+    sourceTaxon: $state.params.sourceTaxon,
+    interactionType: $state.params.interactionType
   };
 
-  if ($scope.query.name) {
-    handleTaxonSelected($scope.query.name);
-    if ($scope.query.interaction) {
+  if ($scope.query.sourceTaxon) {
+    handleTaxonSelected($scope.query.sourceTaxon);
+    if ($scope.query.interactionType) {
       doSearch();
     }
   }
@@ -116,8 +116,8 @@
   };
 
   $scope.taxonSelected = function(item) {
-    $scope.query.name = item.scientificName;
-    $scope.query.interaction = null;
+    $scope.query.sourceTaxon = item.scientificName;
+    $scope.query.interactionType = null;
     $scope.searchResults = [];
     $state.transitionTo('main', $scope.query, {location: true, reload: true});
   };
@@ -133,39 +133,29 @@
     $state.transitionTo('main', $scope.query, {location: true, reload: true});
   };
 
-    $scope.network = function() {
-      $state.transitionTo('network', {
-          taxon: $scope.query.name,
-          interaction: $state.params.interaction || 'eats'
-        },
-        {location: true, reload: true}
-      );
-    };
+  $scope.network = function() {
+    $state.transitionTo('network', {
+      sourceTaxon: $scope.query.sourceTaxon,
+        interactionType: $state.params.interactionType || 'eats'
+      },
+      {location: true, reload: true}
+    );
+  };
 
-    $scope.$on('followEvent', function(evt, eventData) {
-      $scope.query.name = eventData.imageData.scientificName;
-      $scope.query.interaction = eventData.interactionType;
-      $scope.searchResults = [];
-      $state.transitionTo('main', $scope.query, {location: true, reload: true});
-    });
+  $scope.$on('followEvent', function(evt, eventData) {
+    $scope.query.sourceTaxon = eventData.imageData.scientificName;
+    $scope.query.interactionType = eventData.interactionType;
+    $scope.searchResults = [];
+    $state.transitionTo('main', $scope.query, {location: true, reload: true});
+  });
 
-    $scope.$on('mapEvent', function(evt, eventData) {
-      $state.transitionTo('map', {
-          sourceTaxon: $state.params.name,
-          targetTaxon: eventData.imageData.scientificName,
-          interactionType: $state.params.interaction || 'preysOn'
-        },
-        {location: true, reload: true}
-      );
-    });
-
-    $scope.$on('networkEvent', function(evt, eventData) {
-      $state.transitionTo('network', {
-          taxon: eventData.imageData.scientificName,
-          interaction: $state.params.interaction || 'eats'
-        },
-        {location: true, reload: true}
-      );
-    });
+  $scope.$on('networkEvent', function(evt, eventData) {
+    $state.transitionTo('network', {
+        sourceTaxon: eventData.imageData.scientificName,
+        interactionType: $state.params.interactionType || 'eats'
+      },
+      {location: true, reload: true}
+    );
+  });
 
 });
