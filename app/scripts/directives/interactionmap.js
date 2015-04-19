@@ -23,32 +23,41 @@ angular.module('globiProtoApp')
         element.width(element.parent().width());
         element.height(columnGraphValues.height);
 
-        // Initialize
+        // Initialize the map
+        var tiles = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				  maxZoom: 18,
+				  attribution: '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			  });
+
+        var latlng = L.latLng(27.3649, -82.623643);
+
         var map = L.map('interactionMap', {
-          center: [27.3649, -82.623643],
-          zoom: 3,
-          scrollWheelZoom: false
+          center: latlng, zoom: 3, scrollWheelZoom: false, layers: [tiles]
         });
 
-        // Base layer
-        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            maxZoom: 10
-        }).addTo(map);
+        var baseLayer = {
+			    Base: tiles
+		    };
+        L.control.layers(baseLayer).addTo(map);
+
+        // Markers Cluster Layer
+        var markers = L.markerClusterGroup({ disableClusteringAtZoom: 17 });
 
         // Watch for new markers to be added (TODO remove others?)
         scope.$watch('observations', function(newObservations) {
-          console.log('map directive detected new observations to add: ');
-          console.dir(newObservations);
+
           if (newObservations) {
+
+            map.removeLayer(markers);
+
             Object.keys(newObservations).forEach(function(obs) {
               var markerLocation = new L.LatLng(newObservations[obs].lat, newObservations[obs].lng);
               var marker = new L.Marker(markerLocation);
-              // marker.bindPopup('<b>Hello world!</b><br />I am a popup.');
               marker.bindPopup(newObservations[obs].message);
-              // L.marker([newObservations[obs].lat, newObservations[obs].lng]).addTo(map);
-              marker.addTo(map);
+              markers.addLayer(marker);
+              // marker.addTo(map);
             });
+            map.addLayer(markers);
           } else {
             // TODO hide map? or some message like no geo data available...
           }

@@ -11,7 +11,7 @@
  */
 angular.module('globiProtoApp')
   .controller('NetworkCtrl', function ($scope, $state, taxonInteraction, images,
-      graphService, interactionHelper, toaster, $window, $modal, leafletData) {
+      graphService, interactionHelper, toaster, $window, $modal) {
 
     $scope.isHelpCollapsed = true;
 
@@ -160,21 +160,21 @@ Longitude:-82.623643°*/
       ).then(function(response) {
         $scope.interactionDetails = response;
         $scope.interactionDetails.show = true;
-        leafletData.getMap('interactionMap').then(function(map) {
-          var mapMarkers = $scope.interactionDetails.mapMarkers;
-          var markersArray = [];
-          Object.keys(mapMarkers).forEach(function(key, i) {
-            if (mapMarkers.hasOwnProperty(key)) {
-              // console.log('=== lat: ' + mapMarkers[key].lat + ', lng: ' + mapMarkers[key].lng);
-              // { lat: foo, lng: bar, layer: 'interactions'},
-              console.log('m' + i + ': {lat: ' + mapMarkers[key].lat + ', lng: ' + mapMarkers[key].lng + ', layer: "interactions"},');
-              markersArray.push(L.latLng(mapMarkers[key].lat, mapMarkers[key].lng));
-            }
-          });
-          if (markersArray.length) {
-            // map.fitBounds(new L.latLngBounds(markersArray));
-          }
-        });
+        // leafletData.getMap('interactionMap').then(function(map) {
+        //   var mapMarkers = $scope.interactionDetails.mapMarkers;
+        //   var markersArray = [];
+        //   Object.keys(mapMarkers).forEach(function(key, i) {
+        //     if (mapMarkers.hasOwnProperty(key)) {
+        //       // console.log('=== lat: ' + mapMarkers[key].lat + ', lng: ' + mapMarkers[key].lng);
+        //       // { lat: foo, lng: bar, layer: 'interactions'},
+        //       console.log('m' + i + ': {lat: ' + mapMarkers[key].lat + ', lng: ' + mapMarkers[key].lng + ', layer: "interactions"},');
+        //       markersArray.push(L.latLng(mapMarkers[key].lat, mapMarkers[key].lng));
+        //     }
+        //   });
+        //   if (markersArray.length) {
+        //     // map.fitBounds(new L.latLngBounds(markersArray));
+        //   }
+        // });
       });
     });
 
