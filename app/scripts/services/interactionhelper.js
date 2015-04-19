@@ -83,8 +83,6 @@ angular.module('globiProtoApp')
               lat: interactionDetail.latitude,
               lng: interactionDetail.longitude,
               message: buildGeoMessage(interactionDetail.study_url, 1),
-              // focus: true,
-              draggable: false,
               itemCount: 1
             };
           }

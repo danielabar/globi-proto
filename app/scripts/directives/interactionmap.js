@@ -23,37 +23,32 @@ angular.module('globiProtoApp')
         element.width(element.parent().width());
         element.height(columnGraphValues.height);
 
-        // Initialize the map
+        // Base layer
         var tiles = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				  maxZoom: 18,
 				  attribution: '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 			  });
 
+        // Default center (Gulf of Mexico)
         var latlng = L.latLng(27.3649, -82.623643);
-
         var map = L.map('interactionMap', {
           center: latlng, zoom: 3, scrollWheelZoom: false, layers: [tiles]
         });
 
-        var baseLayer = {
-			    Base: tiles
-		    };
-        L.control.layers(baseLayer).addTo(map);
-
-        // Markers Cluster Layer
+        // Cluster Overlay
         var markers = L.markerClusterGroup({ disableClusteringAtZoom: 17 });
-
-        // Fit Bounds support
         var markerArray;
 
-        // Watch for new markers to be added (TODO remove others?)
+        // Watch for new observations to be added
         scope.$watch('observations', function(newObservations) {
 
           if (newObservations) {
 
+            // Cleanup old observations
             map.removeLayer(markers);
             markerArray = [];
 
+            // Add to layer
             Object.keys(newObservations).forEach(function(obs) {
               var markerLocation = new L.LatLng(newObservations[obs].lat, newObservations[obs].lng);
               var marker = new L.Marker(markerLocation);
@@ -62,9 +57,9 @@ angular.module('globiProtoApp')
               markerArray.push(markerLocation);
             });
             map.addLayer(markers);
+
+            // Optimize zoom and center for new observations
             map.fitBounds(new L.latLngBounds(markerArray));
-          } else {
-            // TODO hide map? or some message like no geo data available...
           }
         });
       }
