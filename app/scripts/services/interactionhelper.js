@@ -82,8 +82,9 @@ angular.module('globiProtoApp')
             uniqueHolder[uniqueKey] = {
               lat: interactionDetail.latitude,
               lng: interactionDetail.longitude,
+              layer: 'interactions',  // TODO: Caller should pass the layer
               message: buildGeoMessage(interactionDetail.study_url, 1),
-              focus: true,
+              // focus: true,
               draggable: false,
               itemCount: 1
             };

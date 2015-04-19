@@ -15,6 +15,7 @@ angular.module('globiProtoApp')
 
     $scope.isHelpCollapsed = true;
 
+    // TODO map stuff should get pulled out into separate directive/controller
     $scope.mapDefaults = {
       scrollWheelZoom: false
     };
@@ -96,6 +97,61 @@ angular.module('globiProtoApp')
       console.dir(err);
     });
 
+    // Map Stuff (TODO this should go in a separate directive/controller)
+    /* Latitude:27.3649°
+Longitude:-82.623643°*/
+    $scope.mapCenter = {
+      lat: 27.3649,
+      lng: -82.623643,
+      zoom: 2
+    };
+
+    $scope.layers = {
+      baselayers: {
+        osm: {
+        name: 'OpenStreetMap',
+          type: 'xyz',
+          url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          layerOptions: {
+              subdomains: ['a', 'b', 'c'],
+              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+              continuousWorld: true
+          }
+        }
+      },
+      overlays: {
+        // hillshade: {
+        //   name: 'Hillshade Europa',
+        //   type: 'wms',
+        //   url: 'http://129.206.228.72/cached/hillshade',
+        //   visible: true,
+        //   layerOptions: {
+        //       layers: 'europe_wms:hs_srtm_europa',
+        //       format: 'image/png',
+        //       opacity: 0.25,
+        //       attribution: 'Hillshade layer by GIScience http://www.osm-wms.de',
+        //       crs: L.CRS.EPSG900913
+        //   }
+        // },
+        interactions: {
+          name: 'interactions',
+          type: 'markercluster',
+          visible: true
+        }
+      }
+    };
+
+    // temp hack to get cluster thingie working
+    // $scope.interactionDetails = {};
+    // $scope.interactionDetails.mapMarkers = {
+    //   m1: {
+    //       lat: 42.20133,
+    //       lng: 2.19110,
+    //       layer: 'interactions',
+    //       message: 'Im a moving car'
+    //     }
+    // };
+
     $scope.$on('linkClicked', function(evt, linkItem) {
       $scope.interactionDetails = {};
       var linkNodes = graphService.getLinkNodes(linkItem);
@@ -107,13 +163,16 @@ angular.module('globiProtoApp')
         leafletData.getMap('interactionMap').then(function(map) {
           var mapMarkers = $scope.interactionDetails.mapMarkers;
           var markersArray = [];
-          Object.keys(mapMarkers).forEach(function(key) {
+          Object.keys(mapMarkers).forEach(function(key, i) {
             if (mapMarkers.hasOwnProperty(key)) {
+              // console.log('=== lat: ' + mapMarkers[key].lat + ', lng: ' + mapMarkers[key].lng);
+              // { lat: foo, lng: bar, layer: 'interactions'},
+              console.log('m' + i + ': {lat: ' + mapMarkers[key].lat + ', lng: ' + mapMarkers[key].lng + ', layer: "interactions"},');
               markersArray.push(L.latLng(mapMarkers[key].lat, mapMarkers[key].lng));
             }
           });
           if (markersArray.length) {
-            map.fitBounds(new L.latLngBounds(markersArray));
+            // map.fitBounds(new L.latLngBounds(markersArray));
           }
         });
       });
