@@ -45,7 +45,7 @@ angular.module('globiProtoApp')
           .attr('markerHeight', 8)
           .attr('orient', 'auto')
           .append('svg:path')
-          .attr('d', 'M0,-4L10,0L0,4L10');
+          .attr('d', 'M0,-4 L10,0 L0,4 L0,-4');
 
         // Keep reference to nodes and links to support updates
         var nodes = [];
