@@ -43,21 +43,26 @@ angular.module('globiProtoApp')
         // Markers Cluster Layer
         var markers = L.markerClusterGroup({ disableClusteringAtZoom: 17 });
 
+        // Fit Bounds support
+        var markerArray;
+
         // Watch for new markers to be added (TODO remove others?)
         scope.$watch('observations', function(newObservations) {
 
           if (newObservations) {
 
             map.removeLayer(markers);
+            markerArray = [];
 
             Object.keys(newObservations).forEach(function(obs) {
               var markerLocation = new L.LatLng(newObservations[obs].lat, newObservations[obs].lng);
               var marker = new L.Marker(markerLocation);
               marker.bindPopup(newObservations[obs].message);
               markers.addLayer(marker);
-              // marker.addTo(map);
+              markerArray.push(markerLocation);
             });
             map.addLayer(markers);
+            map.fitBounds(new L.latLngBounds(markerArray));
           } else {
             // TODO hide map? or some message like no geo data available...
           }

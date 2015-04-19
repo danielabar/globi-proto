@@ -15,11 +15,6 @@ angular.module('globiProtoApp')
 
     $scope.isHelpCollapsed = true;
 
-    // TODO map stuff should get pulled out into separate directive/controller
-    $scope.mapDefaults = {
-      scrollWheelZoom: false
-    };
-
     graphService.init();
 
     $scope.interactionDetails = {
@@ -96,61 +91,6 @@ angular.module('globiProtoApp')
     }, function(err) {
       console.dir(err);
     });
-
-    // Map Stuff (TODO this should go in a separate directive/controller)
-    /* Latitude:27.3649°
-Longitude:-82.623643°*/
-    $scope.mapCenter = {
-      lat: 27.3649,
-      lng: -82.623643,
-      zoom: 2
-    };
-
-    $scope.layers = {
-      baselayers: {
-        osm: {
-        name: 'OpenStreetMap',
-          type: 'xyz',
-          url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          layerOptions: {
-              subdomains: ['a', 'b', 'c'],
-              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-              continuousWorld: true
-          }
-        }
-      },
-      overlays: {
-        // hillshade: {
-        //   name: 'Hillshade Europa',
-        //   type: 'wms',
-        //   url: 'http://129.206.228.72/cached/hillshade',
-        //   visible: true,
-        //   layerOptions: {
-        //       layers: 'europe_wms:hs_srtm_europa',
-        //       format: 'image/png',
-        //       opacity: 0.25,
-        //       attribution: 'Hillshade layer by GIScience http://www.osm-wms.de',
-        //       crs: L.CRS.EPSG900913
-        //   }
-        // },
-        interactions: {
-          name: 'interactions',
-          type: 'markercluster',
-          visible: true
-        }
-      }
-    };
-
-    // temp hack to get cluster thingie working
-    // $scope.interactionDetails = {};
-    // $scope.interactionDetails.mapMarkers = {
-    //   m1: {
-    //       lat: 42.20133,
-    //       lng: 2.19110,
-    //       layer: 'interactions',
-    //       message: 'Im a moving car'
-    //     }
-    // };
 
     $scope.$on('linkClicked', function(evt, linkItem) {
       $scope.interactionDetails = {};
