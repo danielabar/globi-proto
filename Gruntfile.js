@@ -186,7 +186,8 @@ module.exports = function (grunt) {
     wiredep: {
       app: {
         src: ['<%= yeoman.app %>/index.html'],
-        ignorePath:  /\.\.\//
+        // ignorePath:  /\.\.\//
+        ignorePath:  /^\.\.\/{0,3}/
       },
       test: {
         devDependencies: true,
@@ -356,6 +357,10 @@ module.exports = function (grunt) {
 
     // Copies remaining files to places other tasks can use
     copy: {
+      vendorDot: {
+        src: 'bower_components/leaflet.markercluster/dist/leaflet.markercluster.js',
+        dest: '<%= yeoman.dist %>/bower_components/leaflet.markercluster/dist/leaflet.markercluster.js'
+      },
       dist: {
         files: [{
           expand: true,
@@ -487,6 +492,7 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
+    'copy:vendorDot',
     'replace:releaseNumber',
     'cdnify',
     'cssmin',

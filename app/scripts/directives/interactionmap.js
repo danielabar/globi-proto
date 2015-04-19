@@ -35,9 +35,15 @@ angular.module('globiProtoApp')
           center: latlng, zoom: 3, scrollWheelZoom: false, layers: [tiles]
         });
 
-        // Cluster Overlay
+        // Cluster overlay
         var markers = L.markerClusterGroup({ disableClusteringAtZoom: 17 });
         var markerArray;
+
+        // Marker options
+        L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
+        var markerOpts = {
+          icon: new L.Icon.Default()
+        };
 
         // Watch for new observations to be added
         scope.$watch('observations', function(newObservations) {
@@ -51,7 +57,7 @@ angular.module('globiProtoApp')
             // Add to layer
             Object.keys(newObservations).forEach(function(obs) {
               var markerLocation = new L.LatLng(newObservations[obs].lat, newObservations[obs].lng);
-              var marker = new L.Marker(markerLocation);
+              var marker = new L.Marker(markerLocation, markerOpts);
               marker.bindPopup(newObservations[obs].message);
               markers.addLayer(marker);
               markerArray.push(markerLocation);
