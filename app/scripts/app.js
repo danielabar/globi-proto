@@ -19,8 +19,7 @@ angular
     'ngCookies',
     'ngSanitize',
     'ngTouch',
-    'ui.bootstrap',
-    'leaflet-directive'
+    'ui.bootstrap'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     $stateProvider

@@ -11,13 +11,9 @@
  */
 angular.module('globiProtoApp')
   .controller('NetworkCtrl', function ($scope, $state, taxonInteraction, images,
-      graphService, interactionHelper, toaster, $window, $modal, leafletData) {
+      graphService, interactionHelper, toaster, $window, $modal) {
 
     $scope.isHelpCollapsed = true;
-
-    $scope.mapDefaults = {
-      scrollWheelZoom: false
-    };
 
     graphService.init();
 
@@ -97,25 +93,13 @@ angular.module('globiProtoApp')
     });
 
     $scope.$on('linkClicked', function(evt, linkItem) {
-      $scope.interactionDetails = {};
+      // $scope.interactionDetails = {};
       var linkNodes = graphService.getLinkNodes(linkItem);
       interactionHelper.getSourceTargetDetails(
         linkNodes.sourceName, linkNodes.targetName, $scope.query.interactionType
       ).then(function(response) {
         $scope.interactionDetails = response;
         $scope.interactionDetails.show = true;
-        leafletData.getMap('interactionMap').then(function(map) {
-          var mapMarkers = $scope.interactionDetails.mapMarkers;
-          var markersArray = [];
-          Object.keys(mapMarkers).forEach(function(key) {
-            if (mapMarkers.hasOwnProperty(key)) {
-              markersArray.push(L.latLng(mapMarkers[key].lat, mapMarkers[key].lng));
-            }
-          });
-          if (markersArray.length) {
-            map.fitBounds(new L.latLngBounds(markersArray));
-          }
-        });
       });
     });
 
