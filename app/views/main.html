@@ -10,7 +10,7 @@
           <div class="col-xs-12 horizontal-center">
             <form class="form">
               <div class="form-group">
-                <h3 class="text-center">{{query.interaction | uppercase }} Exploration of</h3>
+                <h3 class="text-center">{{query.interactionType | uppercase }} Exploration of</h3>
 
                 <div class="loading-spiner-holder" data-loading >
                   <span class="glyphicon glyphicon-refresh spinning"></span>
@@ -20,7 +20,7 @@
                   <input id="speciesName" name="speciesName" type="text"
                          ng-model="query.name"
                          class="form-control"
-                         placeholder="Enter an animal to start..."
+                         placeholder="Enter an animal to start (eg tuna)..."
                          typeahead="taxonSelection as taxonSelection.scientificName for taxonSelection in getResults($viewValue)"
                          typeahead-template-url="views/taxonSelection.html"
                          typeahead-wait-ms="100"
