@@ -37,7 +37,7 @@
           });
         }
       } else {
-        toaster.pop('note', 'Sorry', 'No interactions found for: ' + $scope.query.name + ' ' + $scope.query.interaction);
+        toaster.pop('note', 'Sorry', 'No interactions found for: ' + $scope.query.sourceTaxon + ' ' + $scope.query.interactionType);
       }
     }, function(err) {
       console.dir(err);
