@@ -126,7 +126,7 @@ angular.module('globiProtoApp')
 
           // Links initial positions
           var link = svg.selectAll('.link').data(links);
-          var lineLinks = link.enter().insert('line')
+          var lineLinks = link.enter().insert('path')
             .on('mouseover', function() {
               d3.select(this).classed('link-selected', true);
             })
@@ -139,10 +139,22 @@ angular.module('globiProtoApp')
             .classed('link', true)
             .classed('linkback', function(d) { return d.linkBack; })
             .attr('marker-end', 'url(#arrow)')
-            .attr('x1', function(d) { return nodes[d.source].xPos; })
-            .attr('y1', function(d) { return nodes[d.source].yPos; })
-            .attr('x2', function(d) { return nodes[d.source].xPos; })
-            .attr('y2', function(d) { return nodes[d.source].yPos; });
+            .attr('d', function(d) {
+              var src = nodes[d.source];
+              var str = 'M ' + src.xPos + ' ' + src.yPos;
+              if (d.linkBack) {
+                str += ' q ' + src.xPos + ' ' + src.yPos + ' ';
+              }
+              else {
+                str += ' L ';
+              }
+              str += src.xPos + ' ' + src.yPos;
+              return str;
+            });
+            //.attr('x1', function(d) { return nodes[d.source].xPos; })
+            //.attr('y1', function(d) { return nodes[d.source].yPos; })
+            //.attr('x2', function(d) { return nodes[d.source].xPos; })
+            //.attr('y2', function(d) { return nodes[d.source].yPos; });
 
           // Transition links end points to their new positions
           lineLinks.transition()
@@ -151,8 +163,22 @@ angular.module('globiProtoApp')
             })
             .duration(300)
             .ease('linear')
-            .attr('x2', function(d) { return nodes[d.target].xPos; })
-            .attr('y2', function(d) { return nodes[d.target].yPos; });
+            .attr('fill', 'none')
+            .attr('d', function(d) {
+              var src = nodes[d.source];
+              var target = nodes[d.target];
+              var str = 'M ' + src.xPos + ' ' + src.yPos;
+              if (d.linkBack) {
+                str += ' Q ' + target.xPos + ' ' + src.yPos + ' ';
+              }
+              else {
+                str += ' L ';
+              }
+              str += target.xPos + ' ' + target.yPos;
+              return str;
+            });
+            //.attr('x2', function(d) { return nodes[d.target].xPos; })
+            //.attr('y2', function(d) { return nodes[d.target].yPos; });
 
           link.exit().remove();
 
