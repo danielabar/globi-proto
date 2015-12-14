@@ -65,7 +65,9 @@ angular.module('globiProtoApp')
             map.addLayer(markers);
 
             // Optimize zoom and center for new observations
-            map.fitBounds(new L.latLngBounds(markerArray));
+            if (markerArray.length > 0) {
+              map.fitBounds(new L.latLngBounds(markerArray));
+            }
           }
         });
       }
