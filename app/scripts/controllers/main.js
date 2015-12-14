@@ -19,10 +19,14 @@
       sourceTaxon: $scope.query.sourceTaxon,
       interactionType: $scope.query.interactionType
     }).$promise.then(function(response) {
+        var deduped,
+          speciesOnly;
+
       if (response.length > 0) {
-        var filteredResponse = interactionService.removeDuplicateTargets(response);
-        for (var i=0; i<filteredResponse.length; i++) {
-          images.get({taxon: filteredResponse[i].target_taxon_name}).$promise.then(function(imageResponse) {
+        deduped = interactionService.removeDuplicateTargets(response);
+        speciesOnly = interactionService.removeShallowTaxonPaths(deduped);
+        for (var i=0; i<speciesOnly.length; i++) {
+          images.get({taxon: speciesOnly[i].target_taxon_name}).$promise.then(function(imageResponse) {
             $scope.searchResults.push({
               scientificName: imageResponse.scientificName,
               commonName: imageResponse.commonName,
