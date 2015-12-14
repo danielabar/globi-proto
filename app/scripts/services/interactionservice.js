@@ -8,10 +8,9 @@
  * Factory in the globiProtoApp.
  */
 angular.module('globiProtoApp')
-  .factory('interactionService', function () {
+  .factory('interactionService', function ($log) {
 
-    // Heuristic to determine if its a species rather than a higher order classification
-    var MIN_TAXON_PATH = 6;
+    var MIN_TAXON_PATH = 7;
 
     var calculateTaxonPathLength = function(taxonPath) {
       var split,
@@ -41,6 +40,7 @@ angular.module('globiProtoApp')
         return result;
       },
 
+      // Heuristic to determine if its a species rather than a higher order classification
       removeShallowTaxonPaths: function(interactions) {
         var filtered = [],
           taxonPath;
@@ -48,9 +48,8 @@ angular.module('globiProtoApp')
         if (interactions && interactions.length > 0) {
           filtered = interactions.filter(function(interaction) {
             taxonPath = interaction.target_taxon_path;
-            // temp debug
             if (calculateTaxonPathLength(taxonPath) < MIN_TAXON_PATH) {
-              console.log('=== filtered out due to shallow taxon path: ' + interaction.target_taxon_name + ', ' + interaction.target_taxon_path);
+              $log.debug('filtered due to shallow taxon path: name = ' + interaction.target_taxon_name + ', path = ' + interaction.target_taxon_path);
             }
             return calculateTaxonPathLength(taxonPath) >= MIN_TAXON_PATH;
           });
