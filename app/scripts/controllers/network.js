@@ -11,7 +11,7 @@
  */
 angular.module('globiProtoApp')
   .controller('NetworkCtrl', function ($scope, $state, taxonInteraction, images,
-      graphService, interactionHelper, toaster, $window, $modal) {
+      graphService, interactionHelper, interactionService, toaster, $window, $modal) {
 
     $scope.isHelpCollapsed = true;
 
@@ -35,12 +35,19 @@ angular.module('globiProtoApp')
     });
 
     taxonInteraction.query($scope.query, function(response) {
+      var deduped,
+        speciesOnly,
+        sourceTaxon,
+        graphData;
+
       if (response.length > 0) {
-        var sourceTaxon = {
+        deduped = interactionService.removeDuplicateTargets(response);
+        speciesOnly = interactionService.removeShallowTaxonPaths(deduped);
+        sourceTaxon = {
           name: $scope.query.sourceTaxon,
           group: 1
         };
-        var graphData = graphService.append(response, sourceTaxon);
+        graphData = graphService.append(speciesOnly, sourceTaxon);
         graphData.action = 'add';
         $scope.graph = graphData;
         $scope.columnGraph = graphData;
@@ -64,8 +71,13 @@ angular.module('globiProtoApp')
         sourceTaxon: taxon.name,
         interactionType: $scope.query.interactionType
       }, function(response) {
+        var deduped,
+          speciesOnly;
+
         if (response.length > 0) {
-          graphData = graphService.append(response, taxon);
+          deduped = interactionService.removeDuplicateTargets(response);
+          speciesOnly = interactionService.removeShallowTaxonPaths(deduped);
+          graphData = graphService.append(speciesOnly, taxon);
           graphData.action = 'add';
           $scope.graph = graphData;
           $scope.columnGraph = graphData;
