@@ -8,4 +8,4 @@
  * Value in the globiProtoApp.
  */
 angular.module('globiProtoApp')
-  .value('apiUrl', 'http://api.globalbioticinteractions.org');
+  .value('apiUrl', 'https://api.globalbioticinteractions.org');
